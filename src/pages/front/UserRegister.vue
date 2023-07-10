@@ -14,9 +14,29 @@
           </q-tabs>
 
           <q-tab-panels v-model="tab" animated >
-            <q-tab-panel name="login">
-              <div class="text-h6">Mails</div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            <q-tab-panel name="login" class="q-px-xl flex-center">
+              <q-form
+                @submit="onSubmit"
+              >
+            <div class="row">
+              <q-input label="Username" v-model="form.username" :rules="[rules.isString, rules.required, rules.min4, rules.max10]"  lazy-rules class="col">
+              </q-input>
+            </div>
+            <div class="row">
+              <q-input :type="isPwd ? 'password' : 'text'" label="Password" class="col" v-model="form.password" :rules="[rules.isString, rules.required, rules.min4, rules.max20]"  lazy-rules>
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd = !isPwd"
+                  />
+                </template>
+              </q-input>
+            </div>
+            <div class="row flex-center">
+              <q-btn outline label="submit" type="submit" class="q-mt-md"/>
+            </div>
+              </q-form>
             </q-tab-panel>
 
             <q-tab-panel name="register" class="q-px-xl flex-center" >
@@ -52,7 +72,7 @@
               </q-input>
             </div>
             <div class="row">
-              <q-input :type="isPwd ? 'password' : 'text'" label="Confirm Password" class="col" v-model="form.confirmPassword" :rules="[rules.confirmPassword]" reactive-rules>
+              <q-input :type="isPwd ? 'password' : 'text'" label="Confirm Password" class="col" v-model="form.confirmPassword" :rules="[rules.required, rules.confirmPassword]" reactive-rules>
                 <!-- <template v-slot:before>
                   Confirm Password
                 </template> -->
