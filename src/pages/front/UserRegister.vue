@@ -180,7 +180,7 @@ const onSubmit = async (e) => {
 }
 </script>
 
-<style>
+<style scoped>
 .q-notification{
   opacity: 0.7;
   width: 20rem;

@@ -9,13 +9,6 @@ const routes = [
         meta: {
           title: 'moOo'
         }
-      },
-      {
-        path: 'register',
-        component: () => import('pages/front/UserRegister.vue'),
-        meta: {
-          title: 'moOo | Register'
-        }
       }
     ]
   },
