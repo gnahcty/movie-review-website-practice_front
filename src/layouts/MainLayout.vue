@@ -14,7 +14,7 @@
         <q-btn flat round icon="fa-solid fa-ranking-star" class="q-ma-lg" to="/users">
           <q-tooltip>Popular User</q-tooltip>
         </q-btn>
-        <q-btn flat round icon="face_2" to="/user">
+        <q-btn flat round icon="face_2" to="/profile">
           <q-tooltip>User</q-tooltip>
         </q-btn>
       </q-toolbar>
@@ -29,17 +29,17 @@
                 <img src="https://source.boringavatars.com/beam/120/Annie%20Jump?colors=264653,2a9d8f,e9c46a,f4a261,e76f51">
               </q-avatar>
             </q-item-section>
-
+<!-- TODO: 登入後把login signup改成 watched films -->
             <q-item-section>
-              <q-item-label class="text-h5 q-pl-lg">User Name</q-item-label>
-              <q-item-label >
+              <q-item-label class="text-h5 q-pl-lg q-pb-sm">{{user.username || 'Guest User'}}</q-item-label>
+              <q-item-label v-if="!isLogin">
                 <q-btn outline color="green" size="xs" label="Login" class="q-ml-md" @click="open('login')" />
                 <q-btn outline style="color: goldenrod;" size="xs" label="Sign Up" class="q-ml-xs" @click="open('register')" />
               </q-item-label>
             </q-item-section>
           </q-item>
             <template v-for="(menuItem, index) in menuList" :key="index" >
-              <q-item clickable v-ripple :to="menuItem.to"  class="q-pl-lg">
+              <q-item clickable v-ripple :to="menuItem.to" class="q-pl-lg">
                 <q-item-section avatar>
                   <q-icon :name="menuItem.icon" />
                 </q-item-section>
@@ -47,9 +47,15 @@
                   {{ menuItem.label }}
                 </q-item-section>
               </q-item>
-              <q-separator :key="'sep' + index"  v-if="menuItem.separator" />
             </template>
-
+            <q-item clickable v-ripple v-if="isLogin" class="q-pl-lg" @click="logout">
+              <q-item-section avatar>
+                <q-icon name="logout" />
+              </q-item-section>
+              <q-item-section>
+                Logout
+              </q-item-section>
+            </q-item>
           </q-list>
         </q-scroll-area>
     </q-drawer>
@@ -96,7 +102,7 @@
           <!-- 註冊頁面  -->
           <q-tab-panel name="register" class="q-px-xl flex-center" >
             <q-form
-              @submit="onSubmit"
+              @submit="regSubmit"
             >
           <div class="row">
             <q-input label="Username" v-model="form.username" :rules="[rules.isString, rules.required, rules.min4, rules.max10]"  lazy-rules class="col">
@@ -146,18 +152,22 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import validator from 'validator'
-// import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { useUserStore } from '../stores/user.js'
-import { api } from '../boot/axios.js'
+import { api, apiAuth } from '../boot/axios.js'
 
 const leftDrawerOpen = ref(false)
 const loginModal = ref(false)
 const tab = ref('login')
 const isPwd = ref(true)
-// const router = useRouter()
+const router = useRouter()
 const user = useUserStore()
+const $q = useQuasar()
+const route = useRoute()
+const { isLogin } = storeToRefs(user)
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
@@ -172,13 +182,12 @@ const menuList = [
   { to: '/', label: 'Home', icon: 'home' },
   { to: '/films', label: 'Films', icon: 'fa-solid fa-film' },
   { to: '/reviews', label: 'Reviews', icon: 'reviews' },
-  { to: '/user/diary', label: 'Diary', icon: 'import_contacts' },
-  { to: '/user/watchlist', label: 'watchlist', icon: 'more_time' },
-  { to: '/user/likes', label: 'Likes', icon: 'favorite' },
-  { to: 'user/settings', label: 'Settings', icon: 'settings' }
+  { to: '/diary', label: 'Diary', icon: 'import_contacts' },
+  { to: '/watchlist', label: 'watchlist', icon: 'more_time' },
+  { to: '/likes', label: 'Likes', icon: 'favorite' },
+  { to: '/settings', label: 'Settings', icon: 'settings' }
 ]
 
-const $q = useQuasar()
 const form = reactive({
   username: '',
   email: '',
@@ -196,9 +205,9 @@ const rules = {
   confirmPassword: val => val === form.password || 'passwords do not match'
 }
 
-const onSubmit = async (e) => {
+const regSubmit = async (e) => {
   try {
-    const { data } = await api.post('/users', {
+    const { data } = await api.post('s', {
       username: form.username,
       email: form.email,
       password: form.password
@@ -242,9 +251,16 @@ const onSubmit = async (e) => {
 
 const loginSubmit = async (e) => {
   try {
-    await api.post('/users/login', {
+    const { data } = await api.post('/users/login', {
       username: form.username,
       password: form.password
+    })
+    // TODO: 改要存在store的資料
+    user.login({
+      token: data.result.token,
+      username: data.result.username,
+      email: data.result.email,
+      admin: data.result.admin
     })
     $q.notify({
       position: 'top-right',
@@ -260,7 +276,8 @@ const loginSubmit = async (e) => {
       message: 'Success!'
     })
     loginModal.value = false
-    // router.push('/')
+    // TODO: 導向profile?
+    router.push('/')
   } catch (error) {
     $q.notify({
       position: 'top-right',
@@ -278,6 +295,51 @@ const loginSubmit = async (e) => {
   }
 }
 
+const logout = async () => {
+  try {
+    await apiAuth.delete('users/logout')
+    user.logout()
+    $q.notify({
+      position: 'top-right',
+      color: 'green-4',
+      textColor: 'white',
+      icon: 'done',
+      actions: [
+        {
+          icon: 'close',
+          color: 'white'
+        }
+      ],
+      message: 'See You!'
+    })
+    router.push('/')
+  } catch (error) {
+    $q.notify({
+      position: 'top-right',
+      color: 'red-5',
+      textColor: 'white',
+      icon: 'warning',
+      actions: [
+        {
+          icon: 'close',
+          color: 'white'
+        }
+      ],
+      message: error.response.data.message
+    })
+  }
+}
+
+watch(() => route.query, () => {
+  if ('login' in route.query) open('login')
+  else if ('register' in route.query) open('register')
+})
+
+watch(() => loginModal.value, () => {
+  if (loginModal.value === false) {
+    router.replace({ query: null })
+  }
+})
 </script>
 
 <style scoped>

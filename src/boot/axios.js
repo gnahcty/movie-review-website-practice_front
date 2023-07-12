@@ -1,5 +1,6 @@
 import { boot } from 'quasar/wrappers'
 import axios from 'axios'
+import { useUserStore } from '../stores/user.js'
 
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
@@ -15,6 +16,33 @@ const apiAuth = axios.create({
   baseURL: import.meta.env.VITE_API
 })
 
+apiAuth.interceptors.request.use(config => {
+  const user = useUserStore()
+  config.headers.authorization = 'Bearer ' + user.token
+  return config
+})
+
+apiAuth.interceptors.response.use(res => {
+  return res
+}, error => {
+  if (error.response) {
+    if (error.response.data.message === 'login expired' && error.config.url !== '/users/extend') {
+      const user = useUserStore()
+      return apiAuth.patch('/users/extend')
+        .then(({ data }) => {
+          user.token = data.result
+          error.config.headers.authorization = 'Bearer ' + user.token
+          return axios(error.config)
+        })
+        .catch(() => {
+          user.logout()
+          return Promise.reject(error)
+        })
+    }
+  }
+  return Promise.reject(error)
+})
+
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
@@ -28,4 +56,4 @@ export default boot(({ app }) => {
   app.config.globalProperties.$apiAuth = apiAuth
 })
 
-export { api }
+export { api, apiAuth }
