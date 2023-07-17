@@ -22,6 +22,15 @@ const routes = [
         }
       },
       {
+        path: 'films/:id',
+        component: () => import('pages/front/public/FilmDetails.vue'),
+        meta: {
+          title: 'moOo | Film Details',
+          login: false,
+          admin: false
+        }
+      },
+      {
         path: 'reviews',
         component: () => import('pages/front/public/AllReviews.vue'),
         meta: {

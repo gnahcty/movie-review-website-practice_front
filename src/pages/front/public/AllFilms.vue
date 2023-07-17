@@ -1,38 +1,33 @@
 <template>
-    <q-card class="my-card" flat bordered>
-      <q-img :ratio="3/4" src="https://cdn.quasar.dev/img/mountains.jpg">
-        <div class="absolute-top-right" style="background: transparent; padding: 0;">
-          <q-btn flat round color="grey" icon="add" id="add" class="absolute-top-right"/>
-        </div>
-      </q-img>
-      <q-card-actions align="left">
-        <q-btn flat round color="green" icon="visibility"/>
-        <span style="color: green;">00</span>
-        <q-btn flat round color="yellow" icon="segment"/>
-        <span style="color: goldenrod;">00</span>
-        <q-btn flat round color="red" icon="favorite"/>
-        <span style="color: red;">00</span>
-      </q-card-actions>
-    </q-card>
+  <div class="q-pa-md">
+    <div class="row">
+      <div class="col-3" v-for="(film) in films" :key="film.id">
+        <FilmCard v-bind="film"></FilmCard>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
-// import { api } from '../../../boot/axios'
-// import { ref } from 'vue'
+import { api } from '../../../boot/axios'
+import { reactive } from 'vue'
+import FilmCard from '../../../components/FilmCard.vue'
+const films = reactive([])
 
-// const name = ref(null)
+const getFilms = async () => {
+  try {
+    const { data } = await api.get('/films/allFilms')
+    const results = data.results.results
+    films.push(...results)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
-// const onSubmit = async () => {
-//   try {
-//     const title = name.value
-//     const { data } = await api.get(`/films/search/:${title}`)
-//     console.log(data)
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+getFilms()
 
 </script>
+
 <style>
 .my-card{
   width:200px;
