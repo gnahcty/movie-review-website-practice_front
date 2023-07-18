@@ -45,9 +45,6 @@
               >
             <div class="row">
               <q-input label="Username" v-model="form.username" :rules="[rules.isString, rules.required, rules.min4, rules.max10]"  lazy-rules class="col">
-                <!-- <template v-slot:before>
-                  Username
-                </template> -->
               </q-input>
             </div>
             <div class="row">
@@ -59,9 +56,6 @@
             </div>
             <div class="row">
               <q-input :type="isPwd ? 'password' : 'text'" label="Password" class="col" v-model="form.password" :rules="[rules.isString, rules.required, rules.min4, rules.max20]"  lazy-rules>
-                <!-- <template v-slot:before>
-                  Password
-                </template> -->
                 <template v-slot:append>
                   <q-icon
                     :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -73,9 +67,6 @@
             </div>
             <div class="row">
               <q-input :type="isPwd ? 'password' : 'text'" label="Confirm Password" class="col" v-model="form.confirmPassword" :rules="[rules.required, rules.confirmPassword]" reactive-rules>
-                <!-- <template v-slot:before>
-                  Confirm Password
-                </template> -->
                 <template v-slot:append>
                   <q-icon
                     :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -89,26 +80,6 @@
               <q-btn outline label="submit" type="submit" class="q-mt-md"/>
             </div>
               </q-form>
-              <!-- <q-list class="q-px-md">
-                <q-item>
-                  <q-item-section avatar>Username</q-item-section>
-                  <q-item-section>
-                    <q-input></q-input>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section avatar>Password</q-item-section>
-                  <q-item-section>
-                    <q-input></q-input>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section avatar>Email</q-item-section>
-                  <q-item-section>
-                    <q-input></q-input>
-                  </q-item-section>
-                </q-item>
-              </q-list> -->
             </q-tab-panel>
           </q-tab-panels>
         </q-card>
@@ -120,7 +91,7 @@
 import { useQuasar } from 'quasar'
 import { ref, reactive } from 'vue'
 import validator from 'validator'
-import { api } from '../../boot/axios.js'
+import { api } from 'boot/axios.js'
 
 const $q = useQuasar()
 const form = reactive({

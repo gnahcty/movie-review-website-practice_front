@@ -156,8 +156,8 @@ import { ref, reactive, watch } from 'vue'
 import validator from 'validator'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { useUserStore } from '../stores/user.js'
-import { api, apiAuth } from '../boot/axios.js'
+import { useUserStore } from 'stores/user.js'
+import { api, apiAuth } from 'boot/axios.js'
 
 const leftDrawerOpen = ref(false)
 const loginModal = ref(false)
@@ -207,7 +207,7 @@ const rules = {
 
 const regSubmit = async (e) => {
   try {
-    const { data } = await api.post('s', {
+    const { data } = await api.post('/users', {
       username: form.username,
       email: form.email,
       password: form.password

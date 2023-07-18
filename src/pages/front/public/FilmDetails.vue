@@ -5,17 +5,17 @@
         <q-img fil="cover" scale="3/4" :src="'http://image.tmdb.org/t/p/w185/' + film.poster">
           </q-img>
       </div>
-      <div class="col-6">
+      <div class="col-6 q-px-md">
         <h2>{{ film.title }}</h2>
         <p>{{ film.overview }}</p>
-        <p>{{ film.director }}</p>
+        <p>Director: {{ film.director }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { api } from '../../../boot/axios'
+import { api } from 'src/boot/axios'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -26,8 +26,9 @@ const film = ref({
   title: '',
   poster: '',
   overview: '',
-  director: []
+  director: ''
 })
+
 const getDetails = async () => {
   try {
     const { data } = await api.get('/films/' + route.params.id)
@@ -35,12 +36,7 @@ const getDetails = async () => {
     film.value.title = data.results.title
     film.value.poster = data.results.poster_path
     film.value.overview = data.results.overview
-    const dirList = await getCrew(film.value.id, 'Director')
-    // console.log(dirList)
-    for (const dir of dirList) {
-      console.log(dir)
-      film.value.director.push(dir.name)
-    }
+    film.value.director = await getCrew(film.value.id, 'Director')
   } catch (error) {
     console.log(error)
   }
@@ -49,10 +45,19 @@ const getDetails = async () => {
 const getCrew = async (id, job) => {
   try {
     const { data } = await api.get('/films/' + id + '/crew')
-    return data.results.crew.filter((member) => member.job === job)
+    const list = data.results.crew.filter((member) => member.job === job)
+    return getNames(list)
   } catch (error) {
     console.log(error)
   }
+}
+
+const getNames = (list) => {
+  const nameArr = []
+  for (const person of list) {
+    nameArr.push(person.name)
+  }
+  return nameArr.join()
 }
 
 getDetails()
