@@ -19,9 +19,14 @@
             </q-item>
           </q-list>
         </q-btn-dropdown>
-        <q-btn label="Second" />
+        <q-btn-dropdown flat label="genres">
+          <q-option-group
+      v-model="chosenGenres"
+      :options="genres"
+      type="checkbox"
+    />
+        </q-btn-dropdown>
       </q-btn-group>
-
     <div class="row">
       <div class="col-3 flex flex-center" v-for="(film) in films" :key="film.id">
         <FilmCard v-bind="film"></FilmCard>
@@ -32,7 +37,7 @@
 
 <script setup>
 import { api } from 'boot/axios'
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import FilmCard from 'components/FilmCard.vue'
 const films = reactive([])
 const params = reactive({
@@ -40,6 +45,7 @@ const params = reactive({
   year: 2023,
   rating: ''
 })
+const chosenGenres = ref([])
 const getFilms = async () => {
   try {
     const { data } = await api.get('/films/allFilms',
@@ -58,6 +64,85 @@ const years = computed(() => {
   }
   return arr
 })
+
+const genres = [
+  {
+    value: 28,
+    label: 'Action'
+  },
+  {
+    value: 12,
+    label: 'Adventure'
+  },
+  {
+    value: 16,
+    label: 'Animation'
+  },
+  {
+    value: 35,
+    label: 'Comedy'
+  },
+  {
+    value: 80,
+    label: 'Crime'
+  },
+  {
+    value: 99,
+    label: 'Documentary'
+  },
+  {
+    value: 18,
+    label: 'Drama'
+  },
+  {
+    value: 10751,
+    label: 'Family'
+  },
+  {
+    value: 14,
+    label: 'Fantasy'
+  },
+  {
+    value: 36,
+    label: 'History'
+  },
+  {
+    value: 27,
+    label: 'Horror'
+  },
+  {
+    value: 10402,
+    label: 'Music'
+  },
+  {
+    value: 9648,
+    label: 'Mystery'
+  },
+  {
+    value: 10749,
+    label: 'Romance'
+  },
+  {
+    value: 878,
+    label: 'Science Fiction'
+  },
+  {
+    value: 10770,
+    label: 'TV Movie'
+  },
+  {
+    value: 53,
+    label: 'Thriller'
+  },
+  {
+    value: 10752,
+    label: 'War'
+  },
+  {
+    value: 37,
+    label: 'Western'
+  }
+]
 
 const setYear = (year) => {
   params.year = year
