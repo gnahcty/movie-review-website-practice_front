@@ -4,10 +4,18 @@
     <q-header bordered class="bg-white text-black">
       <q-toolbar>
         <q-btn flat round icon="menu" @click = "toggleLeftDrawer"/>
-
-        <q-toolbar-title>
-          <q-btn to="/" size="xl" flat rounded color="primary" icon="img:https://stickershop.line-scdn.net/stickershop/v1/sticker/563671934/android/sticker.png?v=1" label="Title" />
+        <q-toolbar-title >
+          <q-btn to="/" size="xl" flat rounded color="primary" icon="img:https://stickershop.line-scdn.net/stickershop/v1/sticker/563671934/android/sticker.png?v=1" label="Title"/>
         </q-toolbar-title>
+        <!-- <q-space /> -->
+        <form>
+          <q-input rounded outlined v-model="search" placeholder="search movie" style="width:40vw" class="q-ml-xl">
+            <template v-slot:after>
+                <q-btn type="submit" flat round icon="search" @click="SearchMovie" />
+          </template>
+          </q-input>
+        </form>
+        <q-space />
         <q-btn flat round icon="format_list_bulleted" to="/lists" >
           <q-tooltip>Lists</q-tooltip>
         </q-btn>
@@ -160,6 +168,7 @@ import { useUserStore } from 'stores/user.js'
 import { api, apiAuth } from 'boot/axios.js'
 
 const leftDrawerOpen = ref(false)
+const search = ref('')
 const loginModal = ref(false)
 const tab = ref('login')
 const isPwd = ref(true)
@@ -328,6 +337,13 @@ const logout = async () => {
       message: error.response.data.message
     })
   }
+}
+
+const SearchMovie = () => {
+  if (search.value !== '') {
+    router.push(`/search/${search.value}`)
+  }
+  search.value = ''
 }
 
 watch(() => route.query, () => {

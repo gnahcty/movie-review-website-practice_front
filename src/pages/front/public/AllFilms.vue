@@ -21,10 +21,10 @@
         </q-btn-dropdown>
         <q-btn-dropdown flat label="genres">
           <q-option-group
-      v-model="chosenGenres"
-      :options="genres"
-      type="checkbox"
-    />
+            v-model="chosenGenres"
+            :options="genres"
+            type="checkbox"
+          />
         </q-btn-dropdown>
       </q-btn-group>
     <div class="row">
@@ -37,21 +37,23 @@
 
 <script setup>
 import { api } from 'boot/axios'
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, watch, ref } from 'vue'
 import FilmCard from 'components/FilmCard.vue'
 const films = reactive([])
+const chosenGenres = ref([])
 const params = reactive({
   region: 'TW',
   year: 2023,
-  rating: ''
+  rating: '',
+  genres: ''
 })
-const chosenGenres = ref([])
+
 const getFilms = async () => {
   try {
     const { data } = await api.get('/films/allFilms',
       { params })
     const results = data.results.results
-    films.push(...results)
+    films.splice(0, (films.length - 1), ...results)
   } catch (error) {
     console.log(error.response.data.message)
   }
@@ -147,9 +149,16 @@ const genres = [
 const setYear = (year) => {
   params.year = year
 }
+
 const setRating = (i) => {
   params.rating = i
 }
+
+watch(chosenGenres, () => {
+  params.genres = chosenGenres.value.join()
+})
+
+watch(params, getFilms)
 
 getFilms()
 

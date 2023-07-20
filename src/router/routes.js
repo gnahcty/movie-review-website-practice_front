@@ -13,6 +13,15 @@ const routes = [
         }
       },
       {
+        path: 'search/:title',
+        component: () => import('pages/front/public/SearchList.vue'),
+        meta: {
+          title: 'moOo | Film Search',
+          login: false,
+          admin: false
+        }
+      },
+      {
         path: 'films',
         component: () => import('pages/front/public/AllFilms.vue'),
         meta: {
