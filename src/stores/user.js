@@ -7,13 +7,18 @@ export const useUserStore = defineStore('user', () => {
   const username = ref('')
   const email = ref('')
   const admin = ref(false)
+  const following = ref([])
+  const followers = ref([])
+  const watchlist = ref([])
 
-  // TODO:更新資料
   const login = (data) => {
     token.value = data.token
     username.value = data.username
     email.value = data.email
     admin.value = data.admin
+    following.value = data.following
+    followers.value = data.followers
+    watchlist.value = data.watchlist
   }
 
   const isLogin = computed(() => {

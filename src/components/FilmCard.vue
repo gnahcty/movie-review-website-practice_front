@@ -5,12 +5,12 @@
           <div class="absolute-top-right" style="background: transparent; padding: 0;">
             <q-btn flat round color="grey" icon="add" id="add" class="absolute-top-right"/>
           </div>
-          <q-tooltip  anchor="center middle"
+          <q-tooltip anchor="center middle"
             self="top middle">{{ title }}</q-tooltip>
         </q-img>
       </RouterLink>
         <q-card-actions align="left">
-          <q-btn flat round color="green" icon="visibility"/>
+          <q-btn flat round  color="green" icon="visibility" @click="seen()"/>
           <span style="color: green;">00</span>
           <q-btn flat round color="yellow" icon="segment"/>
           <span style="color: goldenrod;">00</span>
@@ -21,6 +21,11 @@
 </template>
 
 <script setup>
+import { api } from 'boot/axios'
+import { useUserStore } from 'stores/user'
+
+const user = useUserStore()
+
 const props = defineProps({
   id: {
     type: Number,
@@ -35,4 +40,17 @@ const props = defineProps({
     default: () => ''
   }
 })
+const seen = async () => {
+  try {
+    const { data } = await api.post('/reviews', {
+      user: user._id,
+      film: props.id,
+      date: new Date().getTime(),
+      watched: req.body.watched
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 </script>

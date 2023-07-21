@@ -17,7 +17,6 @@ import FilmCard from 'components/FilmCard.vue'
 const route = useRoute()
 const films = ref([])
 
-// console.log(route.params.title)
 const searchMovie = async () => {
   try {
     console.log(route.params.title)

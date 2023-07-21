@@ -216,17 +216,10 @@ const rules = {
 
 const regSubmit = async (e) => {
   try {
-    const { data } = await api.post('/users', {
+    await api.post('/users', {
       username: form.username,
       email: form.email,
       password: form.password
-    })
-    // TODO: 改要存在store的資料
-    user.login({
-      token: data.result.token,
-      username: data.result.username,
-      email: data.result.email,
-      admin: data.result.admin
     })
     $q.notify({
       position: 'top-right',
@@ -264,12 +257,15 @@ const loginSubmit = async (e) => {
       username: form.username,
       password: form.password
     })
-    // TODO: 改要存在store的資料
+
     user.login({
       token: data.result.token,
       username: data.result.username,
       email: data.result.email,
-      admin: data.result.admin
+      admin: data.result.admin,
+      following: data.result.following,
+      followers: data.result.followers,
+      watchlist: data.result.watchlist
     })
     $q.notify({
       position: 'top-right',
