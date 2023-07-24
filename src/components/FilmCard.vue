@@ -10,21 +10,22 @@
         </q-img>
       </RouterLink>
         <q-card-actions align="left">
-          <q-btn flat round  color="green" icon="visibility" @click="seen()"/>
-          <span style="color: green;">00</span>
-          <q-btn flat round color="yellow" icon="segment"/>
-          <span style="color: goldenrod;">00</span>
-          <q-btn flat round color="red" icon="favorite"/>
-          <span style="color: red;">00</span>
+          <q-btn flat round :color="watched ? 'green' : 'grey'" icon="visibility" @click="seen()"/>
+          <!-- <span style="color: green;">00</span> -->
+          <q-btn flat round :color="commented ? 'yellow' : 'grey'" icon="segment"/>
+          <!-- <span style="color: goldenrod;">00</span> -->
+          <q-btn flat round :color="liked ? 'red' : 'grey'" icon="favorite" @click="like()"/>
+          <!-- <span style="color: red;">00</span> -->
         </q-card-actions>
       </q-card>
 </template>
 
 <script setup>
-import { api } from 'boot/axios'
-import { useUserStore } from 'stores/user'
+import { ref } from 'vue'
+import { apiAuth } from 'boot/axios'
+// import { useUserStore } from 'stores/user'
 
-const user = useUserStore()
+// const user = useUserStore()
 
 const props = defineProps({
   id: {
@@ -38,19 +39,38 @@ const props = defineProps({
   poster_path: {
     type: String,
     default: () => ''
+  },
+  watched: {
+    type: Boolean,
+    default: () => false
+  },
+  like: {
+    type: Boolean,
+    default: () => false
+  },
+  comments: {
+    type: String,
+    default: () => ''
   }
 })
+
+const watched = ref(props.watched)
+const commented = ref(props.comments !== '')
+const liked = ref(props.like)
+
 const seen = async () => {
-  try {
-    const { data } = await api.post('/reviews', {
-      user: user._id,
-      film: props.id,
-      date: new Date().getTime(),
-      watched: req.body.watched
-    })
-  } catch (error) {
-    console.log(error)
-  }
+  watched.value = !watched.value
+  await apiAuth.post('/reviews/', {
+    filmID: props.id,
+    watched: watched.value
+  })
 }
 
+const like = async () => {
+  liked.value = !liked.value
+  await apiAuth.post('/reviews/', {
+    filmID: props.id,
+    like: liked.value
+  })
+}
 </script>
