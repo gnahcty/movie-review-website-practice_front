@@ -23,9 +23,11 @@
 <script setup>
 import { ref } from 'vue'
 import { apiAuth } from 'boot/axios'
-// import { useUserStore } from 'stores/user'
+import { useUserStore } from 'stores/user'
+import { useQuasar } from 'quasar'
 
-// const user = useUserStore()
+const user = useUserStore()
+const $q = useQuasar()
 
 const props = defineProps({
   id: {
@@ -59,18 +61,50 @@ const commented = ref(props.comments !== '')
 const liked = ref(props.like)
 
 const seen = async () => {
-  watched.value = !watched.value
-  await apiAuth.post('/reviews/', {
-    filmID: props.id,
-    watched: watched.value
-  })
+  if (user.isLogin) {
+    watched.value = !watched.value
+    await apiAuth.post('/reviews/', {
+      filmID: props.id,
+      watched: watched.value
+    })
+  } else {
+    $q.notify({
+      position: 'top-right',
+      color: 'red-5',
+      textColor: 'white',
+      icon: 'warning',
+      actions: [
+        {
+          icon: 'close',
+          color: 'white'
+        }
+      ],
+      message: 'Please Login'
+    })
+  }
 }
 
 const like = async () => {
-  liked.value = !liked.value
-  await apiAuth.post('/reviews/', {
-    filmID: props.id,
-    like: liked.value
-  })
+  if (user.isLogin) {
+    liked.value = !liked.value
+    await apiAuth.post('/reviews/', {
+      filmID: props.id,
+      like: liked.value
+    })
+  } else {
+    $q.notify({
+      position: 'top-right',
+      color: 'red-5',
+      textColor: 'white',
+      icon: 'warning',
+      actions: [
+        {
+          icon: 'close',
+          color: 'white'
+        }
+      ],
+      message: 'Please Login'
+    })
+  }
 }
 </script>

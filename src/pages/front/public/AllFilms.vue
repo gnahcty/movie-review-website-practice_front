@@ -36,9 +36,12 @@
 </template>
 
 <script setup>
-import { api } from 'boot/axios'
+import { api, apiAuth } from 'boot/axios'
 import { computed, reactive, watch, ref } from 'vue'
 import FilmCard from 'components/FilmCard.vue'
+import { useUserStore } from 'stores/user.js'
+
+const user = useUserStore()
 const films = reactive([])
 const chosenGenres = ref([])
 const params = reactive({
@@ -53,9 +56,14 @@ const getFilms = async () => {
     const { data } = await api.get('/films/allFilms',
       { params })
     const results = data.results.results
-    films.splice(0, (films.length - 1), ...results)
+    if (user.isLogin) {
+      const withUserReview = await apiAuth.post('/reviews/user', [...results])
+      films.splice(0, (films.length - 1), ...withUserReview.data.films)
+    } else {
+      films.splice(0, (films.length - 1), ...results)
+    }
   } catch (error) {
-    console.log(error.response.data.message)
+    console.log(error)
   }
 }
 

@@ -21,14 +21,8 @@ const searchMovie = async () => {
   try {
     const { data } = await api.get('/films/search/' + route.params.title)
     const results = data.results.results
-    // get user review data
-    for (const result of results) {
-      const { data: userReviewData } = await apiAuth.get('/reviews/user/' + result.id)
-      result.watched = userReviewData.result?.watched || false
-      result.like = userReviewData.result?.like || false
-      result.comments = userReviewData.result?.comments || ''
-    }
-    films.value.push(...results)
+    const withUserReview = await apiAuth.post('/reviews/user', [...results])
+    films.value.push(...withUserReview.data.films)
   } catch (error) {
     console.log(error)
   }
