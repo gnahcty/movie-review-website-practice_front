@@ -97,6 +97,22 @@ const getUserReview = async () => {
   film.value.comments = data.result.comments
 }
 
+const seen = async () => {
+  film.value.watched = !film.value.watched
+  await apiAuth.post('/reviews/', {
+    filmID: film.value.id,
+    watched: film.value.watched
+  })
+}
+
+const like = async () => {
+  film.value.like = !film.value.like
+  await apiAuth.post('/reviews/', {
+    filmID: film.value.id,
+    like: film.value.like
+  })
+}
+
 getDetails()
 getUserReview()
 </script>
