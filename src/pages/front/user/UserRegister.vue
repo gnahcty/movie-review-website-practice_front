@@ -49,9 +49,6 @@
             </div>
             <div class="row">
               <q-input type="email" label="email" class="col" v-model="form.email" :rules="[rules.isString, rules.required, rules.isEmail]"  lazy-rules>
-                <!-- <template v-slot:before>
-                  Email Address
-                </template> -->
               </q-input>
             </div>
             <div class="row">
