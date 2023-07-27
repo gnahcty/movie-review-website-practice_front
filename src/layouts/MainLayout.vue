@@ -34,7 +34,7 @@
           <q-item style="height:150px;">
             <q-item-section avatar style="width:80px;">
               <q-avatar style="width:80px;height: 100%">
-                <img src="https://source.boringavatars.com/beam/120/Annie%20Jump?colors=264653,2a9d8f,e9c46a,f4a261,e76f51">
+                <img :src=user.avatar>
               </q-avatar>
             </q-item-section>
 <!-- TODO: 登入後把login signup改成 watched films -->
@@ -219,8 +219,10 @@ const regSubmit = async (e) => {
     await api.post('/users', {
       username: form.username,
       email: form.email,
-      password: form.password
+      password: form.password,
+      avatar: `https://source.boringavatars.com/beam/120/${form.username}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`
     })
+    loginModal.value = false
     $q.notify({
       position: 'top-right',
       color: 'green-4',
@@ -263,9 +265,10 @@ const loginSubmit = async (e) => {
       username: data.result.username,
       email: data.result.email,
       admin: data.result.admin,
+      avatar: data.result.avatar,
       following: data.result.following,
       followers: data.result.followers,
-      watchlist: data.result.watchlist
+      watchList: data.result.watchList
     })
     $q.notify({
       position: 'top-right',

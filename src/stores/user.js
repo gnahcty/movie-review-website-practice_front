@@ -9,16 +9,18 @@ export const useUserStore = defineStore('user', () => {
   const admin = ref(false)
   const following = ref([])
   const followers = ref([])
-  const watchlist = ref([])
+  const watchList = ref([])
+  const avatar = ref('')
 
   const login = (data) => {
     token.value = data.token
     username.value = data.username
     email.value = data.email
     admin.value = data.admin
+    avatar.value = data.avatar
     following.value = data.following
     followers.value = data.followers
-    watchlist.value = data.watchlist
+    watchList.value = data.watchList
   }
 
   const isLogin = computed(() => {
@@ -29,17 +31,17 @@ export const useUserStore = defineStore('user', () => {
     return admin.value === 1
   })
 
-  // const avatar = computed(() => {
-  //   return `https://source.boringavatars.com/beam/120/${username.value}?colors=0db2ac,f5dd7e,fc8d4d,fc694d,faba32`
-  // })
-
   const getProfile = async () => {
     if (token.value.length === 0) return
     try {
       const { data } = await apiAuth.get('/users/profile')
       username.value = data.result.username
       email.value = data.result.email
-      admin.value = data.admin
+      admin.value = data.result.admin
+      avatar.value = data.result.avatar
+      following.value = data.result.following
+      followers.value = data.result.followers
+      watchList.value = data.result.watchList
     } catch (error) {
       token.value = ''
     }
@@ -50,12 +52,20 @@ export const useUserStore = defineStore('user', () => {
     username.value = ''
     email.value = ''
     admin.value = 0
+    avatar.value = ''
+    following.value = []
+    followers.value = []
+    watchList.value = []
   }
 
   return {
     token,
     username,
     email,
+    following,
+    followers,
+    avatar,
+    watchList,
     login,
     isLogin,
     isAdmin,

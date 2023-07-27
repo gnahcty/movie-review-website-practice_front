@@ -28,48 +28,11 @@
         <p>Director: {{ film.director }}</p>
         <q-separator />
         <q-list>
-      <q-item-label header>Comments</q-item-label>
-
-      <q-item clickable v-ripple>
-        <q-item-section avatar>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/img/avatar2.jpg">
-          </q-avatar>
-        </q-item-section>
-
-        <q-item-section>
-          <q-item-label lines="1">UserName
-            <q-rating
-          v-model="film.ratings"
-          max="5"
-          color="orange"
-          icon="star_border"
-          icon-selected="star"
-          icon-half="star_half"
-          class="q-ml-md"
-          readonly
-        />
-        <q-icon name="favorite" color="red" class="q-ml-md"/>
-          </q-item-label>
-          <q-item-label caption lines="2">
-            <span>
-            I'll be in your neighborhood doing errands this
-            weekend. Do you want to grab brunch?
-          </span>
-
-          </q-item-label>
-        </q-item-section>
-
-        <q-item-section side top>
-          <q-item-label lines="1">
-            <q-icon name="favorite" />
-            <span class="q-ml-sm">5</span>
-          </q-item-label>
-        </q-item-section>
-      </q-item>
-
-      <q-separator inset="item" />
-    </q-list>
+          <q-item-label header>Comments</q-item-label>
+            <template v-for="cmt in allReviews" :key="cmt.id">
+              <FilmReview v-bind="cmt"></FilmReview>
+            </template>
+        </q-list>
 
         <div class="text-center q-ma-md" v-if="film.comments===''">
           <q-editor v-model="reviewEditor" min-height="5rem" placeholder="write something..." class="text-left"/>
@@ -83,6 +46,7 @@
 <script setup>
 import { api, apiAuth } from 'src/boot/axios'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
+import FilmReview from 'components/FilmReview.vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -99,6 +63,7 @@ const film = reactive({
   comments: '',
   inWatchList: false
 })
+const allReviews = reactive([])
 
 const getDetails = async () => {
   try {
@@ -129,6 +94,12 @@ const getNames = (list) => {
     nameArr.push(person.name)
   }
   return nameArr.join()
+}
+
+const getReviews = async () => {
+  const { data } = await apiAuth.get('/reviews/' + route.params.id)
+  allReviews.splice(0, allReviews.length - 1, ...data.results)
+  console.log(allReviews)
 }
 
 const getUserReview = async () => {
@@ -203,6 +174,7 @@ watch(() => film.ratings, async (newRatings, oldRatings) => {
 onMounted(async () => {
   await getDetails()
   getUserReview()
+  getReviews()
   checkWatchList()
 })
 
