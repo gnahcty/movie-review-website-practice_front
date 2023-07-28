@@ -1,3 +1,3 @@
 <template>
 Diary
-  </template>
+</template>

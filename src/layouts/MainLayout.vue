@@ -34,7 +34,7 @@
           <q-item style="height:150px;">
             <q-item-section avatar style="width:80px;">
               <q-avatar style="width:80px;height: 100%">
-                <img :src=user.avatar>
+                <img :src="(user.avatar || 'https://source.boringavatars.com/beam/120/Annie%20Jump?colors=264653,2a9d8f,e9c46a,f4a261,e76f51')">
               </q-avatar>
             </q-item-section>
 <!-- TODO: 登入後把login signup改成 watched films -->

@@ -13,12 +13,13 @@
           icon="star_border"
           icon-selected="star"
           icon-half="star_half"
+          :readonly="!user.isLogin"
         />
         </q-card-actions>
           <q-card-actions align="center">
-          <q-btn flat round :color="film.watched ? 'green' : 'grey'" icon="visibility" @click="seen()"/>
-          <q-btn flat round :color="film.like ? 'red' : 'grey'" icon="favorite" @click="like()"/>
-          <q-btn flat round :color="film.inWatchList ? 'blue' : 'grey'" icon="more_time" @click="addToWatchList()"/>
+          <q-btn flat round :color="film.watched ? 'green' : 'grey'" icon="visibility" @click="seen()" :disable="!user.isLogin" />
+          <q-btn flat round :color="film.like ? 'red' : 'grey'" icon="favorite" @click="like()" :disable="!user.isLogin"/>
+          <q-btn flat round :color="film.inWatchList ? 'blue' : 'grey'" icon="more_time" @click="addToWatchList()" :disable="!user.isLogin"/>
         </q-card-actions>
         </q-card>
       </div>
@@ -35,7 +36,7 @@
         </q-list>
 
         <div class="text-center q-ma-md" v-if="film.comments===''">
-          <q-editor v-model="reviewEditor" min-height="5rem" placeholder="write something..." class="text-left"/>
+          <q-editor v-model="reviewEditor" min-height="5rem" :placeholder="user.isLogin?'write something...': 'Login to leave a review...'" class="text-left" :readonly="!user.isLogin"/>
         <q-btn label="submit" @click="submitReview" class="q-ma-sm" :disable="disableSubmit"/>
         </div>
       </div>
@@ -47,8 +48,10 @@
 import { api, apiAuth } from 'src/boot/axios'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import FilmReview from 'components/FilmReview.vue'
+import { useUserStore } from 'stores/user'
 import { useRoute } from 'vue-router'
 
+const user = useUserStore()
 const route = useRoute()
 const reviewEditor = ref('')
 const film = reactive({
@@ -97,7 +100,7 @@ const getNames = (list) => {
 }
 
 const getReviews = async () => {
-  const { data } = await apiAuth.get('/reviews/' + route.params.id)
+  const { data } = await api.get('/reviews/' + route.params.id)
   allReviews.splice(0, allReviews.length - 1, ...data.results)
   console.log(allReviews)
 }
@@ -148,6 +151,7 @@ const submitReview = async () => {
     comments: reviewEditor.value
   })
   getUserReview()
+  getReviews()
 }
 
 const addToWatchList = async () => {
@@ -173,8 +177,8 @@ watch(() => film.ratings, async (newRatings, oldRatings) => {
 
 onMounted(async () => {
   await getDetails()
-  getUserReview()
   getReviews()
+  getUserReview()
   checkWatchList()
 })
 

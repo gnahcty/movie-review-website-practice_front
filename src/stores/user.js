@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { apiAuth } from '../boot/axios.js'
 
 export const useUserStore = defineStore('user', () => {
+  const _id = ref('')
   const token = ref('')
   const username = ref('')
   const email = ref('')
@@ -13,6 +14,7 @@ export const useUserStore = defineStore('user', () => {
   const avatar = ref('')
 
   const login = (data) => {
+    _id.value = data._id
     token.value = data.token
     username.value = data.username
     email.value = data.email
@@ -48,6 +50,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const logout = () => {
+    _id.value = ''
     token.value = ''
     username.value = ''
     email.value = ''
@@ -59,6 +62,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   return {
+    _id,
     token,
     username,
     email,
