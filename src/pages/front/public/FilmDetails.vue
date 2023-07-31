@@ -28,10 +28,10 @@
         <p>{{ film.overview }}</p>
         <p>Director: {{ film.director }}</p>
         <q-separator />
-        <q-list>
+        <q-list >
           <q-item-label header>Comments</q-item-label>
             <template v-for="cmt in allReviews" :key="cmt.id">
-              <FilmReview v-bind="cmt"></FilmReview>
+              <FilmReview v-bind="cmt" v-if="cmt.comments!==''" @cmtUpdated="updateReview($event)"></FilmReview>
             </template>
         </q-list>
 
@@ -101,17 +101,17 @@ const getNames = (list) => {
 
 const getReviews = async () => {
   const { data } = await api.get('/reviews/' + route.params.id)
-  allReviews.splice(0, allReviews.length - 1, ...data.results)
-  console.log(allReviews)
+  allReviews.splice(0, allReviews.length, ...data.results)
 }
 
 const getUserReview = async () => {
   const { data } = await apiAuth.get('/reviews/user/' + route.params.id)
-  // console.log(data)
-  film.like = data.result.like
-  film.ratings = data.result.ratings
-  film.watched = data.result.watched
-  film.comments = data.result.comments
+  if (data.results !== null) {
+    film.like = data.result.like
+    film.ratings = data.result.ratings
+    film.watched = data.result.watched
+    film.comments = data.result.comments
+  }
 }
 
 const checkWatchList = async () => {
@@ -159,6 +159,13 @@ const addToWatchList = async () => {
     filmID: film.id.toString()
   })
   checkWatchList()
+}
+
+const updateReview = (data) => {
+  const index = allReviews.findIndex((cmt) => cmt._id === data.result._id)
+  if (index !== -1) {
+    allReviews[index].comments = data.result.comments
+  }
 }
 
 watch(() => film.ratings, async (newRatings, oldRatings) => {

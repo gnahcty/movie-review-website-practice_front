@@ -37,6 +37,7 @@ export const useUserStore = defineStore('user', () => {
     if (token.value.length === 0) return
     try {
       const { data } = await apiAuth.get('/users/profile')
+      _id.value = data.result._id
       username.value = data.result.username
       email.value = data.result.email
       admin.value = data.result.admin
