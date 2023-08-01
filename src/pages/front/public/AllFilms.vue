@@ -37,7 +37,7 @@
 
 <script setup>
 import { api, apiAuth } from 'boot/axios'
-import { computed, reactive, watch, ref } from 'vue'
+import { computed, reactive, watch, ref, onMounted } from 'vue'
 import FilmCard from 'components/FilmCard.vue'
 import { useUserStore } from 'stores/user.js'
 
@@ -61,6 +61,17 @@ const getFilms = async () => {
       films.splice(0, (films.length - 1), ...withUserReview.data.films)
     } else {
       films.splice(0, (films.length - 1), ...results)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getUserLists = async () => {
+  try {
+    const { data } = await apiAuth.get('lists/user')
+    if (user.userLists) {
+      user.userLists = data.UserLists
     }
   } catch (error) {
     console.log(error)
@@ -168,7 +179,10 @@ watch(chosenGenres, () => {
 
 watch(params, getFilms)
 
-getFilms()
+onMounted(async () => {
+  await getFilms()
+  getUserLists()
+})
 
 </script>
 

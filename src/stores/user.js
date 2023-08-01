@@ -12,6 +12,7 @@ export const useUserStore = defineStore('user', () => {
   const followers = ref([])
   const watchList = ref([])
   const avatar = ref('')
+  const userLists = ref([])
 
   const login = (data) => {
     _id.value = data._id
@@ -70,6 +71,7 @@ export const useUserStore = defineStore('user', () => {
     following,
     followers,
     avatar,
+    userLists,
     watchList,
     login,
     isLogin,

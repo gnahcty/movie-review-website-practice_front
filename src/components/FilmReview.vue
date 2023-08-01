@@ -111,7 +111,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed, defineEmits } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { apiAuth } from 'boot/axios'
 import { useUserStore } from 'stores/user'
 import { useQuasar } from 'quasar'
