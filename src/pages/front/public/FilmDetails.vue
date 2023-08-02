@@ -106,11 +106,16 @@ const getReviews = async () => {
 
 const getUserReview = async () => {
   const { data } = await apiAuth.get('/reviews/user/' + route.params.id)
-  if (data.results !== null) {
+  if (data.result) {
     film.like = data.result.like
     film.ratings = data.result.ratings
     film.watched = data.result.watched
     film.comments = data.result.comments
+  } else {
+    film.like = false
+    film.ratings = 0
+    film.watched = false
+    film.comments = ''
   }
 }
 
@@ -156,9 +161,9 @@ const submitReview = async () => {
 
 const addToWatchList = async () => {
   const addedFilm = {
-    id: film.id,
+    filmID: film.id,
     title: film.title,
-    poster: film.poster_path
+    poster: film.poster
   }
   await apiAuth.post('/users/watchlist', addedFilm)
   checkWatchList()

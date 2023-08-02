@@ -233,7 +233,7 @@ const inWatchList = computed(() => {
 const addToWatchList = async () => {
   try {
     const film = {
-      id: props.id,
+      filmID: props.id,
       title: props.title,
       poster: props.poster_path
     }
