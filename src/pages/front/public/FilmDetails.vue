@@ -117,7 +117,7 @@ const getUserReview = async () => {
 const checkWatchList = async () => {
   const { data } = await apiAuth.get('users/profile')
   const watchList = data.result.watchList
-  if (watchList.indexOf(film.id.toString()) >= 0) {
+  if (watchList.some(movie => movie.id === film.id.toString())) {
     film.inWatchList = true
   } else {
     film.inWatchList = false
@@ -155,9 +155,12 @@ const submitReview = async () => {
 }
 
 const addToWatchList = async () => {
-  await apiAuth.post('/users/watchlist', {
-    filmID: film.id.toString()
-  })
+  const addedFilm = {
+    id: film.id,
+    title: film.title,
+    poster: film.poster_path
+  }
+  await apiAuth.post('/users/watchlist', addedFilm)
   checkWatchList()
 }
 

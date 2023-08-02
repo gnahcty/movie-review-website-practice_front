@@ -3,12 +3,12 @@
     <q-btn flat round color="grey" icon="add" id="add" class="absolute-top-right" style="z-index:2" v-if="user.isLogin">
       <q-menu>
         <q-list style="min-width: 150px">
-          <q-item clickable v-close-popup class="row items-center" >
+          <q-item clickable :class="['row', 'items-center', inWatchList]" @click="addToWatchList">
             <q-icon name="more_time" class="col-2 q-pr-sm" />
             <div class="text-left"> WatchList</div>
           </q-item>
           <template v-for="(list, i) in user.userLists" :key="i">
-            <q-item clickable v-close-popup class="row items-center" @click="addToList(i)" :style="inList(i)">
+            <q-item clickable  :class="['row', 'items-center', inList(i)]" @click="addToList(i)">
               <q-icon name="segment" class="col-2 q-pr-sm" />
               <div class="text-left"> {{ list.name }}</div>
             </q-item>
@@ -186,10 +186,15 @@ const createList = async () => {
     })
   } else {
     try {
+      const film = {
+        id: props.id,
+        title: props.title,
+        poster: props.poster_path
+      }
       const { data } = await apiAuth.post('lists/create', {
         name: listTitle.value,
         description: listDescription.value,
-        films: [props.id]
+        films: [film]
       })
       user.userLists.push(data.newList)
     } catch (error) {
@@ -200,24 +205,43 @@ const createList = async () => {
 
 const addToList = async (i) => {
   try {
-    await apiAuth.post('lists/update', {
-      _id: user.userLists[i]._id,
-      film: props.id
-    })
-    const idx = user.userLists[i].films.indexOf(props.id.toString())
-    console.log(` user.userLists[i].films : ${user.userLists[i].films},props.id: ${props.id}, idx: ${idx}`)
-    if (idx === -1) {
-      user.userLists[i].films.push(props.id.toString())
-    } else {
-      user.userLists[i].films.splice(idx, 1)
+    const film = {
+      id: props.id,
+      title: props.title,
+      poster: props.poster_path
     }
+    const { data } = await apiAuth.post('lists/update', {
+      _id: user.userLists[i]._id,
+      film
+    })
+    user.userLists[i] = data.list
   } catch (error) {
     console.log(error)
   }
 }
 
-const inList = computed((i) => {
-  return user.userLists[i].films.indexOf(props.id.toString()) === -1 ? 'color:grey' : 'color:blue'
+const inList = computed(function () {
+  return (i) => {
+    return user.userLists[i].films.some(film => film.id === props.id.toString()) ? 'text-blue' : 'text-grey'
+  }
+})
+
+const inWatchList = computed(() => {
+  return user.watchList.some(film => film.id === props.id.toString()) ? 'text-blue' : 'text-grey'
+})
+
+const addToWatchList = async () => {
+  try {
+    const film = {
+      id: props.id,
+      title: props.title,
+      poster: props.poster_path
+    }
+    const { data } = await apiAuth.post('/users/watchlist', film)
+    user.watchList = data.result
+  } catch (error) {
+    console.log(error)
+  }
 }
-)
+
 </script>
