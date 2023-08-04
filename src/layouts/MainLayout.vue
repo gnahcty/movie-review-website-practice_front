@@ -1,22 +1,24 @@
 <template>
   <q-layout view="hHh lpR fFf">
 
-    <q-header bordered class="bg-white text-black">
-      <q-toolbar>
-        <q-btn flat round icon="menu" @click = "toggleLeftDrawer"/>
-        <q-toolbar-title >
-          <q-btn to="/" size="xl" flat rounded color="primary" icon="img:https://stickershop.line-scdn.net/stickershop/v1/sticker/563671934/android/sticker.png?v=1" label="Title"/>
+    <q-header bordered class="bg-white text-black" style="height: 10% ;">
+      <q-toolbar class="fit">
+        <q-btn flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-toolbar-title>
+          <q-btn to="/" size="xl" flat rounded color="primary"
+            icon="img:https://stickershop.line-scdn.net/stickershop/v1/sticker/563671934/android/sticker.png?v=1"
+            label="Title" />
         </q-toolbar-title>
         <!-- <q-space /> -->
         <form>
           <q-input rounded outlined v-model="search" placeholder="search movie" style="width:40vw" class="q-ml-xl">
             <template v-slot:after>
-                <q-btn type="submit" flat round icon="search" @click="SearchMovie" />
-          </template>
+              <q-btn type="submit" flat round icon="search" @click="SearchMovie" />
+            </template>
           </q-input>
         </form>
         <q-space />
-        <q-btn flat round icon="format_list_bulleted" to="/lists" >
+        <q-btn flat round icon="format_list_bulleted" to="/lists">
           <q-tooltip>Lists</q-tooltip>
         </q-btn>
         <q-btn flat round icon="fa-solid fa-ranking-star" class="q-ma-lg" to="/users">
@@ -34,117 +36,107 @@
           <q-item style="height:150px;">
             <q-item-section avatar style="width:80px;">
               <q-avatar style="width:80px;height: 100%">
-                <img :src="(user.avatar || 'https://source.boringavatars.com/beam/120/Annie%20Jump?colors=264653,2a9d8f,e9c46a,f4a261,e76f51')">
+                <img
+                  :src="(user.avatar || 'https://source.boringavatars.com/beam/120/Annie%20Jump?colors=264653,2a9d8f,e9c46a,f4a261,e76f51')">
               </q-avatar>
             </q-item-section>
-<!-- TODO: 登入後把login signup改成 watched films -->
+            <!-- TODO: 登入後把login signup改成 watched films -->
             <q-item-section>
-              <q-item-label class="text-h5 q-pl-lg q-pb-sm">{{user.username || 'Guest User'}}</q-item-label>
+              <q-item-label class="text-h5 q-pl-lg q-pb-sm">{{ user.username || 'Guest User' }}</q-item-label>
               <q-item-label v-if="!isLogin">
                 <q-btn outline color="green" size="xs" label="Login" class="q-ml-md" @click="open('login')" />
-                <q-btn outline style="color: goldenrod;" size="xs" label="Sign Up" class="q-ml-xs" @click="open('register')" />
+                <q-btn outline style="color: goldenrod;" size="xs" label="Sign Up" class="q-ml-xs"
+                  @click="open('register')" />
               </q-item-label>
             </q-item-section>
           </q-item>
-            <template v-for="(menuItem, index) in menuList" :key="index" >
-              <q-item clickable v-ripple :to="menuItem.to" class="q-pl-lg">
-                <q-item-section avatar>
-                  <q-icon :name="menuItem.icon" />
-                </q-item-section>
-                <q-item-section>
-                  {{ menuItem.label }}
-                </q-item-section>
-              </q-item>
-            </template>
-            <q-item clickable v-ripple v-if="isLogin" class="q-pl-lg" @click="logout">
+          <template v-for="(menuItem, index) in menuList" :key="index">
+            <q-item clickable v-ripple :to="menuItem.to" class="q-pl-lg">
               <q-item-section avatar>
-                <q-icon name="logout" />
+                <q-icon :name="menuItem.icon" />
               </q-item-section>
               <q-item-section>
-                Logout
+                {{ menuItem.label }}
               </q-item-section>
             </q-item>
-          </q-list>
-        </q-scroll-area>
+          </template>
+          <q-item clickable v-ripple v-if="isLogin" class="q-pl-lg" @click="logout">
+            <q-item-section avatar>
+              <q-icon name="logout" />
+            </q-item-section>
+            <q-item-section>
+              Logout
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
     </q-drawer>
 
     <q-dialog v-model="loginModal">
       <q-card style="width: 400px;">
-        <q-tabs
-            v-model="tab"
-            class="bg-grey-2 text-grey-7"
-            active-color="primary"
-            indicator-color="purple"
-            align="justify"
-          >
+        <q-tabs v-model="tab" class="bg-grey-2 text-grey-7" active-color="primary" indicator-color="purple"
+          align="justify">
           <q-tab name="login" label="Login" />
           <q-tab name="register" label="Register" />
         </q-tabs>
 
-        <q-tab-panels v-model="tab" animated >
+        <q-tab-panels v-model="tab" animated>
           <!-- 燈入頁面 -->
           <q-tab-panel name="login" class="q-px-xl flex-center">
-            <q-form
-              @submit="loginSubmit"
-            >
+            <q-form @submit="loginSubmit">
               <div class="row">
-                <q-input label="Username" v-model="form.username" :rules="[rules.isString, rules.required, rules.min4, rules.max10]"  lazy-rules class="col">
+                <q-input label="Username" v-model="form.username"
+                  :rules="[rules.isString, rules.required, rules.min4, rules.max10]" lazy-rules class="col">
                 </q-input>
               </div>
               <div class="row">
-                <q-input :type="isPwd ? 'password' : 'text'" label="Password" class="col" v-model="form.password" :rules="[rules.isString, rules.required, rules.min4, rules.max20]"  lazy-rules>
+                <q-input :type="isPwd ? 'password' : 'text'" label="Password" class="col" v-model="form.password"
+                  :rules="[rules.isString, rules.required, rules.min4, rules.max20]" lazy-rules>
                   <template v-slot:append>
-                    <q-icon
-                      :name="isPwd ? 'visibility_off' : 'visibility'"
-                      class="cursor-pointer"
-                      @click="isPwd = !isPwd"
-                    />
+                    <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                      @click="isPwd = !isPwd" />
                   </template>
                 </q-input>
               </div>
               <div class="row flex-center">
-                <q-btn outline label="submit" type="submit" class="q-mt-md"/>
+                <q-btn outline label="submit" type="submit" class="q-mt-md" />
               </div>
             </q-form>
           </q-tab-panel>
           <!-- 註冊頁面  -->
-          <q-tab-panel name="register" class="q-px-xl flex-center" >
-            <q-form
-              @submit="regSubmit"
-            >
-          <div class="row">
-            <q-input label="Username" v-model="form.username" :rules="[rules.isString, rules.required, rules.min4, rules.max10]"  lazy-rules class="col">
-            </q-input>
-          </div>
-          <div class="row">
-            <q-input type="email" label="email" class="col" v-model="form.email" :rules="[rules.isString, rules.required, rules.isEmail]"  lazy-rules>
-            </q-input>
-          </div>
-          <div class="row">
-            <q-input :type="isPwd ? 'password' : 'text'" label="Password" class="col" v-model="form.password" :rules="[rules.isString, rules.required, rules.min4, rules.max20]"  lazy-rules>
-              <template v-slot:append>
-                <q-icon
-                  :name="isPwd ? 'visibility_off' : 'visibility'"
-                  class="cursor-pointer"
-                  @click="isPwd = !isPwd"
-                />
-              </template>
-            </q-input>
-          </div>
-          <div class="row">
-            <q-input :type="isPwd ? 'password' : 'text'" label="Confirm Password" class="col" v-model="form.confirmPassword" :rules="[rules.required, rules.confirmPassword]" reactive-rules>
-              <template v-slot:append>
-                <q-icon
-                  :name="isPwd ? 'visibility_off' : 'visibility'"
-                  class="cursor-pointer"
-                  @click="isPwd = !isPwd"
-                />
-              </template>
-            </q-input>
-          </div>
-          <div class="row flex-center">
-            <q-btn outline label="submit" type="submit" class="q-mt-md"/>
-          </div>
+          <q-tab-panel name="register" class="q-px-xl flex-center">
+            <q-form @submit="regSubmit">
+              <div class="row">
+                <q-input label="Username" v-model="form.username"
+                  :rules="[rules.isString, rules.required, rules.min4, rules.max10]" lazy-rules class="col">
+                </q-input>
+              </div>
+              <div class="row">
+                <q-input type="email" label="email" class="col" v-model="form.email"
+                  :rules="[rules.isString, rules.required, rules.isEmail]" lazy-rules>
+                </q-input>
+              </div>
+              <div class="row">
+                <q-input :type="isPwd ? 'password' : 'text'" label="Password" class="col" v-model="form.password"
+                  :rules="[rules.isString, rules.required, rules.min4, rules.max20]" lazy-rules>
+                  <template v-slot:append>
+                    <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                      @click="isPwd = !isPwd" />
+                  </template>
+                </q-input>
+              </div>
+              <div class="row">
+                <q-input :type="isPwd ? 'password' : 'text'" label="Confirm Password" class="col"
+                  v-model="form.confirmPassword" :rules="[rules.required, rules.confirmPassword]" reactive-rules>
+                  <template v-slot:append>
+                    <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                      @click="isPwd = !isPwd" />
+                  </template>
+                </q-input>
+              </div>
+              <div class="row flex-center">
+                <q-btn outline label="submit" type="submit" class="q-mt-md" />
+              </div>
             </q-form>
           </q-tab-panel>
         </q-tab-panels>
@@ -358,15 +350,16 @@ watch(() => loginModal.value, () => {
 </script>
 
 <style scoped>
-.q-notification{
+.q-notification {
   opacity: 0.7;
   width: 20rem;
 }
+
 .q-notifications__list--top {
-    top: 7rem !important;
+  top: 7rem !important;
 }
 
-.q-notification__message{
+.q-notification__message {
   padding-left: 25px;
 }
 </style>
