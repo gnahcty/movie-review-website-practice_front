@@ -5,7 +5,7 @@
       <div class="column window-height" style="box-sizing: border-box;">
         <p class="titles">Popular This Week</p>
         <q-carousel v-model="slide" transition-prev="slide-right" transition-next="slide-left" swipeable animated
-          control-color="black" padding arrows infinite height="70%" style="width: 100vw;">
+          control-color="black" padding arrows infinite height="65%" style="width: 100vw;">
           <q-carousel-slide :name="index + 1" v-for="(filmGroup, index) in filmGroups" :key="index"
             class="column no-wrap fit">
             <div class="row fit justify-start items-center q-gutter-md q-col-gutter no-wrap" style="padding-right: 60px;">
@@ -18,8 +18,29 @@
       </div>
       <!-- page 1 end -->
     </swiper-slide>
-    <swiper-slide>
 
+    <!-- page 2 start -->
+    <swiper-slide>
+      <div class="column window-height" style="box-sizing: border-box;">
+        <p class="titles">Popular Comments</p>
+        <q-carousel v-model="slide2" transition-prev="slide-right" transition-next="slide-left" swipeable animated
+          control-color="black" padding arrows infinite height="65%" style="width: 80vw;" class="self-center">
+          <q-carousel-slide :name="1" class="wrapper fit flex flex-center">
+            <template v-for="n in 6" :key="n">
+              <div class="cmt bg-blue row fit q-pa-md">
+                <q-img src="https://picsum.photos/500/300" :ratio="3 / 4" class="full-height col-3 "
+                  style="border-radius: 15px;" />
+              </div>
+            </template>
+          </q-carousel-slide>
+          <q-carousel-slide :name="2" class="column no-wrap">
+            <div class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap">
+              <q-img class="rounded-borders col-6 full-height" src="https://cdn.quasar.dev/img/parallax2.jpg" />
+              <q-img class="rounded-borders col-6 full-height" src="https://cdn.quasar.dev/img/quasar.jpg" />
+            </div>
+          </q-carousel-slide>
+        </q-carousel>
+      </div>
     </swiper-slide>
     <swiper-slide>Slide 3</swiper-slide>
 
@@ -40,6 +61,7 @@ import { api } from 'src/boot/axios'
 const modules = [Mousewheel, Pagination, Navigation]
 
 const slide = ref(1)
+const slide2 = ref(1)
 const filmGroups = reactive([])
 
 const getTrendingFilms = async () => {
@@ -63,5 +85,16 @@ onMounted(getTrendingFilms)
   font-family: Lilita One;
   font-size: 6rem;
   font-weight: 400;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 30vw 30vw;
+  grid-template-rows: 33.3% 33.3% 33.3%;
+  grid-gap: 5px;
+}
+
+.cmt {
+  border-radius: 15px;
 }
 </style>
