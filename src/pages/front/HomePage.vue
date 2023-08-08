@@ -9,8 +9,13 @@
           <q-carousel-slide :name="index + 1" v-for="(filmGroup, index) in filmGroups" :key="index"
             class="column no-wrap fit">
             <div class="row fit justify-start items-center q-gutter-md q-col-gutter no-wrap" style="padding-right: 60px;">
-              <q-img v-for="(film, filmIndex) in filmGroup" fit="contain" :key="filmIndex" class=" col-3 full-height"
-                :scale="3 / 4" :src="'http://image.tmdb.org/t/p/w300/' + film.poster_path" style="border-radius: 15px;" />
+              <template v-for="(film, filmIndex) in filmGroup" :key="filmIndex">
+                <RouterLink :to="'/films/' + film.id" class="col-3 full-height">
+                  <q-img fit="contain" :scale="3 / 4" :src="'http://image.tmdb.org/t/p/w300/' + film.poster_path"
+                    class="full-height " />
+                </RouterLink>
+              </template>
+
             </div>
           </q-carousel-slide>
         </q-carousel>
@@ -27,12 +32,12 @@
           <q-carousel-slide :name="index + 1" v-for="(reviewGroup, index) in reviewGroups" :key="index"
             class="wrapper fit flex flex-center">
             <template v-for="(review, reviewIndex) in reviewGroup" :key="reviewIndex">
-              <q-card class="rounded bg-grey fit">
+              <q-card class="rounded15 bg-grey fit">
                 <q-card-section horizontal class="fit row items-center">
                   <RouterLink :to="'/films/' + review.film" class="col-3 flex items-center full-height">
                     <q-card-section class="q-pr-none fit" style="box-sizing: border-box;">
                       <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" :ratio="3 / 4"
-                        class="rounded fit" />
+                        class="rounded15 fit" />
                     </q-card-section>
                   </RouterLink>
                   <q-card-section class="col-9 full-height">
@@ -67,29 +72,32 @@
       </div>
     </swiper-slide>
     <!-- page 2 end -->
+    <!-- page 3 start -->
     <swiper-slide>
       <div class="column window-height " style="box-sizing: border-box;">
         <p class="titles">Popular Users</p>
-        <div class="row q-gutter-x-md flex-center full-width q-px-xl" style="height: 70%;">
-          <div class="bg-grey full-height col-3 arched column flex-center">
-            <!-- 1 -->
-            <div class="round bg-black" style="width: 72%;">
+        <div class="row q-gutter-x-xl flex-center q-px-xl " style="height: 60%;width:100%">
+          <template v-for="(popUser, i) in popUsers" :key="i">
+            <div class="bg-grey col-3 arched column justify-end items-center" style="height: 34vw;">
+              <!-- 1 -->
+              <q-img :src="popUser.avatar" class="round" style="width: 72%;" />
+              <!-- 2 -->
+              <span class="text-bold text-h3 q-mt-xs">{{ popUser.username }}</span>
+              <!-- 3 -->
+              <div class="text-bold row">
+                <span class="q-mr-md">{{ popUser.watched }} films</span> <span>{{ popUser.reviewed }} reviews</span>
+              </div>
+              <!-- 4 -->
+              <div class="col-4 row q-gutter-md q-pa-md flex-center" style="width:100%">
+                <div class="col flex justify-center" v-for="(review, i) in popUser.latestComments" :key="i">
+                  <RouterLink :to="'/films/' + review.film" class="full-width">
+                    <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" :ratio="3 / 4"
+                      class="full-width rounded15" />
+                  </RouterLink>
+                </div>
+              </div>
             </div>
-            <!-- 2 -->
-            <span class="text-bold text-h3">username</span>
-            <!-- 3 -->
-            <div class="text-bold row">
-              <span>1.8k films</span> <span>1.3k reviews</span>
-            </div>
-            <!-- 4 -->
-            <div class="col-3 row col-3">
-              <div class="col"><img src="https://picsum.photos/300/200/?random=10"></div>
-              <div class="col"><img src="https://picsum.photos/300/200/?random=10"></div>
-              <div class="col"><img src="https://picsum.photos/300/200/?random=10"></div>
-            </div>
-          </div>
-          <div class="bg-blue full-height col-3 arched"></div>
-          <div class="bg-grey full-height col-3 arched"></div>
+          </template>
         </div>
       </div>
     </swiper-slide>
@@ -114,6 +122,7 @@ const slide = ref(1)
 const slide2 = ref(1)
 const filmGroups = reactive([])
 const reviewGroups = reactive([])
+const popUsers = reactive([])
 
 const getTrendingFilms = async () => {
   const { data } = await api.get('/films/trending')
@@ -131,15 +140,17 @@ const getPopReviews = async () => {
   }
 }
 
+const getPopUsers = async () => {
+  const { data } = await api.get('users/pop')
+  popUsers.push(...data.results)
+}
+
 onMounted(
   getTrendingFilms(),
-  getPopReviews()
+  getPopReviews(),
+  getPopUsers()
 )
 </script>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
-</style>
 
 <style scoped>
 .titles {
@@ -154,15 +165,6 @@ onMounted(
   grid-template-columns: 30vw 30vw;
   grid-template-rows: 33% 33% 33%;
   grid-gap: 10px;
-}
-
-.round {
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-}
-
-.rounded {
-  border-radius: 15px;
 }
 
 .arched {
