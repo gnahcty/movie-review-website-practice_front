@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:0 9.5vw;">
+  <div style="padding:0 0 0 9.5vw;">
     <q-splitter v-model="splitterModel" style="height: 90vh">
 
       <template v-slot:before>
@@ -16,14 +16,14 @@
             <q-btn flat round :color="film.inWatchList ? 'blue' : 'grey'" icon="more_time" @click="addToWatchList()"
               :disable="!user.isLogin" size="xl" />
           </div>
-          <q-btn color="yellow-8" text-color="white" label="Review"
+          <q-btn color="yellow-8" text-color="white" :label="reviewed ? 'reviewed' : 'review'" :disable="reviewed"
             style="width: 200px; height: 73px; font-size: xx-large;" class="rounded15 lilita q-py-none"
-            @click="reviewDialog = true" />
+            @click="openReviewDialog()" />
         </div>
       </template>
 
       <template v-slot:after>
-        <div class="q-px-xl">
+        <div class="q-px-xl" style="padding-right: 9.8vw;">
           <!-- film details -->
           <div class="q-pr-xl">
             <div class="lilita" style="font-size: 6rem; margin-bottom: -15px;">{{ film.title }}</div>
@@ -55,13 +55,16 @@
 
     </q-splitter>
 
-    <q-dialog v-model="reviewDialog">
-      <q-card>
-        <q-editor v-model="reviewEditor" min-height="5rem"
-          :placeholder="user.isLogin ? 'write something...' : 'Login to leave a review...'" class="text-left"
-          :readonly="!user.isLogin" />
-        <q-btn label="submit" @click="submitReview" class="q-ma-sm" :disable="disableSubmit" />
-      </q-card>
+    <q-dialog v-model="reviewDialog" full-width>
+      <div id="reviewDialog" class="border10 column q-gutter-xl bg-white">
+        <div class="text-h3 lilita q-mt-none"> Your Review</div>
+        <q-editor v-model="reviewEditor" :placeholder="user.isLogin ? 'write something...' : 'Login to leave a review...'"
+          class="text-left col-8 border10 rounded15 " :readonly="!user.isLogin" />
+        <div class="row flex-center q-gutter-md">
+          <q-btn flat label="submit" class="border5 rounded15 lilita" @click="submitReview" :disable="reviewEmpty" />
+          <q-btn flat label="cancel" class="border5 rounded15 lilita" @click="reviewEditor = ''" v-close-popup />
+        </div>
+      </div>
     </q-dialog>
   </div>
 </template>
@@ -73,10 +76,12 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 import FilmReview from 'components/FilmReview.vue'
 import { useUserStore } from 'stores/user'
 import { useRoute } from 'vue-router'
+import { useQuasar } from 'quasar'
 
+const $q = useQuasar()
 const reviewDialog = ref(false)
 const ratingModel = 4
-const splitterModel = ref(36)
+const splitterModel = ref(25)
 const user = useUserStore()
 const route = useRoute()
 const reviewEditor = ref('')
@@ -94,6 +99,7 @@ const film = reactive({
 })
 const allReviews = reactive([])
 
+// get film details (title, poster...etc)
 const getDetails = async () => {
   try {
     const { data } = await api.get('/films/' + route.params.id)
@@ -107,6 +113,7 @@ const getDetails = async () => {
   }
 }
 
+// get film crew
 const getCrew = async (id, job) => {
   try {
     const { data } = await api.get('/films/' + id + '/crew')
@@ -117,6 +124,7 @@ const getCrew = async (id, job) => {
   }
 }
 
+// 將crew以,連接
 const getNames = (list) => {
   const nameArr = []
   for (const person of list) {
@@ -125,11 +133,13 @@ const getNames = (list) => {
   return nameArr.join()
 }
 
+// get all reviews
 const getReviews = async () => {
   const { data } = await api.get('/reviews/' + route.params.id)
   allReviews.splice(0, allReviews.length, ...data.results)
 }
 
+// get this user's review
 const getUserReview = async () => {
   const { data } = await apiAuth.get('/reviews/user/' + route.params.id)
   if (data.result) {
@@ -155,11 +165,39 @@ const checkWatchList = async () => {
   }
 }
 
-const disableSubmit = computed(() => {
+// 評論是否為空
+const reviewEmpty = computed(() => {
   return reviewEditor.value === ''
 }
 )
 
+// 是否已評論過
+const reviewed = computed(() => {
+  return film.comments !== ''
+})
+
+// 登入才能開review modal
+const openReviewDialog = () => {
+  if (user.isLogin) {
+    reviewDialog.value = true
+  } else {
+    $q.notify({
+      position: 'top-right',
+      color: 'red-5',
+      textColor: 'white',
+      icon: 'warning',
+      actions: [
+        {
+          icon: 'close',
+          color: 'white'
+        }
+      ],
+      message: 'Please Login'
+    })
+  }
+}
+
+// mark as seen
 const seen = async () => {
   film.watched = !film.watched
   await apiAuth.post('/reviews/', {
@@ -168,6 +206,7 @@ const seen = async () => {
   })
 }
 
+// like this film
 const like = async () => {
   film.like = !film.like
   await apiAuth.post('/reviews/', {
@@ -176,14 +215,16 @@ const like = async () => {
   })
 }
 
-// const submitReview = async () => {
-//   await apiAuth.post('/reviews/', {
-//     filmID: film.id,
-//     comments: reviewEditor.value
-//   })
-//   getUserReview()
-//   getReviews()
-// }
+const submitReview = async () => {
+  await apiAuth.post('/reviews/', {
+    filmID: film.id,
+    comments: reviewEditor.value
+  })
+  reviewDialog.value = false
+  reviewEditor.value = ''
+  getUserReview()
+  getReviews()
+}
 
 const addToWatchList = async () => {
   const addedFilm = {
@@ -195,12 +236,12 @@ const addToWatchList = async () => {
   checkWatchList()
 }
 
-// const updateReview = (data) => {
-//   const index = allReviews.findIndex((cmt) => cmt._id === data.result._id)
-//   if (index !== -1) {
-//     allReviews[index].comments = data.result.comments
-//   }
-// }
+const updateReview = (data) => {
+  const index = allReviews.findIndex((cmt) => cmt._id === data.result._id)
+  if (index !== -1) {
+    allReviews[index].comments = data.result.comments
+  }
+}
 
 watch(() => film.ratings, async (newRatings, oldRatings) => {
   if (newRatings !== oldRatings) {
@@ -226,11 +267,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.arched {
-  width: 100%;
-  height: 180px;
-  border: 5px solid #000;
-  background-color: #ddd;
-  border-radius: 122px 0 0 122px;
+#reviewDialog {
+  height: 80vh;
+  width: 75vw !important;
+  border-radius: 50px !important;
+  padding: 48px 48px 24px 0;
 }
 </style>

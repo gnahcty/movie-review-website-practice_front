@@ -143,7 +143,7 @@
       </q-card>
     </q-dialog>
 
-    <q-page-container>
+    <q-page-container :style="pt">
       <router-view :key="$route.fullPath" />
     </q-page-container>
 
@@ -152,7 +152,7 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 import validator from 'validator'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
@@ -336,6 +336,15 @@ const SearchMovie = () => {
   }
   search.value = ''
 }
+
+const pt = computed(() => {
+  if (route.meta.fullpage) {
+    return 'padding-top:0 !important;'
+  } else {
+    return ''
+  }
+}
+)
 
 watch(() => route.query, () => {
   if ('login' in route.query) open('login')

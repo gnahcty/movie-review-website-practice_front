@@ -9,7 +9,8 @@ const routes = [
         meta: {
           title: 'moOo',
           login: false,
-          admin: false
+          admin: false,
+          fullpage: true
         }
       },
       {
@@ -18,7 +19,8 @@ const routes = [
         meta: {
           title: 'moOo | Film Search',
           login: false,
-          admin: false
+          admin: false,
+          fullpage: false
         }
       },
       {
@@ -27,7 +29,8 @@ const routes = [
         meta: {
           title: 'moOo | All Films',
           login: false,
-          admin: false
+          admin: false,
+          fullpage: false
         }
       },
       {
@@ -36,7 +39,8 @@ const routes = [
         meta: {
           title: 'moOo | Film Details',
           login: false,
-          admin: false
+          admin: false,
+          fullpage: false
         }
       },
       {
@@ -45,7 +49,8 @@ const routes = [
         meta: {
           title: 'moOo | All Reviews',
           login: false,
-          admin: false
+          admin: false,
+          fullpage: false
         }
       },
       {
@@ -54,7 +59,8 @@ const routes = [
         meta: {
           title: 'moOo | Popular Users',
           login: false,
-          admin: false
+          admin: false,
+          fullpage: false
         }
       },
       {
@@ -63,7 +69,8 @@ const routes = [
         meta: {
           title: 'moOo | Popular Lists',
           login: false,
-          admin: false
+          admin: false,
+          fullpage: true
         }
       },
       {
@@ -72,7 +79,8 @@ const routes = [
         meta: {
           title: 'moOo | Profile',
           login: true,
-          admin: false
+          admin: false,
+          fullpage: false
         }
       },
       {
@@ -81,7 +89,8 @@ const routes = [
         meta: {
           title: 'moOo | Diary',
           login: true,
-          admin: false
+          admin: false,
+          fullpage: false
         }
       },
       {
@@ -90,7 +99,8 @@ const routes = [
         meta: {
           title: 'moOo | Watchlist',
           login: true,
-          admin: false
+          admin: false,
+          fullpage: false
         }
       },
       {
@@ -99,7 +109,8 @@ const routes = [
         meta: {
           title: 'moOo | Favorites',
           login: true,
-          admin: false
+          admin: false,
+          fullpage: false
         }
       },
       {
@@ -108,7 +119,8 @@ const routes = [
         meta: {
           title: 'moOo | Settings',
           login: true,
-          admin: false
+          admin: false,
+          fullpage: false
         }
       }
     ]
@@ -123,7 +135,8 @@ const routes = [
         meta: {
           title: 'moOo | Admin',
           login: true,
-          admin: true
+          admin: true,
+          fullpage: false
         }
       }
     ]
