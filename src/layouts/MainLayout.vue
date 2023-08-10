@@ -24,7 +24,7 @@
         <q-btn flat round icon="fa-solid fa-ranking-star" class="q-ma-lg" to="/users">
           <q-tooltip>Popular User</q-tooltip>
         </q-btn>
-        <q-btn flat round icon="face_2" to="/profile">
+        <q-btn flat round icon="face_2" to="/profile/recent">
           <q-tooltip>User</q-tooltip>
         </q-btn>
       </q-toolbar>
@@ -185,7 +185,7 @@ const menuList = [
   { to: '/reviews', label: 'Reviews', icon: 'reviews' },
   { to: '/diary', label: 'Diary', icon: 'import_contacts' },
   { to: '/watchlist', label: 'watchlist', icon: 'more_time' },
-  { to: '/likes', label: 'Likes', icon: 'favorite' },
+  { to: '/profile/likes', label: 'Likes', icon: 'favorite' },
   { to: '/settings', label: 'Settings', icon: 'settings' }
 ]
 

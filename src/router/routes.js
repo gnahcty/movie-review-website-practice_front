@@ -74,16 +74,6 @@ const routes = [
         }
       },
       {
-        path: 'profile',
-        component: () => import('pages/front/user/UserProfile.vue'),
-        meta: {
-          title: 'moOo | Profile',
-          login: true,
-          admin: false,
-          fullpage: false
-        }
-      },
-      {
         path: 'diary',
         component: () => import('pages/front/user/UserDiary.vue'),
         meta: {
@@ -98,16 +88,6 @@ const routes = [
         component: () => import('pages/front/user/UserWatchlist.vue'),
         meta: {
           title: 'moOo | Watchlist',
-          login: true,
-          admin: false,
-          fullpage: false
-        }
-      },
-      {
-        path: 'likes',
-        component: () => import('pages/front/user/UserFavorites.vue'),
-        meta: {
-          title: 'moOo | Favorites',
           login: true,
           admin: false,
           fullpage: false
@@ -136,6 +116,32 @@ const routes = [
           title: 'moOo | Admin',
           login: true,
           admin: true,
+          fullpage: false
+        }
+      }
+    ]
+  },
+  {
+    path: '/profile',
+    component: () => import('layouts/ProfileLayout.vue'),
+    children: [
+      {
+        path: 'recent',
+        component: () => import('pages/front/user/UserProfile.vue'),
+        meta: {
+          title: 'moOo | Profile',
+          login: true,
+          admin: false,
+          fullpage: false
+        }
+      },
+      {
+        path: 'likes',
+        component: () => import('pages/front/user/UserFavorites.vue'),
+        meta: {
+          title: 'moOo | Favorites',
+          login: true,
+          admin: false,
           fullpage: false
         }
       }

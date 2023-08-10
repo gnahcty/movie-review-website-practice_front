@@ -1,76 +1,37 @@
 <template>
   <div>
     <full-page ref="fullpage" :options="options" id="fullpage">
-      <div class="section">
-        <div class="self-start"></div>
-        <div class="column full-height" style="box-sizing: border-box;">
+      <div class="section ">
+        <div class="column">
           <p class="titles">Popular This Week</p>
-          <q-carousel v-model="slide" transition-prev="slide-right" transition-next="slide-left" swipeable animated
-            control-color="black" padding arrows infinite height="65%" style="width: 100vw;">
-            <q-carousel-slide :name="index + 1" v-for="(filmGroup, index) in filmGroups" :key="index"
-              class="column no-wrap fit">
-              <div class="row fit justify-start items-center q-gutter-md q-col-gutter no-wrap">
-                <template v-for="(film, filmIndex) in filmGroup" :key="filmIndex">
-                  <RouterLink :to="'/films/' + film.id" class="col-3 full-height">
+          <div class="row items-center" style="width:100%">
+            <div class="col-1 relative">
+              <div class="swiper-button-prev" id="swiper-prev" style="top: auto !important;"></div>
+            </div>
+            <div class="col-10">
+              <swiper v-bind="swiperOptions">
+                <swiperSlide v-for="(film, i) in films" :key="i">
+                  <RouterLink :to="'/films/' + film.id">
                     <img :src="'http://image.tmdb.org/t/p/w300/' + film.poster_path"
-                      class="full-height rounded15 border10 img-center">
+                      style="aspect-ratio:3 / 4 !important;" class="rounded15 border10" />
                   </RouterLink>
-                </template>
-
-              </div>
-            </q-carousel-slide>
-          </q-carousel>
+                </swiperSlide>
+              </swiper>
+            </div>
+            <div class="col-1 relative">
+              <div class="swiper-button-next" id="swiper-next" style="top: auto !important;"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="section">
-        <div class="column full-height" style="box-sizing: border-box;">
+        <div class="column">
           <p class="titles">Popular Comments</p>
-          <q-carousel v-model="slide2" transition-prev="slide-right" transition-next="slide-left" swipeable animated
-            control-color="black" padding arrows infinite height="65%" style="width: 80vw;" class="self-center">
-            <q-carousel-slide :name="index + 1" v-for="(reviewGroup, index) in reviewGroups" :key="index"
-              class="wrapper fit flex flex-center">
-              <template v-for="(review, reviewIndex) in reviewGroup" :key="reviewIndex">
-                <q-card class="rounded15 bg-grey fit">
-                  <q-card-section horizontal class="fit row items-center">
-                    <RouterLink :to="'/films/' + review.film" class="col-3 flex items-center full-height">
-                      <q-card-section class="q-pr-none fit" style="box-sizing: border-box;">
-                        <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" :ratio="3 / 4"
-                          class="rounded15 fit" />
-                      </q-card-section>
-                    </RouterLink>
-                    <q-card-section class="col-9 full-height">
-                      <q-item class="fit q-pa-none">
-                        <q-item-section class="column">
-                          <q-item-label lines="1" class="col-4 row">
-                            <span class="text-h4 text-bold col text-no-wrap"
-                              style="text-overflow: ellipsis; overflow: hidden;">{{
-                                review.title }}</span>
-                            <span class="text-h6 q-ml-md col-3">{{ review.year }}</span>
-                          </q-item-label>
-                          <q-item-label lines="1" class="col-2">
-                            <q-avatar size="sm"> <img :src=review.user.avatar></q-avatar>
-                            <span class="q-ml-xs q-mr-sm">{{ review.user.username }}</span>
-                            <q-rating v-model="review.ratings" :max="review.ratings" size="1em" icon="star_border"
-                              icon-selected="star" icon-half="star_half" readonly />
-                            <q-icon v-if="review.like" name="favorite" color="red" class="q-ml-sm" />
-                          </q-item-label>
-                          <q-item-label caption lines="3" class="col-4">{{ review.comments }}</q-item-label>
-                          <q-item-label lines="1" class="col">
-                            <q-icon name="favorite" class="q-mr-sm" />
-                            <span class="q-mr-xs">{{ review.cmtLikes.length }}</span>likes
-                          </q-item-label>
-                        </q-item-section>
-                      </q-item>
-                    </q-card-section>
-                  </q-card-section>
-                </q-card>
-              </template>
-            </q-carousel-slide>
-          </q-carousel>
+          <ReviewCarousel :reviewGroups="reviewGroups"></ReviewCarousel>
         </div>
       </div>
       <div class="section">
-        <div class="column window-height " style="box-sizing: border-box;">
+        <div class="column">
           <p class="titles">Popular Users</p>
           <div class="row q-gutter-x-xl flex-center q-px-xl " style="height: 60%;width:100%">
             <template v-for="(popUser, i) in popUsers" :key="i">
@@ -84,7 +45,7 @@
                   <span class="q-mr-md">{{ popUser.watched }} films</span> <span>{{ popUser.reviewed }} reviews</span>
                 </div>
                 <!-- 4 -->
-                <div class="col-4 row q-gutter-md q-pa-md flex-center" style="width:100%">
+                <div class="gt-sm col-4 row q-gutter-md q-pa-md flex-center" style="width:100%">
                   <div class="col flex justify-center" v-for="(review, i) in popUser.latestComments" :key="i">
                     <RouterLink :to="'/films/' + review.film" class="full-width">
                       <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" :ratio="3 / 4"
@@ -97,10 +58,9 @@
           </div>
         </div>
       </div>
+
     </full-page>
   </div>
-
-  <div class="absolute-bottom-right bg-white" style="width:200px; height: 50px;"></div>
 </template>
 
 <script setup>
@@ -110,21 +70,49 @@ const options = {
   // sectionsColor: ['#41b883', '#ff5f45', '#0798ec']
 }
 
-import { ref, onMounted, reactive } from 'vue'
+import { onMounted, reactive } from 'vue'
 import { api } from 'src/boot/axios'
+import { Swiper, SwiperSlide } from 'swiper/vue'
 
-const slide = ref(1)
-const slide2 = ref(1)
-const filmGroups = reactive([])
+// Import Swiper styles
+import 'swiper/scss'
+import 'swiper/scss/navigation'
+import 'swiper/scss/grid'
+import { Navigation } from 'swiper'
+import ReviewCarousel from 'src/components/ReviewCarousel.vue'
+
 const reviewGroups = reactive([])
 const popUsers = reactive([])
+const films = reactive([])
+
+const swiperOptions = {
+  slidesPerView: 1,
+  spaceBetween: 10,
+  loop: true,
+  navigation: {
+    prevEl: '#swiper-prev',
+    nextEl: '#swiper-next'
+  },
+  modules: [Navigation],
+  breakpoints: {
+    768: {
+      slidesPerView: 2,
+      spaceBetween: 20
+    },
+    1128: {
+      slidesPerView: 3,
+      spaceBetween: 20
+    },
+    1620: {
+      slidesPerView: 4,
+      spaceBetween: 20
+    }
+  }
+}
 
 const getTrendingFilms = async () => {
   const { data } = await api.get('/films/trending')
-  const films = data.results.results
-  for (let i = 0; i < films.length; i += 4) {
-    filmGroups.push(films.slice(i, i + 4))
-  }
+  films.push(...data.results.results)
 }
 
 const getPopReviews = async () => {
@@ -149,7 +137,8 @@ onMounted(
 
 <style scoped>
 .section {
-  padding-top: 93px;
+  padding-top: 10vh;
+  overflow: hidden;
 }
 
 .titles {
@@ -159,18 +148,11 @@ onMounted(
   font-weight: 400;
 }
 
-.wrapper {
-  display: grid;
-  grid-template-columns: 30vw 30vw;
-  grid-template-rows: 33% 33% 33%;
-  grid-gap: 10px;
-}
-
 .arched {
   border-radius: 222px 222px 0 0;
 }
 
-/* .q-img img {
-  border-radius: 15px !important;
-} */
+.h100 {
+  height: 100% !important;
+}
 </style>
