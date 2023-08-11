@@ -1,5 +1,5 @@
 <template>
-  <q-card class="my-card" flat bordered>
+  <q-card class="my-card" flat bordered style="width:80%">
     <q-btn flat round color="grey" icon="add" id="add" class="absolute-top-right" style="z-index:2" v-if="user.isLogin">
       <q-menu>
         <q-list style="min-width: 150px">
@@ -8,7 +8,7 @@
             <div class="text-left"> WatchList</div>
           </q-item>
           <template v-for="(list, i) in user.userLists" :key="i">
-            <q-item clickable  :class="['row', 'items-center', inList(i)]" @click="addToList(i)">
+            <q-item clickable :class="['row', 'items-center', inList(i)]" @click="addToList(i)">
               <q-icon name="segment" class="col-2 q-pr-sm" />
               <div class="text-left"> {{ list.name }}</div>
             </q-item>
@@ -22,7 +22,7 @@
       </q-menu>
     </q-btn>
     <RouterLink :to="'/films/' + props.id">
-      <q-img :ratio="3 / 4" :src="'http://image.tmdb.org/t/p/w185/' + props.poster_path">
+      <q-img :ratio="3 / 4" :src="'http://image.tmdb.org/t/p/w300/' + props.poster_path">
         <q-tooltip anchor="center middle" self="top middle">{{ title }}
         </q-tooltip>
       </q-img>
@@ -39,15 +39,16 @@
 
   <q-dialog v-model="newListDialog">
     <q-card style="min-width: 450px">
-        <q-card-section>
-          <q-input rounded outlined v-model="listTitle" type="text" label="List Title" class="q-mb-lg" :rules="[ val=>!!val || 'List Title is Required']"/>
-          <q-input rounded filled v-model="listDescription" type="textarea" label="list Description" />
-        </q-card-section>
-        <q-card-actions align="center">
-          <q-btn flat label="Cancel" type="reset" color="primary" v-close-popup @click="clear"/>
-          <q-btn flat label="Submit" type="submit" color="primary" v-close-popup @click="createList" />
-        </q-card-actions>
-      </q-card>
+      <q-card-section>
+        <q-input rounded outlined v-model="listTitle" type="text" label="List Title" class="q-mb-lg"
+          :rules="[val => !!val || 'List Title is Required']" />
+        <q-input rounded filled v-model="listDescription" type="textarea" label="list Description" />
+      </q-card-section>
+      <q-card-actions align="center">
+        <q-btn flat label="Cancel" type="reset" color="primary" v-close-popup @click="clear" />
+        <q-btn flat label="Submit" type="submit" color="primary" v-close-popup @click="createList" />
+      </q-card-actions>
+    </q-card>
   </q-dialog>
 </template>
 
@@ -100,13 +101,13 @@ const props = defineProps({
   original_title: {
 
   },
-  overview: { },
-  popularity: { },
-  release_date: { },
-  video: { },
-  vote_average: { },
-  vote_count: { },
-  ratings: { }
+  overview: {},
+  popularity: {},
+  release_date: {},
+  video: {},
+  vote_average: {},
+  vote_count: {},
+  ratings: {}
 })
 
 const listTitle = ref('')

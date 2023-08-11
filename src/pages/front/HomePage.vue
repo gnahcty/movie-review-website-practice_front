@@ -25,9 +25,9 @@
         </div>
       </div>
       <div class="section">
-        <div class="column">
-          <p class="titles">Popular Comments</p>
-          <ReviewCarousel :reviewGroups="reviewGroups"></ReviewCarousel>
+        <div class="column ">
+          <p class="titles col-auto">Popular Comments</p>
+          <ReviewCarousel :reviewGroups="reviewGroups" class="col"></ReviewCarousel>
         </div>
       </div>
       <div class="section">

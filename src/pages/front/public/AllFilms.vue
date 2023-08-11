@@ -1,32 +1,28 @@
 <template>
-  <div class="q-pa-md">
-      <q-btn-group spread flat class="q-ma-md">
-        <q-btn-dropdown flat :label=params.year>
-          <q-list>
-            <q-item clickable v-close-popup v-for="(year,i) in years" :key="i" @click="setYear(year)" >
-              <q-item-section>
-                <q-item-label>{{year}}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
-        <q-btn-dropdown flat :label="(params.rating|| 'ratings')">
-          <q-list>
-            <q-item clickable v-close-popup v-for="i in 5" :key="i" @click="setRating(i)" >
-              <q-item-section>
-                <q-item-label>{{i}}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
-        <q-btn-dropdown flat label="genres">
-          <q-option-group
-            v-model="chosenGenres"
-            :options="genres"
-            type="checkbox"
-          />
-        </q-btn-dropdown>
-      </q-btn-group>
+  <div class="q-pa-xl">
+    <q-btn-group spread flat class="q-ma-md">
+      <q-btn-dropdown flat :label=params.year>
+        <q-list>
+          <q-item clickable v-close-popup v-for="(year, i) in years" :key="i" @click="setYear(year)">
+            <q-item-section>
+              <q-item-label>{{ year }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
+      <q-btn-dropdown flat :label="(params.rating || 'ratings')">
+        <q-list>
+          <q-item clickable v-close-popup v-for="i in 5" :key="i" @click="setRating(i)">
+            <q-item-section>
+              <q-item-label>{{ i }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
+      <q-btn-dropdown flat label="genres">
+        <q-option-group v-model="chosenGenres" :options="genres" type="checkbox" />
+      </q-btn-dropdown>
+    </q-btn-group>
     <div class="row">
       <div class="col-3 flex flex-center" v-for="(film) in films" :key="film.id">
         <FilmCard v-bind="film"></FilmCard>
@@ -187,15 +183,17 @@ onMounted(async () => {
 </script>
 
 <style>
-.my-card{
-  width:200px;
+.my-card {
+  width: 200px;
   border: none;
 }
-span{
+
+span {
   margin-right: 5px;
   margin-right: 0px;
 }
-#add:hover{
+
+#add:hover {
   color: white;
 }
 </style>
