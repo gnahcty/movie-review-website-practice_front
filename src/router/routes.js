@@ -132,7 +132,7 @@ const routes = [
           title: 'moOo | Profile',
           login: true,
           admin: false,
-          fullpage: false
+          bg: '#ffe500'
         }
       },
       {
@@ -142,7 +142,7 @@ const routes = [
           title: 'moOo | Favorites',
           login: true,
           admin: false,
-          fullpage: false
+          bg: '#00e0ff'
         }
       }
     ]

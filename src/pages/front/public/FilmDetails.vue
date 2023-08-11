@@ -5,7 +5,7 @@
       <template v-slot:before>
         <div class="fit q-pa-xl flex flex-center column q-gutter-y-sm">
           <img class="col-7 rounded border10" :src="'http://image.tmdb.org/t/p/w300/' + film.poster"
-            style="border-radius: 60px;">
+            style="border-radius: 32px;">
           <q-rating v-model="film.ratings" max="5" size="50px" color="black" icon="eva-star-outline"
             icon-selected="eva-star" icon-half="star_half" :readonly="!user.isLogin" />
           <div class="flex flex-center q-gutter-x-sm">
@@ -23,7 +23,7 @@
       </template>
 
       <template v-slot:after>
-        <div class="q-px-xl" style="padding-right: 9.8vw;">
+        <div class="q-px-xl bg-grey-2" style="padding-right: 9.8vw; ">
           <!-- film details -->
           <div class="q-pr-xl">
             <div class="lilita" style="font-size: 6rem; margin-bottom: -15px;">{{ film.title }}</div>

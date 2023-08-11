@@ -26,8 +26,9 @@
       </div>
       <div class="section">
         <div class="column ">
-          <p class="titles col-auto">Popular Comments</p>
-          <ReviewCarousel :reviewGroups="reviewGroups" class="col"></ReviewCarousel>
+          <p class="titles col-2">Popular Comments</p>
+          <ReviewCarousel :reviewGroups="reviewGroups" class="col-10">
+          </ReviewCarousel>
         </div>
       </div>
       <div class="section">
@@ -35,7 +36,7 @@
           <p class="titles">Popular Users</p>
           <div class="row q-gutter-x-xl flex-center q-px-xl " style="height: 60%;width:100%">
             <template v-for="(popUser, i) in popUsers" :key="i">
-              <div class="bg-grey col-3 arched column justify-end items-center" style="height: 34vw;">
+              <div class="border10 col-3 arched column justify-end items-center" style="height: 34vw;">
                 <!-- 1 -->
                 <q-img :src="popUser.avatar" class="round" style="width: 72%;" />
                 <!-- 2 -->

@@ -24,7 +24,7 @@
       </q-btn-dropdown>
     </q-btn-group>
     <div class="row">
-      <div class="col-3 flex flex-center" v-for="(film) in films" :key="film.id">
+      <div class="col-2 flex flex-center" v-for="(film) in films" :key="film.id">
         <FilmCard v-bind="film"></FilmCard>
       </div>
     </div>

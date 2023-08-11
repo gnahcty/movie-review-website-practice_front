@@ -51,10 +51,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { apiAuth } from 'src/boot/axios'
 import { useUserStore } from 'stores/user.js'
 const user = useUserStore()
 const tab = ref('watchlist')
 const splitterModel = ref(85)
-
+const getUserLists = async () => {
+  try {
+    const { data } = await apiAuth.get('lists/user')
+    if (user.userLists) {
+      user.userLists = data.UserLists
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+onMounted(getUserLists)
 </script>

@@ -1,10 +1,10 @@
 <template>
   <q-carousel v-model="slide2" transition-prev="slide-right" transition-next="slide-left" swipeable animated
-    control-color="black" padding arrows infinite style="width: 80vw; height:60vh" class="self-center">
+    control-color="black" padding arrows infinite style="width: 80vw;" class="self-center">
     <q-carousel-slide :name="index + 1" v-for="(reviewGroup, index) in props.reviewGroups" :key="index"
-      class="wrapper fit flex flex-center">
+      class="wrapper flex flex-center" style="padding-bottom: 0 !important;">
       <template v-for="(review, reviewIndex) in reviewGroup" :key="reviewIndex">
-        <q-card class="rounded15 bg-grey fit">
+        <q-card flat class="rounded15 bg-white border5 h100">
           <q-card-section horizontal class="fit row items-center">
             <RouterLink :to="'/films/' + review.film" class="col-3 flex items-center full-height">
               <q-card-section class="q-pr-none fit" style="box-sizing: border-box;">
@@ -55,7 +55,7 @@ const props = defineProps({
 .wrapper {
   display: grid;
   grid-template-columns: 30vw 30vw;
-  grid-template-rows: 33% 33% 33%;
+  grid-template-rows: 32% 32% 32%;
   grid-gap: 10px;
 }
 </style>

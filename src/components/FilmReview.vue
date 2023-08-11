@@ -1,5 +1,5 @@
 <template>
-  <q-item v-ripple class="arched">
+  <q-item v-ripple class="arched bg-white">
     <q-item-section avatar>
       <q-img class="round " style="width:150px;" :src="user.avatar"></q-img>
     </q-item-section>
@@ -200,7 +200,7 @@ const deleteCmt = async () => {
   width: 100%;
   height: 180px;
   border: 5px solid #000;
-  background-color: #ddd;
+  /* background-color: #ddd; */
   border-radius: 122px 0 0 122px;
 }
 </style>
