@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lhh lpR fFf" :style="hStyle">
-    <q-header reveal class="column text-black" id="header" :style="hStyle">
+    <q-header class="column text-black" id="header" style="background: transparent;">
       <q-toolbar class="col-2">
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
       </q-toolbar>
@@ -31,9 +31,9 @@
       <div class="col row justify-center">
         <div class="col-md-8 col-12 row items-center">
           <q-tabs align="left" indicator-color="transparent" class="q-mt-md col-2 row window-width">
-            <q-route-tab to="recent" label="recent" class="col-sm col-md-2 q-py-sm"
+            <q-route-tab to="recent" label="recent" class="col-sm col-md-3 q-py-sm"
               style="background-color: #ffe500 ; opacity: 1 ;" />
-            <q-route-tab to="likes" label="favorites" class="col-sm col-md-2 q-py-sm"
+            <q-route-tab to="likes" label="favorites" class="col-sm col-md-3 q-py-sm"
               style="background-color:#00e0ff ; opacity: 1 ;" />
           </q-tabs>
         </div>

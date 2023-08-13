@@ -144,9 +144,6 @@ onMounted(
 
 .titles {
   padding-left: 60px;
-  font-family: Lilita One;
-  font-size: 6rem;
-  font-weight: 400;
 }
 
 .arched {
