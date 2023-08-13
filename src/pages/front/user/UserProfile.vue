@@ -18,20 +18,50 @@
           <div class="swiper-button-next" id="swiper-next"></div>
         </div>
       </div>
-      <div class="titles bdb4">Lists</div>
-      <template v-for="n in 3" :key="n">
-        <div class="row" style="height:230px ;">
-          <div class="col-12 col-md-4  h100">
-            <div v-for="n in 5" :key="n" class="overlapping flex flex-center" :style="`left: ${n * 40}px`">
-              <img src="http://image.tmdb.org/t/p/w300/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg" class="h100 rounded15 border5">
+      <div class="titles bdb4 ">Lists</div>
+      <div class="bdb4">
+        <template v-for="n in 3" :key="n">
+          <div class="row q-py-md">
+            <div class="col-12 col-md-4" style="height:240px ;">
+              <!-- <div v-for="n in 5" :key="n" class=" overlapping"
+                :style="`padding-left:calc( ${(n - 1)}vw + ${(n - 1) * 15}px);`">
+                <img src="http://image.tmdb.org/t/p/w300/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg" class="h100  rounded15 border5"
+                  :style="`z-index:${n}`">
+              </div> -->
+              <CardStack :cards="cards1" :cardWidth="137" :stackWidth="'100%'" :cardHeight="200" :maxCards="5"
+                :paddingX="10">
+                <template v-slot:card>
+                  <img src="http://image.tmdb.org/t/p/w300/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg"
+                    class="h100  rounded15 border5">
+                </template>
+              </CardStack>
             </div>
+            <q-item-section class="col-12 col-md-8 justify-around q-pl-md-md">
+              <q-item-label lines="2" class="title2">a very fucking long title</q-item-label>
+              <q-item-label lines="1">100 films <q-icon name="favorite" class="q-ml-sm" />20</q-item-label>
+            </q-item-section>
           </div>
-          <q-item-section class="col-12 col-md-8 justify-around h100">
-            <q-item-label lines="2" class="text-h3 text-bold">a very fucking long title</q-item-label>
-            <q-item-label lines="1">100 films <q-icon name="favorite" />20</q-item-label>
-          </q-item-section>
+        </template>
+      </div>
+      <div class="row q-mt-md">
+        <div class="col-12 col-md-6 q-pa-md">
+          <div class="bdb4 flex justify-between items-end"><span class="titles">Watchlist</span> <span
+              class="text-h6 q-mb-lg">100</span></div>
+          <CardStack :cards="cards1" :stackWidth="'100%'" :cardWidth="137" :cardHeight="200" :paddingX="20" :maxCards="8">
+            <template v-slot:card>
+              <img src="http://image.tmdb.org/t/p/w300/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg" class="h100  rounded15 border5">
+            </template>
+          </CardStack>
         </div>
-      </template>
+        <div class="col-12 col-md-6 q-pa-md">
+          <div class="bdb4 flex justify-between items-end"><span class="titles">Following</span> <span
+              class="text-h6 q-mb-lg">100</span></div>
+          <div class="row q-pt-md">
+            <img v-for="n in 6" :key="n" class="round col-2"
+              src="https://cdn.discordapp.com/attachments/1109403221245571167/1139384610376138752/IMG_7910.png">
+          </div>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -43,6 +73,7 @@ import 'swiper/scss'
 import 'swiper/scss/navigation'
 import 'swiper/scss/grid'
 import { Navigation } from 'swiper'
+import CardStack from 'components/CardStack.vue'
 
 const swiperOptions = {
   slidesPerView: 1,
@@ -68,22 +99,33 @@ const swiperOptions = {
     }
   }
 }
+
+const cards1 = [
+  { a: 1 },
+  { a: 1 },
+  { a: 1 },
+  { a: 1 },
+  { a: 1 },
+  { a: 1 },
+  { a: 1 },
+  { a: 1 },
+  { a: 1 },
+  { a: 1 },
+  { a: 1 }
+]
 // console.log(swiperOptions)
 </script>
 <style scoped>
-.titles {
-  font-family: Lilita One;
-  font-size: 6rem;
-  font-weight: 400;
-}
-
-.overlapping {
+/* .overlapping {
   position: absolute;
   height: 200px;
-  top: 0;
-  bottom: 0;
-  margin: auto;
 }
+
+.ov-container {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+} */
 
 .relative {
   position: relative !important;

@@ -1,6 +1,17 @@
 // app global css in SCSS form
 @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
 
+.titles {
+  font-family: Lilita One;
+  font-size: min(max(7.5vw, 40px), 96px);
+  font-weight: 400;
+}
+
+.title2{
+  font-size: min(max(3.5vw, 20px), 48px);
+  font-weight: bold;
+}
+
 .lilita{
   font-family: Lilita One;
 }
