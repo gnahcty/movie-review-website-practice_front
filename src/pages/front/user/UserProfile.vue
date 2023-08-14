@@ -9,8 +9,8 @@
         <div class="col-10">
           <swiper v-bind="swiperOptions">
             <swiperSlide v-for="n in 30" :key="n">
-              <img src="http://image.tmdb.org/t/p/w300//iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg"
-                style="aspect-ratio:3 / 4 !important; width: 100% !important ;" class="rounded15 border5" />
+              <img src="http://image.tmdb.org/t/p/w300//iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg" style=" box-sizing: border-box;"
+                class="rounded15 border5 ratio w100" />
             </swiperSlide>
           </swiper>
         </div>
@@ -37,7 +37,7 @@
               </CardStack>
             </div>
             <q-item-section class="col-12 col-md-8 justify-around q-pl-md-md">
-              <q-item-label lines="2" class="title2">a very fucking long title</q-item-label>
+              <q-item-label lines="2" class="title3">a very fucking long title</q-item-label>
               <q-item-label lines="1">100 films <q-icon name="favorite" class="q-ml-sm" />20</q-item-label>
             </q-item-section>
           </div>

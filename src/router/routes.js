@@ -74,6 +74,16 @@ const routes = [
         }
       },
       {
+        path: 'list/:id',
+        component: () => import('pages/front/public/ListDetails.vue'),
+        meta: {
+          title: 'moOo | List Details',
+          login: false,
+          admin: false,
+          fullpage: false
+        }
+      },
+      {
         path: 'diary',
         component: () => import('pages/front/user/UserDiary.vue'),
         meta: {

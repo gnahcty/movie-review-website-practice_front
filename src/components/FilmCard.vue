@@ -1,5 +1,5 @@
 <template>
-  <q-card class="my-card" flat bordered style="width:80%">
+  <q-card class="my-card" flat bordered style="width:80%; padding-bottom:50px" @mouseleave="mouseout()">
     <q-btn flat round color="grey" icon="add" id="add" class="absolute-top-right" style="z-index:2" v-if="user.isLogin">
       <q-menu>
         <q-list style="min-width: 150px">
@@ -22,19 +22,25 @@
       </q-menu>
     </q-btn>
     <RouterLink :to="'/films/' + props.id">
-      <q-img :ratio="3 / 4" :src="'http://image.tmdb.org/t/p/w300/' + props.poster_path">
+      <q-img :src="'http://image.tmdb.org/t/p/w300/' + props.poster_path" class="ratio border5 rounded15"
+        @mouseenter="mousein()">
         <q-tooltip anchor="center middle" self="top middle">{{ title }}
         </q-tooltip>
       </q-img>
     </RouterLink>
-    <q-card-actions align="left">
-      <q-btn flat round :color="watched ? 'green' : 'grey'" icon="visibility" @click="seen()" />
-      <!-- <span style="color: green;">00</span> -->
-      <q-btn flat round :color="commented ? 'yellow' : 'grey'" icon="segment" />
-      <!-- <span style="color: goldenrod;">00</span> -->
-      <q-btn flat round :color="liked ? 'red' : 'grey'" icon="favorite" @click="like()" />
-      <!-- <span style="color: red;">00</span> -->
-    </q-card-actions>
+
+    <q-slide-transition>
+      <div class="relative" v-show="expanded">
+        <q-card-actions align="center">
+          <q-btn flat round :color="watched ? 'green' : 'grey'" icon="visibility" @click="seen()" />
+          <!-- <span style="color: green;">00</span> -->
+          <q-btn flat round :color="commented ? 'yellow' : 'grey'" icon="segment" />
+          <!-- <span style="color: goldenrod;">00</span> -->
+          <q-btn flat round :color="liked ? 'red' : 'grey'" icon="favorite" @click="like()" />
+          <!-- <span style="color: red;">00</span> -->
+        </q-card-actions>
+      </div>
+    </q-slide-transition>
   </q-card>
 
   <q-dialog v-model="newListDialog">
@@ -110,12 +116,27 @@ const props = defineProps({
   ratings: {}
 })
 
+const expanded = ref(false)
 const listTitle = ref('')
 const listDescription = ref('')
 const watched = ref(props.watched)
 const commented = ref(props.comments !== '')
 const liked = ref(props.like)
 const newListDialog = ref(false)
+
+// const pdb = ref('50px')
+// const pdb = computed(() => {
+//   return expanded.value ? '0' : '50px'
+// })
+const mousein = () => {
+  expanded.value = true
+  // pdb.value = 0
+}
+
+const mouseout = () => {
+  expanded.value = false
+  // pdb.value = '50px'
+}
 
 const seen = async () => {
   if (user.isLogin) {

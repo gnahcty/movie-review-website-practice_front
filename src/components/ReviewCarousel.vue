@@ -4,11 +4,11 @@
     <q-carousel-slide :name="index + 1" v-for="(reviewGroup, index) in props.reviewGroups" :key="index"
       class="wrapper flex flex-center" style="padding-bottom: 0 !important;">
       <template v-for="(review, reviewIndex) in reviewGroup" :key="reviewIndex">
-        <q-card flat class="rounded15 bg-white border5 h100">
+        <q-card flat class="rounded15 border5 h100 bgea">
           <q-card-section horizontal class="fit row items-center">
             <RouterLink :to="'/films/' + review.film" class="col-3 flex items-center full-height">
               <q-card-section class="q-pr-none fit" style="box-sizing: border-box;">
-                <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" :ratio="3 / 4" class="rounded15 fit" />
+                <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" class="rounded15 fit ratio border5" />
               </q-card-section>
             </RouterLink>
             <q-card-section class="col-9 full-height">

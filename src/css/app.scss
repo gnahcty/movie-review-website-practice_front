@@ -7,13 +7,25 @@
   font-weight: 400;
 }
 
+.bgea{
+  background-color: #eaeaea;
+}
+
 .title2{
   font-size: min(max(3.5vw, 20px), 48px);
   font-weight: bold;
 }
 
+.title3{
+  font-size: min(max(3.5vw, 20px), 35px);
+}
+
 .lilita{
   font-family: Lilita One;
+}
+
+.ratio{
+  aspect-ratio: 3/4 !important;
 }
 
 .round {
@@ -44,6 +56,15 @@
 }
 .w100{
   width: 100% !important;
+}
+
+.q-img__image{
+  border-radius: 0%;
+}
+
+div.swiper-button-prev,
+div.swiper-button-next {
+color: #000;
 }
 
 .fp-watermark>a{

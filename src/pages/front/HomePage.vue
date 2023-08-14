@@ -12,8 +12,7 @@
               <swiper v-bind="swiperOptions">
                 <swiperSlide v-for="(film, i) in films" :key="i">
                   <RouterLink :to="'/films/' + film.id">
-                    <img :src="'http://image.tmdb.org/t/p/w300/' + film.poster_path"
-                      style="aspect-ratio:3 / 4 !important;" class="rounded15 border10" />
+                    <img :src="'http://image.tmdb.org/t/p/w300/' + film.poster_path" class="rounded15 border10 ratio" />
                   </RouterLink>
                 </swiperSlide>
               </swiper>
@@ -36,9 +35,10 @@
           <p class="titles">Popular Users</p>
           <div class="row q-gutter-x-xl flex-center q-px-xl " style="height: 60%;width:100%">
             <template v-for="(popUser, i) in popUsers" :key="i">
-              <div class="border10 col-3 arched column justify-end items-center" style="height: 34vw;">
+              <div class="col-3 arched column justify-end items-center bgea"
+                style="height: 34vw; border: 4px solid #000;">
                 <!-- 1 -->
-                <q-img :src="popUser.avatar" class="round" style="width: 72%;" />
+                <q-img :src="popUser.avatar" class="round" style="width: 70%; border: 3px solid #000;" />
                 <!-- 2 -->
                 <span class="text-bold text-h3 q-mt-xs">{{ popUser.username }}</span>
                 <!-- 3 -->
@@ -49,8 +49,8 @@
                 <div class="gt-sm col-4 row q-gutter-md q-pa-md flex-center" style="width:100%">
                   <div class="col flex justify-center" v-for="(review, i) in popUser.latestComments" :key="i">
                     <RouterLink :to="'/films/' + review.film" class="full-width">
-                      <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" :ratio="3 / 4"
-                        class="full-width rounded15" />
+                      <img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" class="ratio full-width rounded15"
+                        style="border: 3px solid #000;" />
                     </RouterLink>
                   </div>
                 </div>

@@ -1,17 +1,19 @@
 <template>
   <q-layout view="hHh lpR fFf">
 
-    <q-header bordered class="bg-white text-black" style="height: 10% ;">
+    <q-header class="text-black" style="height: 10%;">
       <q-toolbar class="fit">
         <q-btn flat round icon="menu" @click="toggleLeftDrawer" />
         <q-toolbar-title>
-          <q-btn to="/" size="xl" flat rounded color="primary"
-            icon="img:https://stickershop.line-scdn.net/stickershop/v1/sticker/563671934/android/sticker.png?v=1"
-            label="Title" />
+          <router-link to="/">
+            <img style="height: 6vh;"
+              src="https://cdn.discordapp.com/attachments/1109403221245571167/1140443471002488943/5a3fc2d4e5a78829.png">
+          </router-link>
         </q-toolbar-title>
         <!-- <q-space /> -->
-        <form>
-          <q-input rounded outlined v-model="search" placeholder="search movie" style="width:40vw" class="q-ml-xl">
+        <form class="gt-sm">
+          <q-input rounded standout v-model="search" bg-color="white" placeholder="search movie" style="width:30vw"
+            class="q-ml-xl">
             <template v-slot:after>
               <q-btn type="submit" flat round icon="search" @click="SearchMovie" />
             </template>
@@ -180,7 +182,6 @@ const open = (tabName) => {
 }
 
 const menuList = [
-  { to: '/', label: 'Home', icon: 'home' },
   { to: '/films', label: 'Films', icon: 'fa-solid fa-film' },
   { to: '/reviews', label: 'Reviews', icon: 'reviews' },
   { to: '/diary', label: 'Diary', icon: 'import_contacts' },

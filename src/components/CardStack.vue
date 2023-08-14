@@ -59,10 +59,11 @@ const containerRef = ref(null)
 const responsiveWidth = ref(0)
 
 function init () {
+  addCard(props.cards, props.maxCards)
   stack.push(...props.cards.map((card, index) => {
     return {
       ...card,
-      display: index < _maxCards.value ? 'block' : 'none',
+      display: index < props.maxCards ? 'block' : 'none',
       xPos: props.paddingX + xOffset.value * index,
       yPos: props.paddingY,
       width: props.cardWidth,
@@ -71,12 +72,13 @@ function init () {
     }
   }))
 }
-
-// _maxCards = props.maxCards || props.cards.length
-const _maxCards = computed(() =>
-  props.cards.length > props.maxCards ? props.maxCards : props.cards.length
-)
-
+const addCard = (arr, max) => {
+  if (arr.length < max) {
+    // console.log(arr)
+    arr.unshift({})
+    addCard(arr, max)
+  }
+}
 // container寬度，預設為卡片寬度+px*2，可設px或%數
 const containerWidth = computed(() => {
   if (!props.stackWidth) {
@@ -99,7 +101,7 @@ const _stackWidth = computed(() => {
 
 // x位移量
 const xOffset = computed(() =>
-  (_stackWidth.value - props.paddingX * 2 - props.cardWidth) / (_maxCards.value - 1)
+  (_stackWidth.value - props.paddingX * 2 - props.cardWidth) / (props.maxCards - 1)
 )
 
 // 視窗resize時，以container的內寬度更新responsiveWidth
@@ -115,6 +117,7 @@ const handleResize = debounce(() => {
 onMounted(() => {
   init()
   window.addEventListener('resize', handleResize)
+  handleResize()
 })
 </script>
 

@@ -66,6 +66,7 @@ const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
+// { to: '/', label: 'Home', icon: 'home' },
 </script>
 
 <style scoped>
