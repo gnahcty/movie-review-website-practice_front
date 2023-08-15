@@ -28,16 +28,19 @@
         </div>
       </div>
       <div class="section">
-        <div class="column ">
-          <p class="titles col-2">Popular Comments</p>
-          <ReviewCarousel :reviewGroups="reviewGroups" class="col-10">
-          </ReviewCarousel>
+        <div class="column " style="height: 90vh;">
+          <div class="titles col-2" style="box-sizing: border-box;">Popular Comments</div>
+          <div class="col-10 flex flex-center">
+            <ReviewCarousel :reviewGroups="reviewGroups" style="overflow: hidden;" class="h100" @like="likecmt">
+            </ReviewCarousel>
+          </div>
+
         </div>
       </div>
       <div class="section">
-        <div class="column">
-          <p class="titles">Popular Users</p>
-          <div class="row q-gutter-x-xl flex-center q-px-xl " style="height: 60%;width:100%">
+        <div class="column" style="height: 90vh;">
+          <div class="titles col-2">Popular Users</div>
+          <div class="row q-gutter-x-xl flex-center q-px-xl col-10 w100">
             <template v-for="(popUser, i) in popUsers" :key="i">
               <div class="col-3 arched column justify-end items-center bgea"
                 style="height: 34vw; border: 4px solid #000;">
@@ -85,7 +88,7 @@ const options = {
 }
 
 import { onMounted, reactive, onUnmounted } from 'vue'
-import { api } from 'src/boot/axios'
+import { api, apiAuth } from 'src/boot/axios'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 
 // Import Swiper styles
@@ -132,6 +135,7 @@ const getTrendingFilms = async () => {
 const getPopReviews = async () => {
   const { data } = await api.get('reviews/pop')
   const reviews = data.results
+  reviewGroups.length = 0
   for (let i = 0; i < reviews.length; i += 6) {
     reviewGroups.push(reviews.slice(i, i + 6))
   }
@@ -140,6 +144,11 @@ const getPopReviews = async () => {
 const getPopUsers = async () => {
   const { data } = await api.get('users/pop')
   popUsers.push(...data.results)
+}
+
+const likecmt = async (id) => {
+  await apiAuth.post('reviews/like', { cmtID: id })
+  getPopReviews()
 }
 
 onMounted(

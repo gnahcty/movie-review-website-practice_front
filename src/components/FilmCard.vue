@@ -23,14 +23,14 @@
     </q-btn>
     <RouterLink :to="'/films/' + props.id">
       <q-img :src="'http://image.tmdb.org/t/p/w300/' + props.poster_path" class="ratio border5 rounded15"
-        @mouseenter="mousein()">
+        @mouseenter="mousein()" ref="imgRef">
         <q-tooltip anchor="center middle" self="top middle">{{ title }}
         </q-tooltip>
       </q-img>
     </RouterLink>
-
-    <q-slide-transition>
-      <div class="relative" v-show="expanded">
+    <div v-if="!expanded" style="width: 100% ; height: 58px; bg-grey"></div>
+    <q-slide-transition v-else>
+      <div class="relative">
         <q-card-actions align="center">
           <q-btn flat round :color="watched ? 'green' : 'grey'" icon="visibility" @click="seen()" />
           <!-- <span style="color: green;">00</span> -->
@@ -123,6 +123,7 @@ const watched = ref(props.watched)
 const commented = ref(props.comments !== '')
 const liked = ref(props.like)
 const newListDialog = ref(false)
+const imgRef = ref(null)
 
 // const pdb = ref('50px')
 // const pdb = computed(() => {

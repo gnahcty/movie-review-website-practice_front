@@ -1,6 +1,6 @@
 <template>
   <q-carousel v-model="slide2" transition-prev="slide-right" transition-next="slide-left" swipeable animated
-    control-color="black" padding arrows infinite style="width: 80vw;" class="self-center">
+    control-color="black" padding arrows infinite style="width: 80vw; " class="self-center ">
     <q-carousel-slide :name="index + 1" v-for="(reviewGroup, index) in props.reviewGroups" :key="index"
       class="wrapper flex flex-center" style="padding-bottom: 0 !important;">
       <template v-for="(review, reviewIndex) in reviewGroup" :key="reviewIndex">
@@ -31,10 +31,10 @@
                     <q-icon v-if="review.like" name="favorite" color="red" class="q-ml-sm" />
                   </q-item-label>
                   <q-item-label caption lines="3" class="col-3">{{ review.comments }}</q-item-label>
-                  <q-item-label lines="1" class="col-2 flex items-start">
-                    <q-btn flat round icon="favorite" class="q-mr-sm"
+                  <q-item-label lines="1" class="col-2 flex items-center">
+                    <q-btn flat round icon="favorite" class="q-mr-sm" size="sm"
                       :color="review.cmtLikes.indexOf(user._id) === -1 ? 'black' : 'red'"
-                      @click="emit('like', review._id)" />
+                      @click="$emit('like', review._id)" />
                     <span class="q-mr-xs">{{ review.cmtLikes.length }}</span>likes
                   </q-item-label>
                 </q-item-section>
@@ -51,7 +51,7 @@
 import { ref } from 'vue'
 import { useUserStore } from 'stores/user'
 
-const emit = defineEmits(['like'])
+defineEmits(['like'])
 const user = useUserStore()
 const slide2 = ref(1)
 const props = defineProps({
