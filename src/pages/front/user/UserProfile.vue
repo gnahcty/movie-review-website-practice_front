@@ -8,9 +8,15 @@
         </div>
         <div class="col-10">
           <swiper v-bind="swiperOptions">
-            <swiperSlide v-for="n in 30" :key="n">
-              <img src="http://image.tmdb.org/t/p/w300//iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg" style=" box-sizing: border-box;"
-                class="rounded15 border5 ratio w100" />
+            <swiperSlide v-for="(review) in reviews" :key="review._id">
+              <RouterLink :to="'/films/' + review.film">
+                <q-img :src="`http://image.tmdb.org/t/p/w300/${review.poster}`" style=" box-sizing: border-box;"
+                  class="rounded15 border5 ratio w100">
+                  <q-tooltip anchor="center middle" self="top middle">
+                    {{ review.title }}
+                  </q-tooltip>
+                </q-img>
+              </RouterLink>
             </swiperSlide>
           </swiper>
         </div>
@@ -20,25 +26,22 @@
       </div>
       <div class="titles bdb4 ">Lists</div>
       <div class="bdb4">
-        <template v-for="n in 3" :key="n">
+        <template v-for="(list) in lists" :key="list._id">
           <div class="row q-py-md">
             <div class="col-12 col-md-4" style="height:240px ;">
-              <!-- <div v-for="n in 5" :key="n" class=" overlapping"
-                :style="`padding-left:calc( ${(n - 1)}vw + ${(n - 1) * 15}px);`">
-                <img src="http://image.tmdb.org/t/p/w300/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg" class="h100  rounded15 border5"
-                  :style="`z-index:${n}`">
-              </div> -->
-              <CardStack :cards="cards1" :cardWidth="137" :stackWidth="'100%'" :cardHeight="200" :maxCards="5"
+              <CardStack :cards="list.films" :cardWidth="137" :stackWidth="'100%'" :cardHeight="200" :maxCards="5"
                 :paddingX="10">
-                <template v-slot:card>
-                  <img src="http://image.tmdb.org/t/p/w300/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg"
+                <template v-slot:card="{ card }">
+                  <img v-if="card.poster" :src="`http://image.tmdb.org/t/p/w300/${card.poster}`"
                     class="h100  rounded15 border5">
+                  <div v-else class="h100 w100 bg-grey rounded15" style="border: 5px solid grey;"></div>
                 </template>
               </CardStack>
             </div>
             <q-item-section class="col-12 col-md-8 justify-around q-pl-md-md">
-              <q-item-label lines="2" class="title3">a very fucking long title</q-item-label>
-              <q-item-label lines="1">100 films <q-icon name="favorite" class="q-ml-sm" />20</q-item-label>
+              <q-item-label lines="2" class="title3 text-bold">{{ list.name }}</q-item-label>
+              <q-item-label lines="1" class="flex items-center">{{ list.films?.length }} films
+                <q-btn flat round icon="favorite" />{{ list.likes.length }}</q-item-label>
             </q-item-section>
           </div>
         </template>
@@ -46,18 +49,21 @@
       <div class="row q-mt-md">
         <div class="col-12 col-md-6 q-pa-md">
           <div class="bdb4 flex justify-between items-end"><span class="titles">Watchlist</span> <span
-              class="text-h6 q-mb-lg">100</span></div>
-          <CardStack :cards="cards1" :stackWidth="'100%'" :cardWidth="137" :cardHeight="200" :paddingX="20" :maxCards="8">
-            <template v-slot:card>
-              <img src="http://image.tmdb.org/t/p/w300/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg" class="h100  rounded15 border5">
+              class="text-h6 q-mb-lg">{{ watchlist.length }}</span></div>
+          <CardStack :cards="watchlist" :stackWidth="'100%'" :cardWidth="137" :cardHeight="200" :paddingX="20"
+            :maxCards="8">
+            <template v-slot:card="{ card }">
+              <img v-if="card.poster" :src="`http://image.tmdb.org/t/p/w300/${card.poster}`"
+                class="h100 rounded15 border5">
+              <div v-else class="h100 w100 bg-grey rounded15" style="border: 5px solid grey;"></div>
             </template>
           </CardStack>
         </div>
         <div class="col-12 col-md-6 q-pa-md">
           <div class="bdb4 flex justify-between items-end"><span class="titles">Following</span> <span
-              class="text-h6 q-mb-lg">100</span></div>
+              class="text-h6 q-mb-lg">{{ profile.following?.length }}</span></div>
           <div class="row q-pt-md">
-            <img v-for="n in 6" :key="n" class="round col-2"
+            <img v-for="(user) in profile.following" :key="user" class="round col-2"
               src="https://cdn.discordapp.com/attachments/1109403221245571167/1139384610376138752/IMG_7910.png">
           </div>
         </div>
@@ -73,7 +79,18 @@ import 'swiper/scss'
 import 'swiper/scss/navigation'
 import 'swiper/scss/grid'
 import { Navigation } from 'swiper'
+import { useRoute } from 'vue-router'
+import { reactive, onMounted } from 'vue'
+import { api } from 'src/boot/axios'
+// import { useUserStore } from 'stores/user'
 import CardStack from 'components/CardStack.vue'
+
+// const user = useUserStore()
+const route = useRoute()
+const profile = reactive({})
+const watchlist = reactive([])
+const reviews = reactive([])
+const lists = reactive([])
 
 const swiperOptions = {
   slidesPerView: 1,
@@ -100,33 +117,19 @@ const swiperOptions = {
   }
 }
 
-const cards1 = [
-  { a: 1 },
-  { a: 1 },
-  { a: 1 },
-  { a: 1 },
-  { a: 1 },
-  { a: 1 },
-  { a: 1 },
-  { a: 1 },
-  { a: 1 },
-  { a: 1 },
-  { a: 1 }
-]
-// console.log(swiperOptions)
-</script>
-<style scoped>
-/* .overlapping {
-  position: absolute;
-  height: 200px;
+const getRecent = async () => {
+  const { data } = await api.get('/profile/recent/' + route.params.username)
+  Object.assign(profile, data.result.profile)
+  watchlist.push(...data.result.watchlist)
+  reviews.push(...data.result.userReviews)
+  lists.push(...data.result.userLists)
 }
+onMounted(() => {
+  getRecent()
+})
+</script>
 
-.ov-container {
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-} */
-
+<style scoped>
 .relative {
   position: relative !important;
 }

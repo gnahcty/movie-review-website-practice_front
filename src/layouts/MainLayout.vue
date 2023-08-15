@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf">
 
-    <q-header class="text-black" style="height: 10%;">
+    <q-header class="text-black" style="height: 10%;" :style="{ background: colors[headerColor] }">
       <q-toolbar class="fit">
         <q-btn flat round icon="menu" @click="toggleLeftDrawer" />
         <q-toolbar-title>
@@ -12,8 +12,8 @@
         </q-toolbar-title>
         <!-- <q-space /> -->
         <form class="gt-sm">
-          <q-input rounded standout v-model="search" bg-color="white" placeholder="search movie" style="width:30vw"
-            class="q-ml-xl">
+          <q-input rounded standout="bg-black" bg-color="white" v-model="search" placeholder="search movie"
+            style="width:30vw" class="q-ml-xl ">
             <template v-slot:after>
               <q-btn type="submit" flat round icon="search" @click="SearchMovie" />
             </template>
@@ -26,8 +26,8 @@
         <q-btn flat round icon="fa-solid fa-ranking-star" class="q-ma-lg" to="/users">
           <q-tooltip>Popular User</q-tooltip>
         </q-btn>
-        <q-btn flat round icon="face_2" to="/profile/recent">
-          <q-tooltip>User</q-tooltip>
+        <q-btn flat round icon="face_2" :to="user.isLogin ? `/profile/${user.username}/recent` : '?tab=login'">
+          <q-tooltip>Profile</q-tooltip>
         </q-btn>
       </q-toolbar>
     </q-header>
@@ -37,20 +37,31 @@
         <q-list>
           <q-item style="height:150px;">
             <q-item-section avatar style="width:80px;">
-              <q-avatar style="width:80px;height: 100%">
-                <img
-                  :src="(user.avatar || 'https://source.boringavatars.com/beam/120/Annie%20Jump?colors=264653,2a9d8f,e9c46a,f4a261,e76f51')">
-              </q-avatar>
+              <router-link :to="`/profile/${user.username}/recent`">
+                <q-avatar style="width:80px;height: 100%">
+                  <img
+                    :src="(user.avatar || 'https://source.boringavatars.com/beam/120/Annie%20Jump?colors=264653,2a9d8f,e9c46a,f4a261,e76f51')">
+                </q-avatar>
+              </router-link>
             </q-item-section>
             <!-- TODO: 登入後把login signup改成 watched films -->
             <q-item-section>
               <q-item-label class="text-h5 q-pl-lg q-pb-sm">{{ user.username || 'Guest User' }}</q-item-label>
               <q-item-label v-if="!isLogin">
-                <q-btn outline color="green" size="xs" label="Login" class="q-ml-md" @click="open('login')" />
+                <q-btn outline color="green" size="xs" label="Login" class="q-ml-md" @click="tab = 'login'" />
                 <q-btn outline style="color: goldenrod;" size="xs" label="Sign Up" class="q-ml-xs"
-                  @click="open('register')" />
+                  @click="tab = 'register'" />
               </q-item-label>
             </q-item-section>
+          </q-item>
+          <q-item class="lt-md">
+            <form class="w100">
+              <q-input rounded outlined v-model="search" placeholder="search movie">
+                <template v-slot:after>
+                  <q-btn type="submit" flat round icon="search" @click="SearchMovie" />
+                </template>
+              </q-input>
+            </form>
           </q-item>
           <template v-for="(menuItem, index) in menuList" :key="index">
             <q-item clickable v-ripple :to="menuItem.to" class="q-pl-lg">
@@ -74,16 +85,15 @@
       </q-scroll-area>
     </q-drawer>
 
-    <q-dialog v-model="loginModal">
+    <q-dialog :model-value="loginModal" persistent>
       <q-card style="width: 400px;">
-        <q-tabs v-model="tab" class="bg-grey-2 text-grey-7" active-color="primary" indicator-color="purple"
-          align="justify">
+        <q-tabs v-model="tab" class="bg-grey-2 text-grey-7" active-color="black" indicator-color="black" align="justify">
           <q-tab name="login" label="Login" />
           <q-tab name="register" label="Register" />
         </q-tabs>
 
         <q-tab-panels v-model="tab" animated>
-          <!-- 燈入頁面 -->
+          <!-- 登入頁面 -->
           <q-tab-panel name="login" class="q-px-xl flex-center">
             <q-form @submit="loginSubmit">
               <div class="row">
@@ -100,7 +110,8 @@
                   </template>
                 </q-input>
               </div>
-              <div class="row flex-center">
+              <div class="row q-gutter-md flex-center">
+                <q-btn outline label="cancel" color="grey" type="reset" class="q-mt-md" @click="tab = ''" />
                 <q-btn outline label="submit" type="submit" class="q-mt-md" />
               </div>
             </q-form>
@@ -136,7 +147,8 @@
                   </template>
                 </q-input>
               </div>
-              <div class="row flex-center">
+              <div class="row q-gutter-md flex-center">
+                <q-btn outline label="cancel" color="grey" type="reset" class="q-mt-md" @click="tab = ''" />
                 <q-btn outline label="submit" type="submit" class="q-mt-md" />
               </div>
             </q-form>
@@ -146,7 +158,7 @@
     </q-dialog>
 
     <q-page-container :style="pt">
-      <router-view :key="$route.fullPath" />
+      <router-view :key="$route.fullPath" @fullpage-scroll="onFullPageScroll" />
     </q-page-container>
 
   </q-layout>
@@ -154,17 +166,17 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { ref, reactive, watch, computed } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import validator from 'validator'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { useRouteQuery } from '@vueuse/router'
 import { useUserStore } from 'stores/user.js'
 import { api, apiAuth } from 'boot/axios.js'
 
 const leftDrawerOpen = ref(false)
 const search = ref('')
-const loginModal = ref(false)
-const tab = ref('login')
+const tab = useRouteQuery('tab', '')
 const isPwd = ref(true)
 const router = useRouter()
 const user = useUserStore()
@@ -172,13 +184,12 @@ const $q = useQuasar()
 const route = useRoute()
 const { isLogin } = storeToRefs(user)
 
+const loginModal = computed(() => {
+  return tab.value !== ''
+})
+
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
-}
-
-const open = (tabName) => {
-  loginModal.value = !loginModal.value
-  tab.value = tabName
 }
 
 const menuList = [
@@ -347,16 +358,12 @@ const pt = computed(() => {
 }
 )
 
-watch(() => route.query, () => {
-  if ('login' in route.query) open('login')
-  else if ('register' in route.query) open('register')
-})
-
-watch(() => loginModal.value, () => {
-  if (loginModal.value === false) {
-    router.replace({ query: null })
-  }
-})
+const colors = ['#ffe500', '#000', '#f00']
+const headerColor = ref(0)
+const onFullPageScroll = (destination) => {
+  console.log(destination)
+  headerColor.value = destination
+}
 </script>
 
 <style scoped>

@@ -1,7 +1,9 @@
 <template>
   <q-item v-ripple class="arched bg-white">
     <q-item-section avatar>
-      <q-img class="round " style="width:150px;" :src="user.avatar"></q-img>
+      <router-link :to="`/profile/${user.username}/recent`">
+        <q-img class="round " style="width:150px;" :src="user.avatar" />
+      </router-link>
     </q-item-section>
 
     <q-item-section clickable @click="details = true" style="justify-content: start;">
@@ -31,9 +33,11 @@
       <q-card-section>
         <div class="row">
           <div class="col">
-            <q-avatar>
-              <img :src="user.avatar">
-            </q-avatar>
+            <router-link :to="`/profile/${user.username}/recent`">
+              <q-avatar>
+                <img :src="user.avatar">
+              </q-avatar>
+            </router-link>
             <span class="text-h6 q-ml-md">{{ user.username }}</span>
           </div>
           <div class="col-auto">

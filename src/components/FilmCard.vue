@@ -1,5 +1,5 @@
 <template>
-  <q-card class="my-card" flat bordered style="width:80%; padding-bottom:50px" @mouseleave="mouseout()">
+  <q-card class="my-card" flat bordered style="width:80%;" @mouseleave="mouseout()">
     <q-btn flat round color="grey" icon="add" id="add" class="absolute-top-right" style="z-index:2" v-if="user.isLogin">
       <q-menu>
         <q-list style="min-width: 150px">

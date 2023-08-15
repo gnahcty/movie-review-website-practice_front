@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, nextTick } from 'vue'
+import { ref, reactive, computed, onMounted, nextTick, watch } from 'vue'
 import { debounce } from 'src/utils/debounce'
 
 const props = defineProps({
@@ -57,28 +57,51 @@ const stack = reactive([])
 
 const containerRef = ref(null)
 const responsiveWidth = ref(0)
+// const cardArr = []
+
+const unwatch = watch(() => props.cards.length, (newValue, oldValue) => {
+  if (oldValue !== 0) return
+  init()
+  unwatch()
+  handleResize()
+})
 
 function init () {
-  addCard(props.cards, props.maxCards)
-  stack.push(...props.cards.map((card, index) => {
-    return {
-      ...card,
-      display: index < props.maxCards ? 'block' : 'none',
-      xPos: props.paddingX + xOffset.value * index,
-      yPos: props.paddingY,
-      width: props.cardWidth,
-      height: props.cardHeight,
-      zIndex: index
-    }
-  }))
+  stack.splice(
+    0,
+    stack.length - 1,
+    ...Array.from({ length: props.maxCards }, (card, index) => {
+      const data = props.cards[index] || {}
+      return {
+        ...data,
+        display: index < props.maxCards ? 'block' : 'none',
+        xPos: props.paddingX + xOffset.value * index,
+        yPos: props.paddingY,
+        width: props.cardWidth,
+        height: props.cardHeight,
+        zIndex: props.maxCards - index
+      }
+    }).reverse())
+  // addCard(cardArr, props.maxCards)
+  // stack.push(...cardArr.map((card, index) => {
+  //   return {
+  //     ...card,
+  //     display: index < props.maxCards ? 'block' : 'none',
+  //     xPos: props.paddingX + xOffset.value * index,
+  //     yPos: props.paddingY,
+  //     width: props.cardWidth,
+  //     height: props.cardHeight,
+  //     zIndex: index
+  //   }
+  // }))
 }
-const addCard = (arr, max) => {
-  if (arr.length < max) {
-    // console.log(arr)
-    arr.unshift({})
-    addCard(arr, max)
-  }
-}
+// const addCard = (arr, max) => {
+//   if (arr.length < max) {
+//     // console.log(arr)
+//     arr.unshift({})
+//     addCard(arr, max)
+//   }
+// }
 // container寬度，預設為卡片寬度+px*2，可設px或%數
 const containerWidth = computed(() => {
   if (!props.stackWidth) {
@@ -114,10 +137,15 @@ const handleResize = debounce(() => {
   })
 }, 250)
 
-onMounted(() => {
-  init()
+onMounted(async () => {
+  if (props.cards.length > 0) {
+    unwatch()
+    init()
+  }
   window.addEventListener('resize', handleResize)
-  handleResize()
+  if (props.cards.length > 0) {
+    handleResize()
+  }
 })
 </script>
 

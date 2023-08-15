@@ -136,7 +136,7 @@ const routes = [
     component: () => import('layouts/ProfileLayout.vue'),
     children: [
       {
-        path: 'recent',
+        path: '/profile/:username/recent',
         component: () => import('pages/front/user/UserProfile.vue'),
         meta: {
           title: 'moOo | Profile',
@@ -146,7 +146,7 @@ const routes = [
         }
       },
       {
-        path: 'likes',
+        path: '/profile/:username/likes',
         component: () => import('pages/front/user/UserFavorites.vue'),
         meta: {
           title: 'moOo | Favorites',

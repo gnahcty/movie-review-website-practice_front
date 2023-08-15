@@ -12,7 +12,11 @@
               <swiper v-bind="swiperOptions">
                 <swiperSlide v-for="(film, i) in films" :key="i">
                   <RouterLink :to="'/films/' + film.id">
-                    <img :src="'http://image.tmdb.org/t/p/w300/' + film.poster_path" class="rounded15 border10 ratio" />
+                    <q-img :src="'http://image.tmdb.org/t/p/w300/' + film.poster_path" class="rounded15 border10 ratio"
+                      style="width: 80%;">
+                      <q-tooltip anchor="center middle" self="top middle">{{ film.title }}
+                      </q-tooltip>
+                    </q-img>
                   </RouterLink>
                 </swiperSlide>
               </swiper>
@@ -38,9 +42,13 @@
               <div class="col-3 arched column justify-end items-center bgea"
                 style="height: 34vw; border: 4px solid #000;">
                 <!-- 1 -->
-                <q-img :src="popUser.avatar" class="round" style="width: 70%; border: 3px solid #000;" />
+                <router-link :to="`/profile/${popUser.username}/recent`" style="width: 70%;">
+                  <q-img :src="popUser.avatar" class="round" style="border: 3px solid #000;" />
+                </router-link>
                 <!-- 2 -->
-                <span class="text-bold text-h3 q-mt-xs">{{ popUser.username }}</span>
+                <router-link :to="`/profile/${popUser.username}/recent`" class="text-center" style="width: 70%;">
+                  <span class="text-bold text-h3 q-mt-xs">{{ popUser.username }}</span>
+                </router-link>
                 <!-- 3 -->
                 <div class="text-bold row">
                   <span class="q-mr-md">{{ popUser.watched }} films</span> <span>{{ popUser.reviewed }} reviews</span>
@@ -49,8 +57,10 @@
                 <div class="gt-sm col-4 row q-gutter-md q-pa-md flex-center" style="width:100%">
                   <div class="col flex justify-center" v-for="(review, i) in popUser.latestComments" :key="i">
                     <RouterLink :to="'/films/' + review.film" class="full-width">
-                      <img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" class="ratio full-width rounded15"
-                        style="border: 3px solid #000;" />
+                      <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" class="ratio full-width rounded15"
+                        style="border: 3px solid #000;">
+                        <q-tooltip anchor="center middle" self="top middle">{{ review.title }} </q-tooltip>
+                      </q-img>
                     </RouterLink>
                   </div>
                 </div>
@@ -65,13 +75,16 @@
 </template>
 
 <script setup>
-
+const emit = defineEmits(['fullpage-scroll'])
 const options = {
-  licenseKey: 'gplv3-license'
+  licenseKey: 'gplv3-license',
+  onLeave: (origin, destination, direction, trigger) => {
+    emit('fullpage-scroll', destination.index)
+  }
   // sectionsColor: ['#41b883', '#ff5f45', '#0798ec']
 }
 
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, onUnmounted } from 'vue'
 import { api } from 'src/boot/axios'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 
@@ -134,6 +147,10 @@ onMounted(
   getPopReviews(),
   getPopUsers()
 )
+
+onUnmounted(() => {
+  emit('fullpage-scroll', 0)
+})
 </script>
 
 <style scoped>

@@ -8,27 +8,33 @@
           <q-card-section horizontal class="fit row items-center">
             <RouterLink :to="'/films/' + review.film" class="col-3 flex items-center full-height">
               <q-card-section class="q-pr-none fit" style="box-sizing: border-box;">
-                <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" class="rounded15 fit ratio border5" />
+                <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" class="rounded15 fit ratio border5">
+                  <q-tooltip anchor="center middle" self="top middle">{{ review.title }} </q-tooltip>
+                </q-img>
               </q-card-section>
             </RouterLink>
-            <q-card-section class="col-9 full-height">
+            <q-card-section class="col-9 full-height q-py-sm">
               <q-item class="fit q-pa-none">
-                <q-item-section class="column">
-                  <q-item-label lines="1" class="col-4 row">
+                <q-item-section class="column flex justify-center">
+                  <q-item-label lines="1" class="col-3 row">
                     <span class="text-h4 text-bold col text-no-wrap" style="text-overflow: ellipsis; overflow: hidden;">{{
                       review.title }}</span>
                     <span class="text-h6 q-ml-md col-3">{{ review.year }}</span>
                   </q-item-label>
                   <q-item-label lines="1" class="col-2">
-                    <q-avatar size="sm"> <img :src=review.user.avatar></q-avatar>
-                    <span class="q-ml-xs q-mr-sm">{{ review.user.username }}</span>
+                    <router-link :to="`/profile/${review.user.username}/recent`">
+                      <q-avatar size="sm"> <img :src=review.user.avatar></q-avatar>
+                      <span class="q-ml-xs q-mr-sm">{{ review.user.username }}</span>
+                    </router-link>
                     <q-rating v-model="review.ratings" :max="review.ratings" size="1em" icon="star_border"
                       icon-selected="star" icon-half="star_half" readonly />
                     <q-icon v-if="review.like" name="favorite" color="red" class="q-ml-sm" />
                   </q-item-label>
-                  <q-item-label caption lines="3" class="col-4">{{ review.comments }}</q-item-label>
-                  <q-item-label lines="1" class="col">
-                    <q-icon name="favorite" class="q-mr-sm" />
+                  <q-item-label caption lines="3" class="col-3">{{ review.comments }}</q-item-label>
+                  <q-item-label lines="1" class="col-2 flex items-start">
+                    <q-btn flat round icon="favorite" class="q-mr-sm"
+                      :color="review.cmtLikes.indexOf(user._id) === -1 ? 'black' : 'red'"
+                      @click="emit('like', review._id)" />
                     <span class="q-mr-xs">{{ review.cmtLikes.length }}</span>likes
                   </q-item-label>
                 </q-item-section>
@@ -43,12 +49,17 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useUserStore } from 'stores/user'
+
+const emit = defineEmits(['like'])
+const user = useUserStore()
 const slide2 = ref(1)
 const props = defineProps({
   reviewGroups: {
     type: Array
   }
 })
+
 </script>
 
 <style lang="scss" scoped>

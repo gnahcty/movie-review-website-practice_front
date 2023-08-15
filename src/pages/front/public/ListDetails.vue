@@ -15,7 +15,9 @@
       <div class=" col-12 col-md-4 q-pa-xl">
         <div class="row w100 justify-start items-center">
           <div class="col-5">
-            <img :src=list.user?.avatar>
+            <router-link :to="`/profile/${list.user?.username}/recent`">
+              <img :src=list.user?.avatar>
+            </router-link>
           </div>
           <div class="col-auto title3 text-bold text-center">{{ list.user?.username }}</div>
         </div>

@@ -38,10 +38,10 @@ export default route(function (/* { store, ssrContext } */) {
     }
 
     // TODO: 登入後跳回原本頁面
-    if (user.isLogin && ['/?register', '/?login'].includes(to.path)) {
-      next('/')
+    if (user.isLogin && ['/?tab=register', '/?tab=login'].includes(to.path)) {
+      next('/?tab=""')
     } else if (to.meta.login && !user.isLogin) {
-      next('/?login')
+      next('/?tab=login')
     } else if (to.meta.admin && !user.isAdmin) {
       next('/')
     } else {

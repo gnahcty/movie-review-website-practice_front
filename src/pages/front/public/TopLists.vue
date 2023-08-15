@@ -26,9 +26,11 @@
                 <q-item-section class="col-4 justify-around q-pl-md-md">
                   <q-item-label lines="2" class="title3 lilita">{{ list.name }}</q-item-label>
                   <q-item-label lines="1" class="row q-px-md">
-                    <span class="col-auto flex items-center">
-                      <img :src=list.user.avatar class="round " style="width: 50px;">
-                      <span class="text-h6 q-pl-md">{{ list.user.username }}</span>
+                    <span class="col-auto ">
+                      <router-link :to="`/profile/${list.user.username}/recent`" class="flex items-center">
+                        <img :src=list.user.avatar class="round " style="width: 50px;">
+                        <span class="text-h6 q-pl-md">{{ list.user.username }}</span>
+                      </router-link>
 
                     </span>
 
@@ -69,10 +71,11 @@
                 <q-item-section class="col-4 justify-around q-pl-md-md">
                   <q-item-label lines="2" class="title3 lilita">{{ list.name }}</q-item-label>
                   <q-item-label lines="1" class="row q-px-md">
-                    <span class="col-auto flex items-center">
-                      <img :src=list.user.avatar class="round " style="width: 50px;">
-                      <span class="text-h6 q-pl-md">{{ list.user.username }}</span>
-
+                    <span class="col-auto ">
+                      <router-link :to="`/profile/${list.user.username}/recent`" class="flex items-center">
+                        <img :src=list.user.avatar class="round " style="width: 50px;">
+                        <span class="text-h6 q-pl-md">{{ list.user.username }}</span>
+                      </router-link>
                     </span>
 
                     <span class="col flex justify-end items-center">

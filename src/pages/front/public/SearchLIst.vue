@@ -1,8 +1,11 @@
 <template>
-  <div class="q-pa-md flex flex-center">
-    <div class="row">
-      <div class="col-3 flex flex-center" v-for="(film) in films" :key="film.id">
-        <FilmCard v-bind="film"></FilmCard>
+  <div class="row justify-center">
+    <div class="col-8">
+      <div class="row">
+        <div class="col-3 flex flex-center" v-for="(film) in films" :key="film.id"
+          style="align-content: flex-start; height: 350px;">
+          <FilmCard v-bind="film"></FilmCard>
+        </div>
       </div>
     </div>
   </div>

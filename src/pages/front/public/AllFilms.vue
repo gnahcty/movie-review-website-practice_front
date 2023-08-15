@@ -26,7 +26,7 @@
       </q-btn-group>
       <div class="row">
         <div class="col-3 flex flex-center" v-for="(film) in films" :key="film.id"
-          style="align-content: flex-start; height: 310px;">
+          style="align-content: flex-start; height: 350px;">
           <FilmCard v-bind="film"></FilmCard>
         </div>
       </div>
