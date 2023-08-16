@@ -155,6 +155,11 @@ const getUserReview = async () => {
   }
 }
 
+const getFriendsReviews = async () => {
+  const { data } = await apiAuth.get(`reviews/${route.params.id}/friend`)
+  console.log(data)
+}
+
 const checkWatchList = async () => {
   const { data } = await apiAuth.get('users/profile')
   const watchList = data.result.watchList
@@ -262,6 +267,7 @@ onMounted(async () => {
   getReviews()
   getUserReview()
   checkWatchList()
+  getFriendsReviews()
 })
 
 </script>

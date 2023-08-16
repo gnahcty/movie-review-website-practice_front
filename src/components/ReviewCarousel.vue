@@ -16,9 +16,12 @@
             <q-card-section class="col-9 full-height q-py-sm">
               <q-item class="fit q-pa-none">
                 <q-item-section class="column flex justify-center">
-                  <q-item-label lines="1" class="col-3 row">
-                    <span class="text-h4 text-bold col text-no-wrap" style="text-overflow: ellipsis; overflow: hidden;">{{
-                      review.title }}</span>
+                  <q-item-label lines="1" class="col-3 ">
+                    <RouterLink :to="'/films/' + review.film" class="row">
+                      <span class="text-h4 text-bold col text-no-wrap"
+                        style="text-overflow: ellipsis; overflow: hidden;">{{
+                          review.title }}</span>
+                    </RouterLink>
                     <span class="text-h6 q-ml-md col-3">{{ review.year }}</span>
                   </q-item-label>
                   <q-item-label lines="1" class="col-2">

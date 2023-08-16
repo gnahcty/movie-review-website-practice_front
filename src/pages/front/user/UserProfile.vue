@@ -41,7 +41,9 @@
             <q-item-section class="col-12 col-md-8 justify-around q-pl-md-md">
               <q-item-label lines="2" class="title3 text-bold">{{ list.name }}</q-item-label>
               <q-item-label lines="1" class="flex items-center">{{ list.films?.length }} films
-                <q-btn flat round icon="favorite" />{{ list.likes.length }}</q-item-label>
+                <q-btn flat round icon="favorite" :color="list.likes.indexOf(currentUser._id) > -1 ? 'red' : 'black'"
+                  @click=" likeList(list._id)" />
+                {{ list.likes.length }}</q-item-label>
             </q-item-section>
           </div>
         </template>
@@ -62,9 +64,12 @@
         <div class="col-12 col-md-6 q-pa-md">
           <div class="bdb4 flex justify-between items-end"><span class="titles">Following</span> <span
               class="text-h6 q-mb-lg">{{ profile.following?.length }}</span></div>
-          <div class="row q-pt-md">
-            <img v-for="(user) in profile.following" :key="user" class="round col-2"
-              src="https://cdn.discordapp.com/attachments/1109403221245571167/1139384610376138752/IMG_7910.png">
+          <div class="q-pt-md row q-gutter-md">
+            <div v-for="(user, i) in profile.following" :key="user" class="col-2">
+              <router-link to="/profile/_id/recent" v-if="i < 10">
+                <img class="round w100" :src="user.avatar">
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -81,11 +86,11 @@ import 'swiper/scss/grid'
 import { Navigation } from 'swiper'
 import { useRoute } from 'vue-router'
 import { reactive, onMounted } from 'vue'
-import { api } from 'src/boot/axios'
-// import { useUserStore } from 'stores/user'
+import { api, apiAuth } from 'src/boot/axios'
+import { useUserStore } from 'stores/user'
 import CardStack from 'components/CardStack.vue'
 
-// const user = useUserStore()
+const currentUser = useUserStore()
 const route = useRoute()
 const profile = reactive({})
 const watchlist = reactive([])
@@ -117,12 +122,17 @@ const swiperOptions = {
   }
 }
 
+const likeList = async (id) => {
+  await apiAuth.post('/lists/like', { id })
+  getRecent()
+}
+
 const getRecent = async () => {
   const { data } = await api.get('/profile/recent/' + route.params.username)
   Object.assign(profile, data.result.profile)
-  watchlist.push(...data.result.watchlist)
-  reviews.push(...data.result.userReviews)
-  lists.push(...data.result.userLists)
+  watchlist.splice(0, watchlist.length, ...data.result.watchlist)
+  reviews.splice(0, reviews.length, ...data.result.userReviews)
+  lists.splice(0, lists.length, ...data.result.userLists)
 }
 onMounted(() => {
   getRecent()

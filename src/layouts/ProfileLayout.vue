@@ -16,7 +16,8 @@
               <q-item-section>
                 <q-item-label style="font-weight: 800;" class="title2 text-bold">{{ profile.username }}</q-item-label>
                 <q-item-label style="margin-top: 10px !important;" v-if="user.username !== profile.username">
-                  <q-btn color="white" label="follow" class="text-black" @click="follow()" /></q-item-label>
+                  <q-btn unelevated class="text-black" :label="!followed ? 'follow' : 'followed'"
+                    :color="!followed ? 'white' : 'light-green-14'" @click="follow()" /></q-item-label>
               </q-item-section>
             </q-item>
           </div>
@@ -142,6 +143,15 @@ const menuList = [
   { to: '/reviews', label: 'Reviews', icon: 'reviews' },
   { to: '/watchlist', label: 'watchlist', icon: 'more_time' }
 ]
+
+const followed = computed(() => {
+  return profile.followers?.some(follower => follower._id === user._id)
+})
+
+const follow = async () => {
+  await apiAuth.post('users/follow', { username: profile.username })
+  getRecent()
+}
 
 const getRecent = async () => {
   const { data } = await api.get('/profile/recent/' + route.params.username)

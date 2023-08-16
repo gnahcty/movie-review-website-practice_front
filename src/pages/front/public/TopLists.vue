@@ -35,7 +35,11 @@
                     </span>
 
                     <span class="col flex justify-end items-center">
-                      <q-btn flat round icon="favorite" /> <span>{{ list.likes.length }}</span>
+                      <q-btn flat round icon="favorite"
+                        :color="list.likes.indexOf(currentUser._id) > -1 ? 'red' : 'black'"
+                        @click=" likeList(list._id)" />
+                      <span>{{
+                        list.likes.length }}</span>
                     </span>
                   </q-item-label>
                 </q-item-section>
@@ -79,7 +83,10 @@
                     </span>
 
                     <span class="col flex justify-end items-center">
-                      <q-btn flat round icon="favorite" /> <span>{{ list.likes.length }}</span>
+                      <q-btn flat round icon="favorite"
+                        :color="list.likes.indexOf(currentUser._id) > -1 ? 'red' : 'black'"
+                        @click=" likeList(list._id)" />
+                      <span>{{ list.likes.length }}</span>
                     </span>
                   </q-item-label>
                 </q-item-section>
@@ -102,9 +109,12 @@ const options = {
 }
 
 import { onMounted, reactive } from 'vue'
-import { api } from 'src/boot/axios'
+import { api, apiAuth } from 'src/boot/axios'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import CardStack from 'src/components/CardStack.vue'
+import { useUserStore } from 'stores/user.js'
+
+const currentUser = useUserStore()
 
 // Import Swiper styles
 import 'swiper/scss'
@@ -160,6 +170,7 @@ const swiperOptionsNew = {
     }
   }
 }
+
 const pop = reactive([])
 const newList = reactive([])
 const getPopLists = async () => {
@@ -169,6 +180,12 @@ const getPopLists = async () => {
 const getNewLists = async () => {
   const { data } = await api.get('/lists/new')
   newList.push(...data.results)
+}
+
+const likeList = async (id) => {
+  await apiAuth.post('/lists/like', { id })
+  getPopLists()
+  getNewLists()
 }
 onMounted(() => {
   getPopLists()

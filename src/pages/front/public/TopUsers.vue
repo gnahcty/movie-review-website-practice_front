@@ -1,3 +1,0 @@
-<template>
-TopUsers
-</template>
