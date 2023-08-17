@@ -34,7 +34,6 @@
             <ReviewCarousel :reviewGroups="reviewGroups" style="overflow: hidden;" class="h100" @like="likecmt">
             </ReviewCarousel>
           </div>
-
         </div>
       </div>
       <div class="section">
@@ -42,37 +41,11 @@
           <div class="titles col-2">Popular Users</div>
           <div class="row q-gutter-x-xl flex-center q-px-xl col-10 w100">
             <template v-for="(popUser, i) in popUsers" :key="i">
-              <div class="col-3 arched column justify-end items-center bgea"
-                style="height: 34vw; border: 4px solid #000;">
-                <!-- 1 -->
-                <router-link :to="`/profile/${popUser.username}/recent`" style="width: 70%;">
-                  <q-img :src="popUser.avatar" class="round" style="border: 3px solid #000;" />
-                </router-link>
-                <!-- 2 -->
-                <router-link :to="`/profile/${popUser.username}/recent`" class="text-center" style="width: 70%;">
-                  <span class="text-bold text-h3 q-mt-xs">{{ popUser.username }}</span>
-                </router-link>
-                <!-- 3 -->
-                <div class="text-bold row">
-                  <span class="q-mr-md">{{ popUser.watched }} films</span> <span>{{ popUser.reviewed }} reviews</span>
-                </div>
-                <!-- 4 -->
-                <div class="gt-sm col-4 row q-gutter-md q-pa-md flex-center" style="width:100%">
-                  <div class="col flex justify-center" v-for="(review, i) in popUser.latestComments" :key="i">
-                    <RouterLink :to="'/films/' + review.film" class="full-width">
-                      <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" class="ratio full-width rounded15"
-                        style="border: 3px solid #000;">
-                        <q-tooltip anchor="center middle" self="top middle">{{ review.title }} </q-tooltip>
-                      </q-img>
-                    </RouterLink>
-                  </div>
-                </div>
-              </div>
+              <UserArch v-bind="popUser"></UserArch>
             </template>
           </div>
         </div>
       </div>
-
     </full-page>
   </div>
 </template>
@@ -97,6 +70,7 @@ import 'swiper/scss/navigation'
 import 'swiper/scss/grid'
 import { Navigation } from 'swiper'
 import ReviewCarousel from 'src/components/ReviewCarousel.vue'
+import UserArch from 'src/components/UserArch.vue'
 
 const reviewGroups = reactive([])
 const popUsers = reactive([])
@@ -143,7 +117,7 @@ const getPopReviews = async () => {
 
 const getPopUsers = async () => {
   const { data } = await api.get('users/pop')
-  popUsers.push(...data.results)
+  popUsers.push(...data.top3)
 }
 
 const likecmt = async (id) => {

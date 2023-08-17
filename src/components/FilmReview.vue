@@ -1,5 +1,6 @@
 <template>
-  <q-item v-ripple class="arched bg-white">
+  <!-- sm以上 -->
+  <q-item v-ripple class="arched bg-white gt-xs">
     <q-item-section avatar>
       <router-link :to="`/profile/${user.username}/recent`">
         <q-img class="round " style="width:150px;" :src="user.avatar" />
@@ -13,6 +14,34 @@
         <q-icon v-if="like" name="favorite" class="q-ml-md" />
       </q-item-label>
       <q-item-label lines="3" class="text-h4 col-8">
+        <span class="full-height flex items-center">
+          {{ comments }}
+        </span>
+
+      </q-item-label>
+    </q-item-section>
+
+    <q-item-section side top>
+      <q-item-label lines="1">
+        <q-btn flat round icon="favorite" :color="CmtLiked ? 'red' : 'grey'" @click="likeCmt" />
+        <span>{{ likesArr.length }}</span>
+      </q-item-label>
+    </q-item-section>
+  </q-item>
+  <!-- sm以下 -->
+  <q-item v-ripple class="bg-white lt-sm">
+    <q-item-section avatar>
+      <router-link :to="`/profile/${user.username}/recent`">
+        <q-img class="round " style="width:53px;" :src="user.avatar" />
+      </router-link>
+    </q-item-section>
+
+    <q-item-section clickable @click="details = true" style="justify-content: start;" class="column">
+      <q-item-label lines="1" class="lilita col">{{ user.username }}
+        <span v-if="ratings > 0" class="q-ml-md">{{ rating }} <q-icon name="eva-star" /></span>
+        <q-icon v-if="like" name="favorite" class="q-ml-md" />
+      </q-item-label>
+      <q-item-label lines="3" class="col-8">
         <span class="full-height flex items-center">
           {{ comments }}
         </span>

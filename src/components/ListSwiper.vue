@@ -5,7 +5,7 @@
     </div>
     <div class="col-10">
       <swiper v-bind="props.swiperOptions">
-        <swiperSlide v-for="(list, i) in props.list" :key="i" class="column">
+        <swiperSlide v-for="(list) in props.list" :key="list._id" class="column">
           <div class="col-8">
             <RouterLink :to="`/list/${list._id}`">
               <CardStack :cards="list.films" :cardWidth="props.cardStackOptions.cardWidth"

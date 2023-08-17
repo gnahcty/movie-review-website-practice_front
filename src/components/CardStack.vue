@@ -1,4 +1,5 @@
 <template>
+  <!-- FIXME: cannot read properties of null (reading 'clientWidth') -->
   <div class="stack_wrapper" ref="containerRef">
     <div class="stack_stack" :style="{
       height: `${cardHeight + paddingY * 2}px`,
@@ -82,26 +83,8 @@ function init () {
         zIndex: props.maxCards - index
       }
     }).reverse())
-  // addCard(cardArr, props.maxCards)
-  // stack.push(...cardArr.map((card, index) => {
-  //   return {
-  //     ...card,
-  //     display: index < props.maxCards ? 'block' : 'none',
-  //     xPos: props.paddingX + xOffset.value * index,
-  //     yPos: props.paddingY,
-  //     width: props.cardWidth,
-  //     height: props.cardHeight,
-  //     zIndex: index
-  //   }
-  // }))
 }
-// const addCard = (arr, max) => {
-//   if (arr.length < max) {
-//     // console.log(arr)
-//     arr.unshift({})
-//     addCard(arr, max)
-//   }
-// }
+
 // container寬度，預設為卡片寬度+px*2，可設px或%數
 const containerWidth = computed(() => {
   if (!props.stackWidth) {

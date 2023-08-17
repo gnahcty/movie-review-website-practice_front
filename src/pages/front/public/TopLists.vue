@@ -1,6 +1,6 @@
 <template>
   <!-- 283*420 -->
-  <!-- FIXME: like時不會響應 -->
+  <!-- FIXME: like*2時不會響應 -->
   <div>
     <full-page ref="fullpage" :options="options" id="fullpage">
       <div class="section">
@@ -31,13 +31,14 @@ import ListSwiper from 'src/components/ListSwiper.vue'
 
 const pop = reactive([])
 const newList = reactive([])
+
 const getPopLists = async () => {
   const { data } = await api.get('/lists/pop')
-  pop.push(...data.results)
+  pop.splice(0, pop.length, ...data.results)
 }
 const getNewLists = async () => {
   const { data } = await api.get('/lists/new')
-  newList.push(...data.results)
+  newList.splice(0, newList.length, ...data.results)
 }
 
 const likeList = async (id) => {
