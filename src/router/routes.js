@@ -140,7 +140,7 @@ const routes = [
         component: () => import('pages/front/user/UserProfile.vue'),
         meta: {
           title: 'moOo | Profile',
-          login: true,
+          login: false,
           admin: false,
           bg: '#ffe500'
         }
@@ -150,7 +150,7 @@ const routes = [
         component: () => import('pages/front/user/UserFavorites.vue'),
         meta: {
           title: 'moOo | Favorites',
-          login: true,
+          login: false,
           admin: false,
           bg: '#00e0ff'
         }

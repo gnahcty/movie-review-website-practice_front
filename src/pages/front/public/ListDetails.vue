@@ -1,6 +1,6 @@
 <template>
   <div padding class="row justify-center q-pt-xl">
-    <div class="col-12 col-md-8 row">
+    <div class="col-12 col-md-10 col-lg-8 row">
       <div class=" col-12 col-md-8 q-px-md">
         <div class="titles bdb4">{{ list.name }}</div>
         <div class="row">
@@ -16,10 +16,10 @@
         <div class="row w100 justify-start items-center">
           <div class="col-5">
             <router-link :to="`/profile/${list.user?.username}/recent`">
-              <img :src=list.user?.avatar>
+              <img :src=list.user?.avatar class="w100">
             </router-link>
           </div>
-          <div class="col-auto title3 text-bold text-center">{{ list.user?.username }}</div>
+          <div class="col-auto title3 q-ml-sm text-bold text-center">{{ list.user?.username }}</div>
         </div>
         <div class="q-my-md q-pl-lg q-pb-md flex w100 justify-between items-center bdb4">
           <span class="text-h6">{{ list.films?.length }} films</span>

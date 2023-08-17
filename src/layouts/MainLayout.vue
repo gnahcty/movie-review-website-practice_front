@@ -34,159 +34,29 @@
 
     <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="desktop" elevated>
       <q-scroll-area class="fit">
-        <q-list>
-          <q-item style="height:150px;">
-            <q-item-section avatar style="width:80px;">
-              <router-link :to="`/profile/${user.username}/recent`">
-                <q-avatar style="width:80px;height: 100%">
-                  <img
-                    :src="(user.avatar || 'https://source.boringavatars.com/beam/120/Annie%20Jump?colors=264653,2a9d8f,e9c46a,f4a261,e76f51')">
-                </q-avatar>
-              </router-link>
-            </q-item-section>
-            <!-- TODO: 登入後把login signup改成 watched films -->
-            <q-item-section>
-              <q-item-label class="text-h5 q-pl-lg q-pb-sm">{{ user.username || 'Guest User' }}</q-item-label>
-              <q-item-label v-if="!isLogin">
-                <q-btn outline color="green" size="xs" label="Login" class="q-ml-md" @click="tab = 'login'" />
-                <q-btn outline style="color: goldenrod;" size="xs" label="Sign Up" class="q-ml-xs"
-                  @click="tab = 'register'" />
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item class="lt-md">
-            <form class="w100">
-              <q-input rounded outlined v-model="search" placeholder="search movie">
-                <template v-slot:after>
-                  <q-btn type="submit" flat round icon="search" @click="SearchMovie" />
-                </template>
-              </q-input>
-            </form>
-          </q-item>
-          <template v-for="(menuItem, index) in menuList" :key="index">
-            <q-item clickable v-ripple :to="menuItem.to" class="q-pl-lg">
-              <q-item-section avatar>
-                <q-icon :name="menuItem.icon" />
-              </q-item-section>
-              <q-item-section>
-                {{ menuItem.label }}
-              </q-item-section>
-            </q-item>
-          </template>
-          <q-item clickable v-ripple v-if="isLogin" class="q-pl-lg" @click="logout">
-            <q-item-section avatar>
-              <q-icon name="logout" />
-            </q-item-section>
-            <q-item-section>
-              Logout
-            </q-item-section>
-          </q-item>
-        </q-list>
+        <SideBar :menuList="menuList"></SideBar>
       </q-scroll-area>
     </q-drawer>
-
-    <q-dialog :model-value="loginModal" persistent>
-      <q-card style="width: 400px;">
-        <q-tabs v-model="tab" class="bg-grey-2 text-grey-7" active-color="black" indicator-color="black" align="justify">
-          <q-tab name="login" label="Login" />
-          <q-tab name="register" label="Register" />
-        </q-tabs>
-
-        <q-tab-panels v-model="tab" animated>
-          <!-- 登入頁面 -->
-          <q-tab-panel name="login" class="q-px-xl flex-center">
-            <q-form @submit="loginSubmit">
-              <div class="row">
-                <q-input label="Username" v-model="form.username"
-                  :rules="[rules.isString, rules.required, rules.min4, rules.max10]" lazy-rules class="col">
-                </q-input>
-              </div>
-              <div class="row">
-                <q-input :type="isPwd ? 'password' : 'text'" label="Password" class="col" v-model="form.password"
-                  :rules="[rules.isString, rules.required, rules.min4, rules.max20]" lazy-rules>
-                  <template v-slot:append>
-                    <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
-                      @click="isPwd = !isPwd" />
-                  </template>
-                </q-input>
-              </div>
-              <div class="row q-gutter-md flex-center">
-                <q-btn outline label="cancel" color="grey" type="reset" class="q-mt-md" @click="tab = ''" />
-                <q-btn outline label="submit" type="submit" class="q-mt-md" />
-              </div>
-            </q-form>
-          </q-tab-panel>
-          <!-- 註冊頁面  -->
-          <q-tab-panel name="register" class="q-px-xl flex-center">
-            <q-form @submit="regSubmit">
-              <div class="row">
-                <q-input label="Username" v-model="form.username"
-                  :rules="[rules.isString, rules.required, rules.min4, rules.max10]" lazy-rules class="col">
-                </q-input>
-              </div>
-              <div class="row">
-                <q-input type="email" label="email" class="col" v-model="form.email"
-                  :rules="[rules.isString, rules.required, rules.isEmail]" lazy-rules>
-                </q-input>
-              </div>
-              <div class="row">
-                <q-input :type="isPwd ? 'password' : 'text'" label="Password" class="col" v-model="form.password"
-                  :rules="[rules.isString, rules.required, rules.min4, rules.max20]" lazy-rules>
-                  <template v-slot:append>
-                    <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
-                      @click="isPwd = !isPwd" />
-                  </template>
-                </q-input>
-              </div>
-              <div class="row">
-                <q-input :type="isPwd ? 'password' : 'text'" label="Confirm Password" class="col"
-                  v-model="form.confirmPassword" :rules="[rules.required, rules.confirmPassword]" reactive-rules>
-                  <template v-slot:append>
-                    <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
-                      @click="isPwd = !isPwd" />
-                  </template>
-                </q-input>
-              </div>
-              <div class="row q-gutter-md flex-center">
-                <q-btn outline label="cancel" color="grey" type="reset" class="q-mt-md" @click="tab = ''" />
-                <q-btn outline label="submit" type="submit" class="q-mt-md" />
-              </div>
-            </q-form>
-          </q-tab-panel>
-        </q-tab-panels>
-      </q-card>
-    </q-dialog>
 
     <q-page-container :style="pt">
       <router-view :key="$route.fullPath" @fullpage-scroll="onFullPageScroll" />
     </q-page-container>
-
+    <LoginModal></LoginModal>
   </q-layout>
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
-import { ref, reactive, computed } from 'vue'
-import validator from 'validator'
+import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { storeToRefs } from 'pinia'
-import { useRouteQuery } from '@vueuse/router'
 import { useUserStore } from 'stores/user.js'
-import { api, apiAuth } from 'boot/axios.js'
+import LoginModal from 'src/components/LoginModal.vue'
+import SideBar from 'src/components/SideBar.vue'
 
 const leftDrawerOpen = ref(false)
 const search = ref('')
-const tab = useRouteQuery('tab', '')
-const isPwd = ref(true)
-const router = useRouter()
 const user = useUserStore()
-const $q = useQuasar()
 const route = useRoute()
-const { isLogin } = storeToRefs(user)
-
-const loginModal = computed(() => {
-  return tab.value !== ''
-})
+const router = useRouter()
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
@@ -194,153 +64,12 @@ const toggleLeftDrawer = () => {
 
 const menuList = [
   { to: '/films', label: 'Films', icon: 'fa-solid fa-film' },
-  { to: '/reviews', label: 'Reviews', icon: 'reviews' },
-  { to: '/diary', label: 'Diary', icon: 'import_contacts' },
+  // { to: '/reviews', label: 'Reviews', icon: 'reviews' },
+  // { to: '/diary', label: 'Diary', icon: 'import_contacts' },
   { to: '/watchlist', label: 'watchlist', icon: 'more_time' },
   { to: '/profile/likes', label: 'Likes', icon: 'favorite' },
   { to: '/settings', label: 'Settings', icon: 'settings' }
 ]
-
-const form = reactive({
-  username: '',
-  email: '',
-  password: '',
-  confirmPassword: ''
-})
-
-const rules = {
-  isString: val => typeof val === 'string' || 'invalid',
-  required: val => !!val || 'required',
-  min4: val => val.length >= 4 || 'at least 4 characters',
-  max10: val => val.length <= 10 || 'at most 10 characters',
-  max20: val => val.length <= 20 || 'at most 20 characters',
-  isEmail: val => validator.isEmail(val) || 'not a valid email',
-  confirmPassword: val => val === form.password || 'passwords do not match'
-}
-
-const regSubmit = async (e) => {
-  try {
-    await api.post('/users', {
-      username: form.username,
-      email: form.email,
-      password: form.password,
-      avatar: `https://source.boringavatars.com/beam/120/${form.username}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`
-    })
-    loginModal.value = false
-    $q.notify({
-      position: 'top-right',
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'done',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: 'Success!'
-    })
-  } catch (error) {
-    $q.notify({
-      position: 'top-right',
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: 'error'
-    })
-  }
-}
-
-const loginSubmit = async (e) => {
-  try {
-    const { data } = await api.post('/users/login', {
-      username: form.username,
-      password: form.password
-    })
-
-    user.login({
-      token: data.result.token,
-      username: data.result.username,
-      email: data.result.email,
-      admin: data.result.admin,
-      avatar: data.result.avatar,
-      following: data.result.following,
-      followers: data.result.followers,
-      watchList: data.result.watchList
-    })
-    $q.notify({
-      position: 'top-right',
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'done',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: 'Success!'
-    })
-    loginModal.value = false
-    // TODO: 導向profile?
-    router.push('/')
-  } catch (error) {
-    $q.notify({
-      position: 'top-right',
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: error.response.data.message
-    })
-  }
-}
-
-const logout = async () => {
-  try {
-    await apiAuth.delete('users/logout')
-    user.logout()
-    $q.notify({
-      position: 'top-right',
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'done',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: 'See You!'
-    })
-    router.push('/')
-  } catch (error) {
-    $q.notify({
-      position: 'top-right',
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: error.response.data.message
-    })
-  }
-}
 
 const SearchMovie = () => {
   if (search.value !== '') {
@@ -361,22 +90,7 @@ const pt = computed(() => {
 const colors = ['#ffe500', '#000', '#f00']
 const headerColor = ref(0)
 const onFullPageScroll = (destination) => {
-  console.log(destination)
+  // console.log(destination)
   headerColor.value = destination
 }
 </script>
-
-<style scoped>
-.q-notification {
-  opacity: 0.7;
-  width: 20rem;
-}
-
-.q-notifications__list--top {
-  top: 7rem !important;
-}
-
-.q-notification__message {
-  padding-left: 25px;
-}
-</style>
