@@ -58,7 +58,6 @@ const stack = reactive([])
 
 const containerRef = ref(null)
 const responsiveWidth = ref(0)
-// const cardArr = []
 
 const unwatch = watch(() => props.cards.length, (newValue, oldValue) => {
   if (oldValue !== 0) return

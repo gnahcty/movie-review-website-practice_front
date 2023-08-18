@@ -1,7 +1,15 @@
 <template>
-  <div class="q-pa-md flex justify-center">
-    <div style="max-width: 90%; width: 80vw;">
-      <UserList :userList="top20" @follow="follow"></UserList>
+  <div class="row flex-center">
+    <div class="col-12 col-md-8">
+      <div class="titles">Top Users</div>
+      <div class="row q-gutter-lg">
+        <template v-for="user in top3" :key="user.username">
+          <UserArch v-bind="user" class="col"></UserArch>
+        </template>
+      </div>
+      <div class="q-pt-md flex justify-center w100 q-gutter-y-lg">
+        <UserList :userList="top20" @follow="follow"></UserList>
+      </div>
     </div>
   </div>
 </template>
@@ -9,10 +17,9 @@
 <script setup>
 import { reactive, onMounted } from 'vue'
 import { api, apiAuth } from 'src/boot/axios'
-// import { useUserStore } from 'stores/user'
 import UserList from 'src/components/UserList.vue'
+import UserArch from 'src/components/UserArch.vue'
 
-// const user = useUserStore()
 const top3 = reactive([])
 const top20 = reactive([])
 
@@ -22,8 +29,8 @@ const follow = async (username) => {
 }
 const getPopUsers = async () => {
   const { data } = await api.get('users/pop')
-  top3.push(...data.top3)
-  top20.push(...data.top20)
+  top3.splice(0, top3.length, ...data.top3)
+  top20.splice(0, top20.length, ...data.top20)
 }
 
 onMounted(() => {
@@ -31,6 +38,10 @@ onMounted(() => {
 })
 </script>
 
-<style lang="sass" scoped>
-
+<style scoped>
+.arched {
+  border-radius: 222px 222px 0 0;
+  height: 33vw;
+  border: 4px solid #000;
+}
 </style>

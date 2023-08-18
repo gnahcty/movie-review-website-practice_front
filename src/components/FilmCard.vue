@@ -1,13 +1,14 @@
 <template>
-  <q-card class="my-card" flat bordered style="width:80%;" @mouseleave="mouseout()">
-    <q-btn flat round color="grey" icon="add" id="add" class="absolute-top-right" style="z-index:2" v-if="user.isLogin">
+  <q-card class="my-card" flat bordered style="width:80%;" @mouseleave="expanded = false">
+    <q-btn flat round color="grey" icon="add" id="add" class="absolute-top-right" style="z-index:2"
+      v-if="CurrentUser.isLogin">
       <q-menu>
         <q-list style="min-width: 150px">
           <q-item clickable :class="['row', 'items-center', inWatchList]" @click="addToWatchList">
             <q-icon name="more_time" class="col-2 q-pr-sm" />
             <div class="text-left"> WatchList</div>
           </q-item>
-          <template v-for="(list, i) in user.userLists" :key="i">
+          <template v-for="(list, i) in CurrentUser.userLists" :key="i">
             <q-item clickable :class="['row', 'items-center', inList(i)]" @click="addToList(i)">
               <q-icon name="segment" class="col-2 q-pr-sm" />
               <div class="text-left"> {{ list.name }}</div>
@@ -23,7 +24,7 @@
     </q-btn>
     <RouterLink :to="'/films/' + props.id">
       <q-img :src="'http://image.tmdb.org/t/p/w300/' + props.poster_path" class="ratio border5 rounded15"
-        @mouseenter="mousein()" ref="imgRef">
+        @mouseenter="expanded = true" ref="imgRef">
         <q-tooltip anchor="center middle" self="top middle">{{ title }}
         </q-tooltip>
       </q-img>
@@ -32,11 +33,11 @@
     <q-slide-transition v-else>
       <div class="relative">
         <q-card-actions align="center">
-          <q-btn flat round :color="watched ? 'green' : 'grey'" icon="visibility" @click="seen()" />
+          <q-btn flat round :color="watched ? 'green' : 'grey'" icon="visibility" @click="loginTryCatch(seen)" />
           <!-- <span style="color: green;">00</span> -->
           <q-btn flat round :color="commented ? 'yellow' : 'grey'" icon="segment" />
           <!-- <span style="color: goldenrod;">00</span> -->
-          <q-btn flat round :color="liked ? 'red' : 'grey'" icon="favorite" @click="like()" />
+          <q-btn flat round :color="liked ? 'red' : 'grey'" icon="favorite" @click="loginTryCatch(like)" />
           <!-- <span style="color: red;">00</span> -->
         </q-card-actions>
       </div>
@@ -63,8 +64,10 @@ import { ref, computed } from 'vue'
 import { apiAuth } from 'boot/axios'
 import { useUserStore } from 'stores/user'
 import { useQuasar } from 'quasar'
+import { useLogin } from 'src/utils/checkLogin.js'
 
-const user = useUserStore()
+const { loginTryCatch } = useLogin()
+const CurrentUser = useUserStore()
 const $q = useQuasar()
 
 const props = defineProps({
@@ -125,66 +128,30 @@ const liked = ref(props.like)
 const newListDialog = ref(false)
 const imgRef = ref(null)
 
-// const pdb = ref('50px')
-// const pdb = computed(() => {
-//   return expanded.value ? '0' : '50px'
-// })
-const mousein = () => {
-  expanded.value = true
-  // pdb.value = 0
-}
+const inList = computed(function () {
+  return (i) => {
+    return CurrentUser.userLists[i].films.some(film => film.id === props.id.toString()) ? 'text-blue' : 'text-grey'
+  }
+})
 
-const mouseout = () => {
-  expanded.value = false
-  // pdb.value = '50px'
-}
+const inWatchList = computed(() => {
+  return CurrentUser.watchList.some(film => film.id === props.id.toString()) ? 'text-blue' : 'text-grey'
+})
 
 const seen = async () => {
-  if (user.isLogin) {
-    watched.value = !watched.value
-    await apiAuth.post('/reviews/', {
-      filmID: props.id,
-      watched: watched.value
-    })
-  } else {
-    $q.notify({
-      position: 'top-right',
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: 'Please Login'
-    })
-  }
+  watched.value = !watched.value
+  await apiAuth.post('/reviews/', {
+    filmID: props.id,
+    watched: watched.value
+  })
 }
 
 const like = async () => {
-  if (user.isLogin) {
-    liked.value = !liked.value
-    await apiAuth.post('/reviews/', {
-      filmID: props.id,
-      like: liked.value
-    })
-  } else {
-    $q.notify({
-      position: 'top-right',
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: 'Please Login'
-    })
-  }
+  liked.value = !liked.value
+  await apiAuth.post('/reviews/', {
+    filmID: props.id,
+    like: liked.value
+  })
 }
 
 const clear = () => {
@@ -195,17 +162,8 @@ const clear = () => {
 const createList = async () => {
   if (listTitle.value === '') {
     $q.notify({
-      position: 'top-right',
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: 'Please Enter a List Title'
+      type: 'warnings',
+      message: 'Please Enter a Title'
     })
   } else {
     try {
@@ -219,9 +177,16 @@ const createList = async () => {
         description: listDescription.value,
         films: [film]
       })
-      user.userLists.push(data.newList)
+      CurrentUser.userLists.push(data.newList)
+      $q.notify({
+        type: 'success',
+        message: 'Success!'
+      })
     } catch (error) {
-      console.log(error)
+      $q.notify({
+        type: 'warnings',
+        message: 'something went wrong'
+      })
     }
   }
 }
@@ -234,24 +199,21 @@ const addToList = async (i) => {
       poster: props.poster_path
     }
     const { data } = await apiAuth.post('lists/update', {
-      _id: user.userLists[i]._id,
+      _id: CurrentUser.userLists[i]._id,
       film
     })
-    user.userLists[i] = data.list
+    CurrentUser.userLists[i] = data.list
+    $q.notify({
+      type: 'success',
+      message: 'Film added successfully'
+    })
   } catch (error) {
-    console.log(error)
+    $q.notify({
+      type: 'warnings',
+      message: 'something went wrong'
+    })
   }
 }
-
-const inList = computed(function () {
-  return (i) => {
-    return user.userLists[i].films.some(film => film.id === props.id.toString()) ? 'text-blue' : 'text-grey'
-  }
-})
-
-const inWatchList = computed(() => {
-  return user.watchList.some(film => film.id === props.id.toString()) ? 'text-blue' : 'text-grey'
-})
 
 const addToWatchList = async () => {
   try {
@@ -261,9 +223,16 @@ const addToWatchList = async () => {
       poster: props.poster_path
     }
     const { data } = await apiAuth.post('/users/watchlist', film)
-    user.watchList = data.result
+    CurrentUser.watchList = data.result
+    $q.notify({
+      type: 'success',
+      message: 'Film added successfully'
+    })
   } catch (error) {
-    console.log(error)
+    $q.notify({
+      type: 'warnings',
+      message: 'something went wrong'
+    })
   }
 }
 

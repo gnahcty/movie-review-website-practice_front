@@ -8,7 +8,7 @@
             <div class="titles ">Watchlist</div>
             <div class=" q-mb-md">Your films to be watched.</div>
             <div class="row q-col-gutter-md">
-              <div class="col-6 col-md-4 col-lg-3 " v-for="(film, i) in user.watchList" :key="i">
+              <div class="col-6 col-md-4 col-lg-3 " v-for="(film, i) in CurrentUser.watchList" :key="i">
                 <RouterLink :to="'/films/' + film.id">
                   <q-img :ratio="3 / 4" :src="'http://image.tmdb.org/t/p/w300/' + film.poster" class="rounded15 border5">
                     <q-tooltip anchor="center middle" self="top middle">{{ film.title }}</q-tooltip>
@@ -18,7 +18,7 @@
             </div>
           </q-tab-panel>
 
-          <template v-for="(list, i) in user.userLists" :key="i">
+          <template v-for="(list, i) in CurrentUser.userLists" :key="i">
             <q-tab-panel :name="list.name">
               <div class="titles">{{ list.name }}</div>
               <div class=" q-mb-md">{{ list.description || 'No description' }}</div>
@@ -40,7 +40,7 @@
       <div class=" col-12 col-md-4 q-pa-xl">
         <q-tabs v-model="tab" vertical>
           <q-tab name="watchlist" label="watchlist" />
-          <template v-for="(list, i) in user.userLists" :key="i">
+          <template v-for="(list, i) in CurrentUser.userLists" :key="i">
             <q-tab :name="list.name" :label="list.name" />
           </template>
         </q-tabs>
@@ -53,13 +53,13 @@
 import { ref, onMounted } from 'vue'
 import { apiAuth } from 'src/boot/axios'
 import { useUserStore } from 'stores/user.js'
-const user = useUserStore()
+const CurrentUser = useUserStore()
 const tab = ref('watchlist')
 const getUserLists = async () => {
   try {
     const { data } = await apiAuth.get('lists/user')
-    if (user.userLists) {
-      user.userLists = data.UserLists
+    if (CurrentUser.userLists) {
+      CurrentUser.userLists = data.UserLists
     }
   } catch (error) {
     console.log(error)

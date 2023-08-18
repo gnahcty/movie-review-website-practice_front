@@ -3,27 +3,28 @@
     <img class="col-7 rounded border10" :src="'http://image.tmdb.org/t/p/w300/' + props.film.poster"
       style="border-radius: 32px;">
     <q-rating v-model="userReview.ratings" max="5" size="50px" color="black" icon="eva-star-outline"
-      icon-selected="eva-star" icon-half="star_half" :readonly="!user.isLogin" />
+      icon-selected="eva-star" icon-half="star_half" :readonly="!currentUser.isLogin" />
     <div class="flex flex-center q-gutter-x-sm">
       <q-btn flat round icon="fa-regular fa-eye" size="xl" :color="userReview.watched ? 'green' : 'grey'"
-        :disable="!user.isLogin" @click="seen()" />
-      <q-btn flat round :color="userReview.like ? 'red' : 'grey'" icon="favorite" @click="like()" :disable="!user.isLogin"
-        size="xl" />
-      <q-btn flat round :color="inWatchList ? 'blue' : 'grey'" icon="more_time" @click="addToWatchList()"
-        :disable="!user.isLogin" size="xl" />
+        :disable="!currentUser.isLogin" @click="loginTryCatch(seen)" />
+      <q-btn flat round :color="userReview.like ? 'red' : 'grey'" icon="favorite" @click="loginTryCatch(like)"
+        :disable="!currentUser.isLogin" size="xl" />
+      <q-btn flat round :color="inWatchList ? 'blue' : 'grey'" icon="more_time" @click="loginTryCatch(addToWatchList)"
+        :disable="!currentUser.isLogin" size="xl" />
     </div>
     <q-btn color="yellow-8" text-color="white" :label="reviewed ? 'reviewed' : 'review'" :disable="reviewed"
       style="width: 200px; height: 73px; font-size: xx-large;" class="rounded15 lilita q-py-none"
-      @click="openReviewDialog()" />
+      @click="checkLogin(openReviewDialog)" />
   </div>
 
   <q-dialog v-model="reviewDialog" full-width>
     <div id="reviewDialog" class="border10 column q-gutter-xl bg-white">
       <div class="text-h3 lilita q-mt-none"> Your Review</div>
       <q-editor v-model="reviewEditor" placeholder="Write something..." class="text-left col-8 border10 rounded15 "
-        :readonly="!user.isLogin" />
+        :readonly="!currentUser.isLogin" />
       <div class="row flex-center q-gutter-md">
-        <q-btn flat label="submit" class="border5 rounded15 lilita" @click="submitReview" :disable="editorEmpty" />
+        <q-btn flat label="submit" class="border5 rounded15 lilita" @click="loginTryCatch(submitReview)"
+          :disable="editorEmpty" />
         <q-btn flat label="cancel" class="border5 rounded15 lilita" @click="reviewEditor = ''" v-close-popup />
       </div>
     </div>
@@ -31,14 +32,14 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
 import { computed, reactive, ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from 'stores/user'
 import { apiAuth } from 'src/boot/axios'
+import { useLogin } from 'src/utils/checkLogin.js'
 
-const user = useUserStore()
-const $q = useQuasar()
+const { checkLogin, loginTryCatch } = useLogin()
+const currentUser = useUserStore()
 const route = useRoute()
 
 const props = defineProps({
@@ -59,7 +60,10 @@ const emits = defineEmits(['newCmt'])
 const reviewDialog = ref(false)
 const reviewEditor = ref('')
 const userReview = reactive({
-  ratings: 0
+  like: false,
+  ratings: 0,
+  watched: false,
+  comments: ''
 })
 
 // 評論是否為空
@@ -74,29 +78,13 @@ const reviewed = computed(() => {
 })
 
 const inWatchList = computed(() => {
-  return user.watchList.some(movie => movie.id === props.film.id.toString())
+  return currentUser.watchList.some(movie => movie.id === props.film.id.toString())
 }
 )
 
 // 登入才能開review modal
 const openReviewDialog = () => {
-  if (user.isLogin) {
-    reviewDialog.value = true
-  } else {
-    $q.notify({
-      position: 'top-right',
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: 'Please Login'
-    })
-  }
+  reviewDialog.value = true
 }
 
 // mark as seen
@@ -143,7 +131,7 @@ const addToWatchList = async () => {
 
 const checkWatchList = async () => {
   const { data } = await apiAuth.get('users/profile')
-  user.watchList = data.result.watchList
+  currentUser.watchList = data.result.watchList
 }
 
 // get this user's review
@@ -170,8 +158,7 @@ watch(() => userReview.ratings, async (newRatings, oldRatings) => {
 })
 
 onMounted(async () => {
-  getUserReview()
-  // checkWatchList()
+  if (currentUser.isLogin) { getUserReview() }
 })
 </script>
 

@@ -36,7 +36,7 @@
                   <q-item-label caption lines="3" class="col-3">{{ review.comments }}</q-item-label>
                   <q-item-label lines="1" class="col-2 flex items-center">
                     <q-btn flat round icon="favorite" class="q-mr-sm" size="sm"
-                      :color="review.cmtLikes.indexOf(user._id) === -1 ? 'black' : 'red'"
+                      :color="review.cmtLikes.indexOf(CurrentUser._id) === -1 ? 'black' : 'red'"
                       @click="$emit('like', review._id)" />
                     <span class="q-mr-xs">{{ review.cmtLikes.length }}</span>likes
                   </q-item-label>
@@ -55,7 +55,7 @@ import { ref } from 'vue'
 import { useUserStore } from 'stores/user'
 
 defineEmits(['like'])
-const user = useUserStore()
+const CurrentUser = useUserStore()
 const slide2 = ref(1)
 const props = defineProps({
   reviewGroups: {

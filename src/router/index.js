@@ -32,17 +32,17 @@ export default route(function (/* { store, ssrContext } */) {
   })
 
   Router.beforeEach(async (to, from, next) => {
-    const user = useUserStore()
+    const CurrentUser = useUserStore()
     if (from === START_LOCATION) {
-      await user.getProfile()
+      await CurrentUser.getProfile()
     }
 
     // TODO: 登入後跳回原本頁面
-    if (user.isLogin && ['/?tab=register', '/?tab=login'].includes(to.path)) {
-      next('/?tab=""')
-    } else if (to.meta.login && !user.isLogin) {
+    // if (CurrentUser.isLogin && ['/?tab=register', '/?tab=login'].includes(to.path)) {
+    //   next('/?tab=""')
+    if (to.meta.login && !CurrentUser.isLogin) {
       next('/?tab=login')
-    } else if (to.meta.admin && !user.isAdmin) {
+    } else if (to.meta.admin && !CurrentUser.isAdmin) {
       next('/')
     } else {
       next()

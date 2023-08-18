@@ -13,6 +13,8 @@ export const useUserStore = defineStore('user', () => {
   const watchList = ref([])
   const avatar = ref('')
   const userLists = ref([])
+  const watched = ref('')
+  const reviewed = ref('')
 
   const login = (data) => {
     _id.value = data._id
@@ -24,6 +26,8 @@ export const useUserStore = defineStore('user', () => {
     following.value = data.following
     followers.value = data.followers
     watchList.value = data.watchList
+    watched.value = data.watched
+    reviewed.value = data.reviewed
   }
 
   const isLogin = computed(() => {
@@ -46,6 +50,8 @@ export const useUserStore = defineStore('user', () => {
       following.value = data.result.following
       followers.value = data.result.followers
       watchList.value = data.result.watchList
+      watched.value = data.result.watched
+      reviewed.value = data.result.reviewed
     } catch (error) {
       token.value = ''
     }
@@ -73,6 +79,8 @@ export const useUserStore = defineStore('user', () => {
     avatar,
     userLists,
     watchList,
+    watched,
+    reviewed,
     login,
     isLogin,
     isAdmin,

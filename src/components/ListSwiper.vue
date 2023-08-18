@@ -33,7 +33,7 @@
 
               <span class="col flex justify-end items-center">
                 <q-btn flat round icon="favorite" :color="list.likes.indexOf(currentUser._id) > -1 ? 'red' : 'black'"
-                  @click="$emit('like', list._id)" />
+                  @click="like(list._id)" />
                 <span>{{ list.likes.length }}</span>
               </span>
             </q-item-label>
@@ -51,9 +51,11 @@
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import CardStack from 'src/components/CardStack.vue'
 import { useUserStore } from 'stores/user.js'
+import { useLogin } from 'src/utils/checkLogin.js'
 
 const currentUser = useUserStore()
-defineEmits(['like'])
+const emits = defineEmits(['like'])
+const { checkLogin } = useLogin()
 
 // Import Swiper styles
 import 'swiper/scss'
@@ -104,5 +106,10 @@ const props = defineProps({
     })
   }
 })
+
+const like = (id) => {
+  const emit = emits('like', id)
+  checkLogin(emit)
+}
 
 </script>

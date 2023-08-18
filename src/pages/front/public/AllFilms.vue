@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-
+    <!-- TODO:infinite scroll -->
   </div>
 </template>
 
@@ -41,7 +41,7 @@ import { computed, reactive, watch, ref, onMounted } from 'vue'
 import FilmCard from 'components/FilmCard.vue'
 import { useUserStore } from 'stores/user.js'
 
-const user = useUserStore()
+const CurrentUser = useUserStore()
 const films = reactive([])
 const chosenGenres = ref([])
 const params = reactive({
@@ -56,7 +56,7 @@ const getFilms = async () => {
     const { data } = await api.get('/films/allFilms',
       { params })
     const results = data.results.results
-    if (user.isLogin) {
+    if (CurrentUser.isLogin) {
       const withUserReview = await apiAuth.post('/reviews/user', [...results])
       films.splice(0, (films.length - 1), ...withUserReview.data.films)
     } else {
@@ -70,8 +70,8 @@ const getFilms = async () => {
 const getUserLists = async () => {
   try {
     const { data } = await apiAuth.get('lists/user')
-    if (user.userLists) {
-      user.userLists = data.UserLists
+    if (CurrentUser.userLists) {
+      CurrentUser.userLists = data.UserLists
     }
   } catch (error) {
     console.log(error)

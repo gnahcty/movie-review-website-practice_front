@@ -26,7 +26,8 @@
         <q-btn flat round icon="fa-solid fa-ranking-star" class="q-ma-lg" to="/users">
           <q-tooltip>Popular User</q-tooltip>
         </q-btn>
-        <q-btn flat round icon="face_2" :to="user.isLogin ? `/profile/${user.username}/recent` : '?tab=login'">
+        <q-btn flat round icon="face_2"
+          :to="CurrentUser.isLogin ? `/profile/${CurrentUser.username}/recent` : '?tab=login'">
           <q-tooltip>Profile</q-tooltip>
         </q-btn>
       </q-toolbar>
@@ -54,7 +55,7 @@ import SideBar from 'src/components/SideBar.vue'
 
 const leftDrawerOpen = ref(false)
 const search = ref('')
-const user = useUserStore()
+const CurrentUser = useUserStore()
 const route = useRoute()
 const router = useRouter()
 
@@ -64,10 +65,8 @@ const toggleLeftDrawer = () => {
 
 const menuList = [
   { to: '/films', label: 'Films', icon: 'fa-solid fa-film' },
-  // { to: '/reviews', label: 'Reviews', icon: 'reviews' },
-  // { to: '/diary', label: 'Diary', icon: 'import_contacts' },
   { to: '/watchlist', label: 'watchlist', icon: 'more_time' },
-  { to: '/profile/likes', label: 'Likes', icon: 'favorite' },
+  { to: `/profile/${CurrentUser.username}/likes`, label: 'Likes', icon: 'favorite' },
   { to: '/settings', label: 'Settings', icon: 'settings' }
 ]
 

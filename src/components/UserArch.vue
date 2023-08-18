@@ -1,5 +1,5 @@
 <template>
-  <div class="col-3 arched column justify-end items-center bgea" style="height: 34vw; border: 4px solid #000;">
+  <div class="arched column justify-around items-center bgea q-pt-xl">
     <!-- 1 -->
     <router-link :to="`/profile/${props.username}/recent`" style="width: 70%;">
       <q-img :src="props.avatar" class="round" style="border: 3px solid #000;" />

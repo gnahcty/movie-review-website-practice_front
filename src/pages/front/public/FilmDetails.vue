@@ -43,9 +43,12 @@
 import { api, apiAuth } from 'src/boot/axios'
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useUserStore } from 'stores/user'
+
 import FilmReview from 'components/FilmReview.vue'
 import RatingCard from 'src/components/RatingCard.vue'
 
+const currentUser = useUserStore()
 const ratingModel = ref(0)
 const route = useRoute()
 const film = reactive({
@@ -125,7 +128,9 @@ const addCmt = (cmt) => {
 onMounted(async () => {
   await getDetails()
   getReviews()
-  getFriendsReviews()
+  if (currentUser.isLogin) {
+    getFriendsReviews()
+  }
 })
 
 </script>

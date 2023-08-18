@@ -3,19 +3,21 @@
     <!-- 使用者資訊 -->
     <q-item style="height:150px;">
       <q-item-section avatar style="width:80px;">
-        <router-link :to="`/profile/${user.username}/recent`">
+        <router-link :to="`/profile/${CurrentUser.username}/recent`">
           <q-avatar style="width:80px;height: 100%">
             <img
-              :src="(user.avatar || 'https://source.boringavatars.com/beam/120/Annie%20Jump?colors=264653,2a9d8f,e9c46a,f4a261,e76f51')">
+              :src="(CurrentUser.avatar || 'https://source.boringavatars.com/beam/120/Annie%20Jump?colors=264653,2a9d8f,e9c46a,f4a261,e76f51')">
           </q-avatar>
         </router-link>
       </q-item-section>
-      <!-- TODO: 登入後把login signup改成 watched films -->
       <q-item-section>
-        <q-item-label class="text-h5 q-pl-lg q-pb-sm">{{ user.username || 'Guest User' }}</q-item-label>
+        <q-item-label class="text-h5 q-pl-lg q-pb-sm lilita">{{ CurrentUser.username || 'Guest User' }}</q-item-label>
         <q-item-label v-if="!isLogin">
           <q-btn outline color="green" size="xs" label="Login" class="q-ml-md" @click="tab = 'login'" />
           <q-btn outline style="color: goldenrod;" size="xs" label="Sign Up" class="q-ml-xs" @click="tab = 'register'" />
+        </q-item-label>
+        <q-item-label v-if="isLogin" class="q-ml-md">
+          <span>{{ CurrentUser.watched }} films</span> <span class="q-ml-sm">{{ CurrentUser.reviewed }} reviews</span>
         </q-item-label>
       </q-item-section>
     </q-item>
@@ -63,8 +65,8 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const user = useUserStore()
-const { isLogin } = storeToRefs(user)
+const CurrentUser = useUserStore()
+const { isLogin } = storeToRefs(CurrentUser)
 const $q = useQuasar()
 const tab = useRouteQuery('tab', '')
 
@@ -87,33 +89,15 @@ const SearchMovie = () => {
 const logout = async () => {
   try {
     await apiAuth.delete('users/logout')
-    user.logout()
+    CurrentUser.logout()
     $q.notify({
-      position: 'top-right',
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'done',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
+      type: 'success',
       message: 'See You!'
     })
     router.push('/')
   } catch (error) {
     $q.notify({
-      position: 'top-right',
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
+      type: 'warnings',
       message: error.response.data.message
     })
   }

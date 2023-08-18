@@ -17,8 +17,8 @@ const apiAuth = axios.create({
 })
 
 apiAuth.interceptors.request.use(config => {
-  const user = useUserStore()
-  config.headers.authorization = 'Bearer ' + user.token
+  const CurrentUser = useUserStore()
+  config.headers.authorization = 'Bearer ' + CurrentUser.token
   return config
 })
 
@@ -27,15 +27,15 @@ apiAuth.interceptors.response.use(res => {
 }, error => {
   if (error.response) {
     if (error.response.data.message === 'login expired' && error.config.url !== '/users/extend') {
-      const user = useUserStore()
+      const CurrentUser = useUserStore()
       return apiAuth.patch('/users/extend')
         .then(({ data }) => {
-          user.token = data.result
-          error.config.headers.authorization = 'Bearer ' + user.token
+          CurrentUser.token = data.result
+          error.config.headers.authorization = 'Bearer ' + CurrentUser.token
           return axios(error.config)
         })
         .catch(() => {
-          user.logout()
+          CurrentUser.logout()
           return Promise.reject(error)
         })
     }

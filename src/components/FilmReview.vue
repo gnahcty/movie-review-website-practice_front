@@ -7,7 +7,7 @@
       </router-link>
     </q-item-section>
 
-    <q-item-section clickable @click="details = true" style="justify-content: start;">
+    <q-item-section clickable @click="reviewModal = true" style="justify-content: start;">
       <q-item-label lines="1" class="lilita text-h4">{{ user.username }}
         <q-rating v-if="ratings > 0" v-model="rating" max="5" color="black" icon="eva-star-outline"
           icon-selected="eva-star" icon-half="star_half" class="q-ml-md" readonly />
@@ -36,7 +36,7 @@
       </router-link>
     </q-item-section>
 
-    <q-item-section clickable @click="details = true" style="justify-content: start;" class="column">
+    <q-item-section clickable @click="reviewModal = true" style="justify-content: start;" class="column">
       <q-item-label lines="1" class="lilita col">{{ user.username }}
         <span v-if="ratings > 0" class="q-ml-md">{{ rating }} <q-icon name="eva-star" /></span>
         <q-icon v-if="like" name="favorite" class="q-ml-md" />
@@ -57,7 +57,7 @@
     </q-item-section>
   </q-item>
 
-  <q-dialog v-model="details">
+  <q-dialog v-model="reviewModal">
     <q-card style="width:500px">
       <q-card-section>
         <div class="row">
@@ -77,17 +77,17 @@
                     <q-icon name="share" class="col-4" />
                     <div class="text-left"> Share</div>
                   </q-item>
-                  <q-item clickable v-close-popup class="row items-center">
+                  <q-item clickable v-close-popup class="row items-center" @click="loginTryCatch(report)">
                     <q-icon name="warning" class="col-4" />
                     <div class="text-left"> Report</div>
                   </q-item>
-                  <q-item v-if="user._id === me._id" clickable class="row items-center" @click="editing = true">
+                  <q-item v-if="user._id === currentUser._id" clickable class="row items-center" @click="editing = true">
                     <q-icon name="edit" class="col-4" />
                     <div class="text-left"> Edit</div>
                   </q-item>
                   <q-separator inset />
-                  <q-item v-if="user._id === me._id" clickable v-close-popup class="row items-center" color="red"
-                    @click="deleteCmt">
+                  <q-item v-if="user._id === currentUser._id" clickable v-close-popup class="row items-center" color="red"
+                    @click="loginTryCatch(deleteCmt)">
                     <q-icon name="delete" class="col-4 text-red" />
                     <div class="text-left text-red"> Delete</div>
                   </q-item>
@@ -116,7 +116,7 @@
 
       <q-card-actions align="right">
         <span class="q-mr-sm">{{ likesArr.length }}</span> people liked this
-        <q-btn flat round icon="favorite" :color="CmtLiked ? 'red' : 'grey'" @click="likeCmt" />
+        <q-btn flat round icon="favorite" :color="CmtLiked ? 'red' : 'grey'" @click="loginTryCatch(likeCmt)" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -127,11 +127,11 @@ import { reactive, ref, computed } from 'vue'
 import { apiAuth } from 'boot/axios'
 import { useUserStore } from 'stores/user'
 import { useQuasar } from 'quasar'
+import { useLogin } from 'src/utils/checkLogin.js'
 
 const $q = useQuasar()
-const me = useUserStore()
-const editing = ref(false)
-const details = ref(false)
+const currentUser = useUserStore()
+const { loginTryCatch } = useLogin()
 const props = defineProps({
   _id: {
     type: String,
@@ -179,15 +179,18 @@ const props = defineProps({
   title: String,
   year: String
 })
+const emit = defineEmits(['cmtUpdated'])
 const reviewEditor = ref(props.comments)
 const likesArr = reactive(props.cmtLikes)
+const rating = ref(props.ratings)
+const editing = ref(false)
+const reviewModal = ref(false)
+
 const CmtLiked = computed(() => {
-  return likesArr.indexOf(me._id) > -1
+  return likesArr.indexOf(currentUser._id) > -1
 }
 
 )
-const emit = defineEmits(['cmtUpdated'])
-const rating = ref(props.ratings)
 
 const likeCmt = async () => {
   const { data } = await apiAuth.post('reviews/like', {
@@ -199,22 +202,17 @@ const likeCmt = async () => {
 const updateCmt = async () => {
   if (reviewEditor.value.length === 0) {
     $q.notify({
-      position: 'center',
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: 'Comment can not be blank'
+      type: 'warnings',
+      message: 'Please type something'
     })
   } else {
     const { data } = await apiAuth.post('/reviews/', {
       filmID: props.film,
       comments: reviewEditor.value
+    })
+    $q.notify({
+      type: 'success',
+      message: 'Success!'
     })
     emit('cmtUpdated', data)
   }
@@ -225,6 +223,11 @@ const deleteCmt = async () => {
     _id: props._id
   })
   emit('cmtUpdated', data)
+}
+
+const report = async () => {
+  await apiAuth.post('/reviews/report', { id: props._id })
+  $q.notify({ type: 'success', message: 'Reported' })
 }
 </script>
 

@@ -41,7 +41,7 @@
           <div class="titles col-2">Popular Users</div>
           <div class="row q-gutter-x-xl flex-center q-px-xl col-10 w100">
             <template v-for="(popUser, i) in popUsers" :key="i">
-              <UserArch v-bind="popUser"></UserArch>
+              <UserArch v-bind="popUser" class="col-3 "></UserArch>
             </template>
           </div>
         </div>
@@ -148,6 +148,8 @@ onUnmounted(() => {
 
 .arched {
   border-radius: 222px 222px 0 0;
+  height: 34vw;
+  border: 4px solid #000;
 }
 
 .h100 {

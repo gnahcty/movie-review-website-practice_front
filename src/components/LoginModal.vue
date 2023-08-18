@@ -75,7 +75,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { ref, reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import validator from 'validator'
 import { useRouteQuery } from '@vueuse/router'
 import { useUserStore } from 'stores/user.js'
@@ -84,8 +84,9 @@ import { api } from 'boot/axios.js'
 const $q = useQuasar()
 
 const isPwd = ref(true)
-const user = useUserStore()
+const currentUser = useUserStore()
 const router = useRouter()
+const route = useRoute()
 const tab = useRouteQuery('tab', '')
 const loginModal = computed(() => {
   return tab.value !== ''
@@ -118,31 +119,13 @@ const regSubmit = async (e) => {
     })
     loginModal.value = false
     $q.notify({
-      position: 'top-right',
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'done',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
+      type: 'success',
       message: 'Success!'
     })
   } catch (error) {
     $q.notify({
-      position: 'top-right',
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
-      message: 'error'
+      type: 'warnings',
+      message: 'Something went wrong'
     })
   }
 }
@@ -154,7 +137,7 @@ const loginSubmit = async (e) => {
       password: form.password
     })
 
-    user.login({
+    currentUser.login({
       token: data.result.token,
       username: data.result.username,
       email: data.result.email,
@@ -165,33 +148,15 @@ const loginSubmit = async (e) => {
       watchList: data.result.watchList
     })
     $q.notify({
-      position: 'top-right',
-      color: 'green-4',
-      textColor: 'white',
-      icon: 'done',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
+      type: 'success',
       message: 'Success!'
     })
     loginModal.value = false
-    // TODO: 導向profile?
-    router.push('/')
+    // FIXME: Write operation failed: computed value is readonly
+    router.push(route.path)
   } catch (error) {
     $q.notify({
-      position: 'top-right',
-      color: 'red-5',
-      textColor: 'white',
-      icon: 'warning',
-      actions: [
-        {
-          icon: 'close',
-          color: 'white'
-        }
-      ],
+      type: 'warnings',
       message: error.response.data.message
     })
   }
