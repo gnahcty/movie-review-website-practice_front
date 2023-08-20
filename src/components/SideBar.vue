@@ -43,6 +43,15 @@
         </q-item-section>
       </q-item>
     </template>
+    <q-item clickable v-ripple v-if="isAdmin" class="q-pl-lg" to="/admin">
+      <q-item-section avatar>
+        <q-icon name="shieldPerson" />
+      </q-item-section>
+      <!-- logout -->
+      <q-item-section>
+        Admin
+      </q-item-section>
+    </q-item>
     <q-item clickable v-ripple v-if="isLogin" class="q-pl-lg" @click="logout">
       <q-item-section avatar>
         <q-icon name="logout" />
@@ -66,7 +75,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const CurrentUser = useUserStore()
-const { isLogin } = storeToRefs(CurrentUser)
+const { isLogin, isAdmin } = storeToRefs(CurrentUser)
 const $q = useQuasar()
 const tab = useRouteQuery('tab', '')
 

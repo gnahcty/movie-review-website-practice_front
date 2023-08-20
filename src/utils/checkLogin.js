@@ -25,6 +25,7 @@ export const useLogin = () => {
       try {
         await func()
       } catch (error) {
+        console.log(error)
         $q.notify({ type: 'warnings', message: 'Something went wrong' })
       }
     }

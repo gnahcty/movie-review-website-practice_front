@@ -23,7 +23,9 @@
         </div>
         <div class="q-my-md q-pl-lg q-pb-md flex w100 justify-between items-center bdb4">
           <span class="text-h6">{{ list.films?.length }} films</span>
-          <span><q-btn flat round icon="favorite" /> {{ list.films?.length }}</span>
+          <span><q-btn flat round icon="favorite" @click="loginTryCatch(() => like(list._id))"
+              :color="list.likes?.indexOf(currentUser._id) === -1 ? 'black' : 'red'" />
+            {{ list.likes?.length }}</span>
         </div>
         <div v-if="list.description" class="q-pa-lg text-h5 text-bold">{{ list.description }}</div>
 
@@ -35,12 +37,21 @@
 <script setup>
 import { reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { api } from 'src/boot/axios'
+import { api, apiAuth } from 'src/boot/axios'
+import { useLogin } from 'src/utils/checkLogin'
+import { useUserStore } from 'src/stores/user'
+
+const currentUser = useUserStore()
+const { loginTryCatch } = useLogin()
 const route = useRoute()
 const list = reactive({})
 const getDetails = async () => {
   const { data } = await api.get(`lists/${route.params.id}`)
   Object.assign(list, data.results)
+}
+const like = async (id) => {
+  await apiAuth.post('lists/like', { id })
+  getDetails()
 }
 onMounted(getDetails)
 </script>

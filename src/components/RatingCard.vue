@@ -12,9 +12,9 @@
       <q-btn flat round :color="inWatchList ? 'blue' : 'grey'" icon="more_time" @click="loginTryCatch(addToWatchList)"
         :disable="!currentUser.isLogin" size="xl" />
     </div>
-    <q-btn color="yellow-8" text-color="white" :label="reviewed ? 'reviewed' : 'review'" :disable="reviewed"
-      style="width: 200px; height: 73px; font-size: xx-large;" class="rounded15 lilita q-py-none"
-      @click="checkLogin(openReviewDialog)" />
+    <q-btn color="yellow-8" text-color="white" :label="reviewed && !props.cmtDeleted ? 'reviewed' : 'review'"
+      :disable="reviewed && !props.cmtDeleted" style="width: 200px; height: 73px; font-size: xx-large;"
+      class="rounded15 lilita q-py-none" @click="checkLogin(openReviewDialog)" />
   </div>
 
   <q-dialog v-model="reviewDialog" full-width>
@@ -36,11 +36,13 @@ import { computed, reactive, ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from 'stores/user'
 import { apiAuth } from 'src/boot/axios'
+import { useQuasar } from 'quasar'
 import { useLogin } from 'src/utils/checkLogin.js'
 
 const { checkLogin, loginTryCatch } = useLogin()
 const currentUser = useUserStore()
 const route = useRoute()
+const $q = useQuasar()
 
 const props = defineProps({
   film: {
@@ -53,6 +55,10 @@ const props = defineProps({
       director: ''
     }
     )
+  },
+  cmtDeleted: {
+    type: Boolean,
+    default: () => false
   }
 })
 const emits = defineEmits(['newCmt'])
@@ -117,6 +123,10 @@ const submitReview = async () => {
   reviewEditor.value = ''
   getUserReview()
   emits('newCmt', data.result)
+  $q.notify({
+    type: 'success',
+    message: 'Review added successfully'
+  })
 }
 
 const addToWatchList = async () => {

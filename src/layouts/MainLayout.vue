@@ -2,28 +2,26 @@
   <q-layout view="hHh lpR fFf">
 
     <q-header class="text-black" style="height: 10%;" :style="{ background: colors[headerColor] }">
-      <q-toolbar class="fit">
+      <q-toolbar class="h100 flex items-center">
         <q-btn flat round icon="menu" @click="toggleLeftDrawer" />
-        <q-toolbar-title>
-          <router-link to="/">
-            <img style="height: 6vh;"
-              src="https://cdn.discordapp.com/attachments/1109403221245571167/1140443471002488943/5a3fc2d4e5a78829.png">
-          </router-link>
-        </q-toolbar-title>
-        <!-- <q-space /> -->
+        <router-link to="/">
+          <img style="height: 6vh;"
+            src="https://cdn.discordapp.com/attachments/1109403221245571167/1140443471002488943/5a3fc2d4e5a78829.png">
+        </router-link>
+        <q-space />
         <form class="gt-sm">
           <q-input rounded standout="bg-black" bg-color="white" v-model="search" placeholder="search movie"
-            style="width:30vw" class="q-ml-xl ">
+            style="width:30vw">
             <template v-slot:after>
               <q-btn type="submit" flat round icon="search" @click="SearchMovie" />
             </template>
           </q-input>
         </form>
         <q-space />
-        <q-btn flat round icon="format_list_bulleted" to="/lists">
+        <q-btn flat round icon="format_list_bulleted" to="/lists" class="gt-xs">
           <q-tooltip>Lists</q-tooltip>
         </q-btn>
-        <q-btn flat round icon="fa-solid fa-ranking-star" class="q-ma-lg" to="/users">
+        <q-btn flat round icon="fa-solid fa-ranking-star" class="q-ma-lg gt-xs" to="/users">
           <q-tooltip>Popular User</q-tooltip>
         </q-btn>
         <q-btn flat round icon="face_2"
@@ -86,10 +84,10 @@ const pt = computed(() => {
 }
 )
 
-const colors = ['#ffe500', '#000', '#f00']
-const headerColor = ref(0)
+const colors = ['transparent', '#ffe500', '#ffe500', '#ffe500']
+const headerColor = ref(2)
 const onFullPageScroll = (destination) => {
-  // console.log(destination)
+  console.log(destination)
   headerColor.value = destination
 }
 </script>

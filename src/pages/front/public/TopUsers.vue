@@ -1,5 +1,5 @@
 <template>
-  <div class="row flex-center">
+  <div class="row flex-center" style="overflow-x: clip;">
     <div class="col-12 col-md-8">
       <div class="titles">Top Users</div>
       <div class="row q-gutter-lg">

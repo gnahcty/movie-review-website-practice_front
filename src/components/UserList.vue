@@ -1,6 +1,6 @@
 <template>
-  <q-intersection v-for="user of props.userList" :key="user._id" transition="flip-right" style="height: 200px;"
-    class="w100" once>
+  <q-intersection v-for="user of props.userList" :key="user._id" transition="flip-right"
+    style="height: 200px; width: 80%;" once>
     <div class="arch-wrapper bgea">
       <q-item class="row">
         <q-item-section class="col-auto" avatar>
@@ -56,5 +56,6 @@ defineEmits(['follow'])
 .arch-wrapper {
   border: 4px solid #000;
   border-radius: 132px 0 0 132px;
+  // overflow-x: hidden;
 }
 </style>

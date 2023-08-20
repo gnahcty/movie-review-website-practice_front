@@ -121,7 +121,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('pages/admin/HomePage.vue'),
+        component: () => import('pages/admin/AdminPage.vue'),
         meta: {
           title: 'moOo | Admin',
           login: true,

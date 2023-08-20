@@ -1,7 +1,7 @@
 <template>
   <div class="row items-center h100 w100">
     <div class="col-1 relative">
-      <div class="swiper-button-prev" id="swiper-prev" style="top: auto !important;"></div>
+      <div class="swiper-button-prev swiper-prev" id="swiper-prev" style="top: auto !important;"></div>
     </div>
     <div class="col-10">
       <swiper v-bind="props.swiperOptions">
@@ -33,7 +33,7 @@
 
               <span class="col flex justify-end items-center">
                 <q-btn flat round icon="favorite" :color="list.likes.indexOf(currentUser._id) > -1 ? 'red' : 'black'"
-                  @click="like(list._id)" />
+                  @click="loginTryCatch(() => likeList(list._id))" />
                 <span>{{ list.likes.length }}</span>
               </span>
             </q-item-label>
@@ -42,7 +42,7 @@
       </swiper>
     </div>
     <div class="col-1 relative">
-      <div class="swiper-button-next" id="swiper-next" style="top: auto !important;"></div>
+      <div class="swiper-button-next swiper-next" id="swiper-next" style="top: auto !important;"></div>
     </div>
   </div>
 </template>
@@ -51,11 +51,12 @@
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import CardStack from 'src/components/CardStack.vue'
 import { useUserStore } from 'stores/user.js'
+import { apiAuth } from 'src/boot/axios'
 import { useLogin } from 'src/utils/checkLogin.js'
+const { loginTryCatch } = useLogin()
 
 const currentUser = useUserStore()
 const emits = defineEmits(['like'])
-const { checkLogin } = useLogin()
 
 // Import Swiper styles
 import 'swiper/scss'
@@ -75,8 +76,8 @@ const props = defineProps({
       spaceBetween: 10,
       loop: true,
       navigation: {
-        prevEl: '#swiper-prev',
-        nextEl: '#swiper-next'
+        prevEl: '.swiper-prev',
+        nextEl: '.swiper-next'
       },
       modules: [Navigation],
       breakpoints: {
@@ -106,10 +107,8 @@ const props = defineProps({
     })
   }
 })
-
-const like = (id) => {
-  const emit = emits('like', id)
-  checkLogin(emit)
+const likeList = async (id) => {
+  await apiAuth.post('/lists/like', { id })
+  emits('like')
 }
-
 </script>

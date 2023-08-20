@@ -1,5 +1,5 @@
 <template>
-  <div class="arched column justify-around items-center bgea q-pt-xl">
+  <div class="arched column justify-around items-center bgea q-pt-xl gt-md">
     <!-- 1 -->
     <router-link :to="`/profile/${props.username}/recent`" style="width: 70%;">
       <q-img :src="props.avatar" class="round" style="border: 3px solid #000;" />
@@ -9,7 +9,7 @@
       <span class="text-bold text-h3 q-mt-xs">{{ props.username }}</span>
     </router-link>
     <!-- 3 -->
-    <div class="text-bold row">
+    <div class="text-bold row gt-md">
       <span class="q-mr-md">{{ props.watched }} films</span> <span>{{ props.reviewed }} reviews</span>
     </div>
     <!-- 4 -->

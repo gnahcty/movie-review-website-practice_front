@@ -117,7 +117,7 @@ const regSubmit = async (e) => {
       password: form.password,
       avatar: `https://source.boringavatars.com/beam/120/${form.username}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51`
     })
-    loginModal.value = false
+    router.push('/tab=login')
     $q.notify({
       type: 'success',
       message: 'Success!'

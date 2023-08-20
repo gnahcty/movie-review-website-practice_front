@@ -203,10 +203,6 @@ const addToList = async (i) => {
       film
     })
     CurrentUser.userLists[i] = data.list
-    $q.notify({
-      type: 'success',
-      message: 'Film added successfully'
-    })
   } catch (error) {
     $q.notify({
       type: 'warnings',
@@ -224,10 +220,6 @@ const addToWatchList = async () => {
     }
     const { data } = await apiAuth.post('/users/watchlist', film)
     CurrentUser.watchList = data.result
-    $q.notify({
-      type: 'success',
-      message: 'Film added successfully'
-    })
   } catch (error) {
     $q.notify({
       type: 'warnings',

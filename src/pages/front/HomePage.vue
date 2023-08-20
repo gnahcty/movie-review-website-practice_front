@@ -1,6 +1,22 @@
 <template>
   <div>
     <full-page ref="fullpage" :options="options" id="fullpage">
+      <div class="section" id="frontPage">
+        <div class="w100 h100 relative">
+          <!-- 右上眼球 -->
+          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142730115348959344/IMG_7940.png"
+            style="position: absolute; top: 0; right: 0; width:calc(18vw + 184.3px) ;">
+          <!-- 左下眼球 -->
+          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142730114640130119/IMG_7939.png"
+            style="position: absolute; bottom: 0; left: 0; width: calc(19vw + 184.3px);">
+          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142741333119873055/IMG_7943.png"
+            style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: calc(32vw + 208.9px);">
+          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142741333480587387/IMG_7944.png"
+            style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: calc(32vw + 208.9px);">
+          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142741333740630056/IMG_7945.png"
+            style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: calc(32vw + 208.9px);">
+        </div>
+      </div>
       <div class="section ">
         <div class="column">
           <p class="titles">Popular This Week</p>
@@ -29,9 +45,9 @@
       </div>
       <div class="section">
         <div class="column " style="height: 90vh;">
-          <div class="titles col-2" style="box-sizing: border-box;">Popular Comments</div>
-          <div class="col-10 flex flex-center">
-            <ReviewCarousel :reviewGroups="reviewGroups" style="overflow: hidden;" class="h100" @like="likecmt">
+          <div class="titles col-auto" style="box-sizing: border-box;">Popular Comments</div>
+          <div class="col q-mb-md flex flex-center">
+            <ReviewCarousel :reviewGroups="reviewGroups" :reviewGroups2="reviewGroups2" @like="likecmt">
             </ReviewCarousel>
           </div>
         </div>
@@ -39,7 +55,7 @@
       <div class="section">
         <div class="column" style="height: 90vh;">
           <div class="titles col-2">Popular Users</div>
-          <div class="row q-gutter-x-xl flex-center q-px-xl col-10 w100">
+          <div class="row q-gutter-x-xl flex-center q-px-lg-xl col-10 w100">
             <template v-for="(popUser, i) in popUsers" :key="i">
               <UserArch v-bind="popUser" class="col-3 "></UserArch>
             </template>
@@ -73,6 +89,7 @@ import ReviewCarousel from 'src/components/ReviewCarousel.vue'
 import UserArch from 'src/components/UserArch.vue'
 
 const reviewGroups = reactive([])
+const reviewGroups2 = reactive([])
 const popUsers = reactive([])
 const films = reactive([])
 
@@ -110,8 +127,12 @@ const getPopReviews = async () => {
   const { data } = await api.get('reviews/pop')
   const reviews = data.results
   reviewGroups.length = 0
+  reviewGroups2.length = 0
   for (let i = 0; i < reviews.length; i += 6) {
     reviewGroups.push(reviews.slice(i, i + 6))
+  }
+  for (let i = 0; i < reviews.length; i += 3) {
+    reviewGroups2.push(reviews.slice(i, i + 3))
   }
 }
 
@@ -137,7 +158,20 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.section {
+#frontPage {
+  /* background: #ffe500 url(https://cdn.discordapp.com/attachments/1109403221245571167/1142722955583959090/IMG_7938.png) no-repeat center center / cover; */
+  width: 100%;
+  background-color: #ffe500;
+  display: block !important;
+  padding-top: none;
+}
+
+#frontPage>div {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.section+.section {
   padding-top: 10vh;
   overflow: hidden;
 }

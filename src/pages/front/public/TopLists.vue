@@ -1,6 +1,4 @@
 <template>
-  <!-- 283*420 -->
-  <!-- FIXME: like*2時不會響應 -->
   <div>
     <full-page ref="fullpage" :options="options" id="fullpage">
       <div class="section">
@@ -12,7 +10,7 @@
       <div class="section ">
         <div class="column">
           <div class="listTitles ">Newly Added</div>
-          <ListSwiper :list="newList" @like="likeList" class="col"></ListSwiper>
+          <ListSwiper :list="newList" @like="loginTryCatch(() => { likeList($event) })" class="col"></ListSwiper>
         </div>
       </div>
     </full-page>
@@ -26,7 +24,7 @@ const options = {
 }
 
 import { onMounted, reactive } from 'vue'
-import { api, apiAuth } from 'src/boot/axios'
+import { api } from 'src/boot/axios'
 import ListSwiper from 'src/components/ListSwiper.vue'
 
 const pop = reactive([])
@@ -41,8 +39,7 @@ const getNewLists = async () => {
   newList.splice(0, newList.length, ...data.results)
 }
 
-const likeList = async (id) => {
-  await apiAuth.post('/lists/like', { id })
+const likeList = () => {
   getPopLists()
   getNewLists()
 }

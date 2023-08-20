@@ -2,7 +2,7 @@
   <div class="row justify-center ">
     <div class="col-12 col-xl-10 row justify-around">
       <div class="col-12 col-md-3 flex flex-center" style="height: 90vh;min-width: 320px;">
-        <RatingCard :film="film" @newCmt="addCmt"></RatingCard>
+        <RatingCard :film="film" :cmtDeleted="cmtDeleted" @newCmt="getReviews()"></RatingCard>
       </div>
       <div class="col-12 col-md-8 col-lg-9 flex flex-center" style="height: 90vh; overflow-y: scroll;">
         <div class="bg-grey-2 q-px-lg-xl q-px-md-none q-px-md fit">
@@ -28,7 +28,8 @@
 
             <div class=" q-gutter-y-lg q-mt-md">
               <template v-for="cmt in allReviews" :key="cmt.id">
-                <FilmReview v-bind="cmt" v-if="cmt.comments !== ''" @cmtUpdated="updateReview($event)"></FilmReview>
+                <FilmReview v-bind="cmt" v-if="cmt.comments !== ''" @cmtUpdated="updateReview($event)"
+                  @cmtDeleted="onCmtDeleted()"></FilmReview>
               </template>
             </div>
           </div>
@@ -59,6 +60,7 @@ const film = reactive({
   director: ''
 })
 const allReviews = reactive([])
+const cmtDeleted = ref(false)
 
 // get film details (title, poster...etc)
 const getDetails = async () => {
@@ -121,8 +123,9 @@ const updateReview = (data) => {
   }
 }
 
-const addCmt = (cmt) => {
-  console.log(cmt)
+const onCmtDeleted = () => {
+  getReviews()
+  cmtDeleted.value = true
 }
 
 onMounted(async () => {

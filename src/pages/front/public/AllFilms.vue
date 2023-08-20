@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-center">
-    <div class="col-8">
+    <div class="col-12 col-sm-8">
       <q-btn-group spread flat class="q-ma-md">
         <q-btn-dropdown flat :label=params.year>
           <q-list>
@@ -25,7 +25,7 @@
         </q-btn-dropdown>
       </q-btn-group>
       <div class="row">
-        <div class="col-12 col-sm-6 col-md-4  col-lg-3 flex flex-center" v-for="(film) in films" :key="film.id"
+        <div class="col-6 col-sm-6 col-md-4  col-lg-3 flex flex-center" v-for="(film) in films" :key="film.id"
           style="align-content: flex-start;">
           <FilmCard v-bind="film"></FilmCard>
         </div>
@@ -40,7 +40,9 @@ import { api, apiAuth } from 'boot/axios'
 import { computed, reactive, watch, ref, onMounted } from 'vue'
 import FilmCard from 'components/FilmCard.vue'
 import { useUserStore } from 'stores/user.js'
+import { useQuasar } from 'quasar'
 
+const $q = useQuasar
 const CurrentUser = useUserStore()
 const films = reactive([])
 const chosenGenres = ref([])
@@ -68,13 +70,18 @@ const getFilms = async () => {
 }
 
 const getUserLists = async () => {
-  try {
-    const { data } = await apiAuth.get('lists/user')
-    if (CurrentUser.userLists) {
-      CurrentUser.userLists = data.UserLists
+  if (CurrentUser.isLogin) {
+    try {
+      const { data } = await apiAuth.get('lists/user')
+      if (CurrentUser.userLists) {
+        CurrentUser.userLists = data.UserLists
+      }
+    } catch (error) {
+      $q.notify({
+        type: 'warnings',
+        message: 'Something went wrong'
+      })
     }
-  } catch (error) {
-    console.log(error)
   }
 }
 
@@ -188,7 +195,6 @@ onMounted(async () => {
 
 <style>
 .my-card {
-  width: 200px;
   border: none;
 }
 

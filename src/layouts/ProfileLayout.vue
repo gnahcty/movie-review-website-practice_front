@@ -1,12 +1,12 @@
 <template>
-  <q-layout view="hhh lpR fFf" :style="hStyle">
+  <q-layout view="lhh lpR fFf" :style="hStyle">
     <q-header class="column text-black" id="header" style="background: transparent;">
       <q-toolbar class="col-2">
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="desktop" elevated>
+    <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="mobile">
       <q-scroll-area class="fit">
         <SideBar :menuList="menuList"></SideBar>
       </q-scroll-area>
@@ -81,7 +81,6 @@ const hStyle = computed(() => {
 const menuList = [
   { to: '/', label: 'Home', icon: 'home' },
   { to: '/films', label: 'Films', icon: 'fa-solid fa-film' },
-  { to: '/reviews', label: 'Reviews', icon: 'reviews' },
   { to: '/watchlist', label: 'watchlist', icon: 'more_time' }
 ]
 

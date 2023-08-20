@@ -113,7 +113,7 @@
         </q-dialog>
 
       </q-card-section>
-
+      <!-- like btn -->
       <q-card-actions align="right">
         <span class="q-mr-sm">{{ likesArr.length }}</span> people liked this
         <q-btn flat round icon="favorite" :color="CmtLiked ? 'red' : 'grey'" @click="loginTryCatch(likeCmt)" />
@@ -179,7 +179,7 @@ const props = defineProps({
   title: String,
   year: String
 })
-const emit = defineEmits(['cmtUpdated'])
+const emit = defineEmits(['cmtUpdated', 'cmtDeleted'])
 const reviewEditor = ref(props.comments)
 const likesArr = reactive(props.cmtLikes)
 const rating = ref(props.ratings)
@@ -206,15 +206,22 @@ const updateCmt = async () => {
       message: 'Please type something'
     })
   } else {
-    const { data } = await apiAuth.post('/reviews/', {
-      filmID: props.film,
-      comments: reviewEditor.value
-    })
-    $q.notify({
-      type: 'success',
-      message: 'Success!'
-    })
-    emit('cmtUpdated', data)
+    try {
+      const { data } = await apiAuth.post('/reviews/', {
+        filmID: props.film,
+        comments: reviewEditor.value
+      })
+      $q.notify({
+        type: 'success',
+        message: 'Success!'
+      })
+      emit('cmtUpdated', data)
+    } catch (error) {
+      $q.notify({
+        type: 'warnings',
+        message: 'Something went wrong'
+      })
+    }
   }
 }
 
@@ -222,7 +229,11 @@ const deleteCmt = async () => {
   const { data } = await apiAuth.post('/reviews/delete', {
     _id: props._id
   })
-  emit('cmtUpdated', data)
+  emit('cmtDeleted', data)
+  $q.notify({
+    type: 'success',
+    message: 'Deleted'
+  })
 }
 
 const report = async () => {
