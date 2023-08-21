@@ -44,16 +44,6 @@ const routes = [
         }
       },
       {
-        path: 'reviews',
-        component: () => import('pages/front/public/AllReviews.vue'),
-        meta: {
-          title: 'moOo | All Reviews',
-          login: false,
-          admin: false,
-          fullpage: false
-        }
-      },
-      {
         path: 'users',
         component: () => import('pages/front/public/TopUsers.vue'),
         meta: {
@@ -79,16 +69,6 @@ const routes = [
         meta: {
           title: 'moOo | List Details',
           login: false,
-          admin: false,
-          fullpage: false
-        }
-      },
-      {
-        path: 'diary',
-        component: () => import('pages/front/user/UserDiary.vue'),
-        meta: {
-          title: 'moOo | Diary',
-          login: true,
           admin: false,
           fullpage: false
         }
