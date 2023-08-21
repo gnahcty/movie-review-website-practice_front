@@ -23,7 +23,7 @@
       </q-menu>
     </q-btn>
     <RouterLink :to="'/films/' + props.id">
-      <q-img :src="'http://image.tmdb.org/t/p/w300/' + props.poster_path" class="ratio border5 rounded15"
+      <q-img :src="'https://image.tmdb.org/t/p/w300/' + props.poster_path" class="ratio border5 rounded15"
         @mouseenter="expanded = true" ref="imgRef">
         <q-tooltip anchor="center middle" self="top middle">{{ title }}
         </q-tooltip>

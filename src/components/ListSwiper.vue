@@ -12,7 +12,7 @@
                 :stackWidth="props.cardStackOptions.stackWidth" :cardHeight="props.cardStackOptions.cardHeight"
                 :maxCards="props.cardStackOptions.maxCards" :paddingX="props.cardStackOptions.paddingX">
                 <template v-slot:card="{ card }">
-                  <img v-if="card.poster" :src="`http://image.tmdb.org/t/p/w300/${card.poster}`"
+                  <img v-if="card.poster" :src="`https://image.tmdb.org/t/p/w300/${card.poster}`"
                     class="h100  rounded15 border5">
                   <div v-else class="h100 w100 bg-grey rounded15" style="border: 5px solid grey;"></div>
                 </template>

@@ -10,7 +10,7 @@
             <div class="row q-col-gutter-md">
               <div class="col-6 col-md-4 col-lg-3 " v-for="(film, i) in CurrentUser.watchList" :key="i">
                 <RouterLink :to="'/films/' + film.id">
-                  <q-img :ratio="3 / 4" :src="'http://image.tmdb.org/t/p/w300/' + film.poster" class="rounded15 border5">
+                  <q-img :ratio="3 / 4" :src="'https://image.tmdb.org/t/p/w300/' + film.poster" class="rounded15 border5">
                     <q-tooltip anchor="center middle" self="top middle">{{ film.title }}</q-tooltip>
                   </q-img>
                 </RouterLink>
@@ -25,7 +25,7 @@
               <div class="row q-col-gutter-md">
                 <div class="col-6 col-md-4 col-lg-3" v-for="(film, i) in list.films" :key="i">
                   <RouterLink :to="'/films/' + film.id">
-                    <q-img :ratio="3 / 4" :src="'http://image.tmdb.org/t/p/w300/' + film.poster"
+                    <q-img :ratio="3 / 4" :src="'https://image.tmdb.org/t/p/w300/' + film.poster"
                       class="rounded15 border5">
                       <q-tooltip anchor="center middle" self="top middle">{{ film.title }}</q-tooltip>
                     </q-img>

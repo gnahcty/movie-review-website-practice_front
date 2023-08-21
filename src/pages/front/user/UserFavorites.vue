@@ -11,7 +11,7 @@
           <swiper v-bind="swiperOptionsFilms">
             <swiperSlide v-for="(film) in likedFilms" :key="film._id">
               <RouterLink :to="'/films/' + film._id">
-                <q-img :src="`http://image.tmdb.org/t/p/w300/${film.poster}`" style=" box-sizing: border-box;"
+                <q-img :src="`https://image.tmdb.org/t/p/w300/${film.poster}`" style=" box-sizing: border-box;"
                   class="rounded15 border5 ratio w100">
                   <q-tooltip anchor="center middle" self="top middle">
                     {{ film.title }}
@@ -38,7 +38,7 @@
                   <CardStack :cards="list.films" :cardWidth="150" :stackWidth="'100%'" :cardHeight="210" :maxCards="4"
                     :paddingX="10">
                     <template v-slot:card="{ card }">
-                      <img v-if="card.poster" :src="`http://image.tmdb.org/t/p/w300/${card.poster}`"
+                      <img v-if="card.poster" :src="`https://image.tmdb.org/t/p/w300/${card.poster}`"
                         class="h100  rounded15 border5">
                       <div v-else class="h100 w100 bg-grey rounded15" style="border: 5px solid grey;"></div>
                     </template>

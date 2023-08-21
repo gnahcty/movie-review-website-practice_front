@@ -6,7 +6,7 @@
         <div class="row">
           <div class="col-6 col-md-4 col-lg-3 q-pa-md flex flex-center" v-for="(film) in list.films" :key="film.id">
             <router-link :to="'/films/' + film.id">
-              <img :src="'http://image.tmdb.org/t/p/w300/' + film.poster" class="w100 rounded15 border5">
+              <img :src="'https://image.tmdb.org/t/p/w300/' + film.poster" class="w100 rounded15 border5">
             </router-link>
           </div>
         </div>

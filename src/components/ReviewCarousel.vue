@@ -8,7 +8,7 @@
           <q-card-section horizontal class="fit row items-center">
             <RouterLink :to="'/films/' + review.film" class="col-3 flex items-center full-height">
               <q-card-section class="q-pr-none fit" style="box-sizing: border-box;">
-                <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" class="rounded15 fit ratio border5">
+                <q-img :src="'https://image.tmdb.org/t/p/w300/' + review.poster" class="rounded15 fit ratio border5">
                   <q-tooltip anchor="center middle" self="top middle">{{ review.title }} </q-tooltip>
                 </q-img>
               </q-card-section>
@@ -58,7 +58,7 @@
           <q-card-section horizontal class="h100 row flex-center q-gutter-sm">
             <RouterLink :to="'/films/' + review.film" class="col flex items-center">
               <q-card-section class="q-pa-xs fit" style="box-sizing: border-box;">
-                <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" class="rounded15 w100 ratio border5">
+                <q-img :src="'https://image.tmdb.org/t/p/w300/' + review.poster" class="rounded15 w100 ratio border5">
                   <q-tooltip anchor="center middle" self="top middle">{{ review.title }} </q-tooltip>
                 </q-img>
               </q-card-section>

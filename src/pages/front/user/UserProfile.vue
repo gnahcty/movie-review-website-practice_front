@@ -10,7 +10,7 @@
           <swiper v-bind="swiperOptions">
             <swiperSlide v-for="(review) in reviews" :key="review._id">
               <RouterLink :to="'/films/' + review.film">
-                <q-img :src="`http://image.tmdb.org/t/p/w300/${review.poster}`" style=" box-sizing: border-box;"
+                <q-img :src="`https://image.tmdb.org/t/p/w300/${review.poster}`" style=" box-sizing: border-box;"
                   class="rounded15 border5 ratio w100">
                   <q-tooltip anchor="center middle" self="top middle">
                     {{ review.title }}
@@ -32,7 +32,7 @@
               <CardStack :cards="list.films" :cardWidth="137" :stackWidth="'100%'" :cardHeight="200" :maxCards="5"
                 :paddingX="10">
                 <template v-slot:card="{ card }">
-                  <img v-if="card.poster" :src="`http://image.tmdb.org/t/p/w300/${card.poster}`"
+                  <img v-if="card.poster" :src="`https://image.tmdb.org/t/p/w300/${card.poster}`"
                     class="h100  rounded15 border5">
                   <div v-else class="h100 w100 bg-grey rounded15" style="border: 5px solid grey;"></div>
                 </template>
@@ -55,7 +55,7 @@
           <CardStack :cards="watchlist" :stackWidth="'100%'" :cardWidth="137" :cardHeight="200" :paddingX="20"
             :maxCards="8">
             <template v-slot:card="{ card }">
-              <img v-if="card.poster" :src="`http://image.tmdb.org/t/p/w300/${card.poster}`"
+              <img v-if="card.poster" :src="`https://image.tmdb.org/t/p/w300/${card.poster}`"
                 class="h100 rounded15 border5">
               <div v-else class="h100 w100 bg-grey rounded15" style="border: 5px solid grey;"></div>
             </template>

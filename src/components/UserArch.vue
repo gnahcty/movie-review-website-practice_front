@@ -16,7 +16,7 @@
     <div class="gt-sm col-4 row q-gutter-md q-pa-md flex-center" style="width:100%">
       <div class="col flex justify-center" v-for="(review, i) in props.latestComments" :key="i">
         <RouterLink :to="'/films/' + review.film" class="full-width">
-          <q-img :src="'http://image.tmdb.org/t/p/w300/' + review.poster" class="ratio full-width rounded15"
+          <q-img :src="'https://image.tmdb.org/t/p/w300/' + review.poster" class="ratio full-width rounded15"
             style="border: 3px solid #000;">
             <q-tooltip anchor="center middle" self="top middle">{{ review.title }} </q-tooltip>
           </q-img>

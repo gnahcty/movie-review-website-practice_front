@@ -28,7 +28,7 @@
               <swiper v-bind="swiperOptions">
                 <swiperSlide v-for="(film, i) in films" :key="i">
                   <RouterLink :to="'/films/' + film.id">
-                    <q-img :src="'http://image.tmdb.org/t/p/w300/' + film.poster_path" class="rounded15 border10 ratio"
+                    <q-img :src="'https://image.tmdb.org/t/p/w300/' + film.poster_path" class="rounded15 border10 ratio"
                       style="width: 80%;">
                       <q-tooltip anchor="center middle" self="top middle">{{ film.title }}
                       </q-tooltip>

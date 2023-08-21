@@ -1,6 +1,6 @@
 <template>
   <div class="flex-center column q-gutter-y-sm" style="min-width: 320px;">
-    <img class="col-7 rounded border10" :src="'http://image.tmdb.org/t/p/w300/' + props.film.poster"
+    <img class="col-7 rounded border10" :src="'https://image.tmdb.org/t/p/w300/' + props.film.poster"
       style="border-radius: 32px;">
     <q-rating v-model="userReview.ratings" max="5" size="50px" color="black" icon="eva-star-outline"
       icon-selected="eva-star" icon-half="star_half" :readonly="!currentUser.isLogin" />
