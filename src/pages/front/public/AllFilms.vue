@@ -76,7 +76,7 @@ const getFilms = async () => {
     const results = data.results.results
     if (CurrentUser.isLogin) {
       const withUserReview = await apiAuth.post('/reviews/user', [...results])
-      films.push(withUserReview.data.films)
+      films.push(...withUserReview.data.films)
     } else {
       films.push(...results)
     }

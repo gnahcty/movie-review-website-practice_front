@@ -1,13 +1,10 @@
 <template>
   <div class="q-pa-md column q-gutter-y-xl">
     <q-table title="Reported comments" ref="tableRef" :rows="rows" :columns="columns" row-key="_id" selection="multiple"
-      v-model:selected="selected" @selection="handleSelection" no-data-label="Nothing more to do for now!" />
+      v-model:selected="selected" @selection="handleSelection" no-data-label="Nothing more to do for now" />
     <div class="flex flex-center">
       <q-btn push color="red" size="xl" label="Delete" class="round lilita" @click="deleteCmt" />
-      <q-btn push color="blue" size="xl" label="Resume" class="round lilita" @click="resumeCmt" />
     </div>
-    <q-table title="Deleted comments" ref="tableRef" :rows="rows" :columns="columns" row-key="_id" selection="multiple"
-      v-model:selected="selected" @selection="handleSelection" no-data-label="Nothing is deleted yet" />
   </div>
 </template>
 
@@ -35,6 +32,8 @@ const columns = [
   { name: 'user', label: 'User', field: 'user', sortable: true },
   { name: 'createdAt', label: 'CreatedAt', field: 'createdAt', sortable: true }
 ]
+
+const delRows = ref([])
 
 const rows = ref([])
 
@@ -86,19 +85,42 @@ const handleSelection = ({ rows, added, evt }) => {
 
 const getReported = async () => {
   const { data } = await apiAuth.get('reviews/report')
+  rows.value.length = 0
   for (const cmt of data.result) {
     rows.value.push({
       _id: cmt._id,
       reports: cmt.reported,
       content: cmt.comments,
-      user: cmt.user.username,
-      createdAt: new Date(cmt.createdAt).toLocaleString()
+      user: cmt.user._id,
+      createdAt: cmt.createdAt
     })
   }
-  console.log(data)
+  // console.log(data)
 }
+const deleteCmt = async () => {
+  await apiAuth.post('reviews/Admin/delete', { cmts: selected.value })
+  getReported()
+  getDeleted()
+}
+
+const getDeleted = async () => {
+  delRows.value.length = 0
+  const { data } = await apiAuth.get('reviews/deleted')
+  for (const cmt of data.result) {
+    delRows.value.push({
+      _id: cmt._id,
+      reports: cmt.reports,
+      content: cmt.comment,
+      user: cmt.user.username,
+      createdAt: cmt.created,
+      deletedAt: cmt.createdAt
+    })
+  }
+}
+
 onMounted(() => {
   getReported()
+  getDeleted()
 })
 </script>
 
