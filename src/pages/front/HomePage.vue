@@ -84,7 +84,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/scss'
 import 'swiper/scss/navigation'
 import 'swiper/scss/grid'
-import { Navigation } from 'swiper'
+import { Autoplay, Navigation } from 'swiper'
 import ReviewCarousel from 'src/components/ReviewCarousel.vue'
 import UserArch from 'src/components/UserArch.vue'
 
@@ -96,12 +96,16 @@ const films = reactive([])
 const swiperOptions = {
   slidesPerView: 1,
   spaceBetween: 10,
+  autoplay: {
+    delay: 1500,
+    disableOnInteraction: true
+  },
   loop: true,
   navigation: {
     prevEl: '#swiper-prev',
     nextEl: '#swiper-next'
   },
-  modules: [Navigation],
+  modules: [Autoplay, Navigation],
   breakpoints: {
     768: {
       slidesPerView: 2,
@@ -147,13 +151,14 @@ const likecmt = async (id) => {
 }
 
 onMounted(
+  emit('fullpage-scroll', 0),
   getTrendingFilms(),
   getPopReviews(),
   getPopUsers()
 )
 
 onUnmounted(() => {
-  emit('fullpage-scroll', 0)
+  emit('fullpage-scroll', 1)
 })
 </script>
 

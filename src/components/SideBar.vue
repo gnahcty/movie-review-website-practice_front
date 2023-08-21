@@ -32,6 +32,26 @@
         </q-input>
       </form>
     </q-item>
+    <template v-if="!route.path.includes('/profile/')">
+      <!-- list -->
+      <q-item clickable v-ripple class="lt-sm q-pl-lg" to="/lists">
+        <q-item-section avatar>
+          <q-icon name="format_list_bulleted" />
+        </q-item-section>
+        <q-item-section>
+          Lists
+        </q-item-section>
+      </q-item>
+      <!-- users -->
+      <q-item clickable v-ripple class="lt-sm q-pl-lg" to="/users">
+        <q-item-section avatar>
+          <q-icon name="fa-solid fa-ranking-star" />
+        </q-item-section>
+        <q-item-section>
+          Popular User
+        </q-item-section>
+      </q-item>
+    </template>
     <!-- menu items -->
     <template v-for="(menuItem, index) in props.menuList" :key="index">
       <q-item clickable v-ripple :to="menuItem.to" class="q-pl-lg">
@@ -43,20 +63,20 @@
         </q-item-section>
       </q-item>
     </template>
+    <!-- admin -->
     <q-item clickable v-ripple v-if="isAdmin" class="q-pl-lg" to="/admin">
       <q-item-section avatar>
         <q-icon name="shieldPerson" />
       </q-item-section>
-      <!-- logout -->
       <q-item-section>
         Admin
       </q-item-section>
     </q-item>
+    <!-- logout -->
     <q-item clickable v-ripple v-if="isLogin" class="q-pl-lg" @click="logout">
       <q-item-section avatar>
         <q-icon name="logout" />
       </q-item-section>
-      <!-- logout -->
       <q-item-section>
         Logout
       </q-item-section>
@@ -71,8 +91,9 @@ import { useUserStore } from 'stores/user.js'
 import { useRouteQuery } from '@vueuse/router'
 import { apiAuth } from 'boot/axios.js'
 import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
+const route = useRoute()
 const router = useRouter()
 const CurrentUser = useUserStore()
 const { isLogin, isAdmin } = storeToRefs(CurrentUser)

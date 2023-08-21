@@ -31,7 +31,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="desktop" elevated>
+    <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="desktop">
       <q-scroll-area class="fit">
         <SideBar :menuList="menuList"></SideBar>
       </q-scroll-area>
@@ -85,9 +85,9 @@ const pt = computed(() => {
 )
 
 const colors = ['transparent', '#ffe500', '#ffe500', '#ffe500']
-const headerColor = ref(2)
+const headerColor = ref(1)
 const onFullPageScroll = (destination) => {
-  console.log(destination)
+  // console.log(destination)
   headerColor.value = destination
 }
 </script>

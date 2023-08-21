@@ -80,8 +80,12 @@ const hStyle = computed(() => {
 
 const menuList = [
   { to: '/', label: 'Home', icon: 'home' },
+  { to: '/lists', label: 'Lists', icon: 'format_list_bulleted' },
+  { to: '/users', label: 'Popular User', icon: 'fa-solid fa-ranking-star' },
   { to: '/films', label: 'Films', icon: 'fa-solid fa-film' },
-  { to: '/watchlist', label: 'watchlist', icon: 'more_time' }
+  { to: '/watchlist', label: 'watchlist', icon: 'more_time' },
+  { to: `/profile/${CurrentUser.username}/likes`, label: 'Likes', icon: 'favorite' },
+  { to: '/settings', label: 'Settings', icon: 'settings' }
 ]
 
 const followed = computed(() => {

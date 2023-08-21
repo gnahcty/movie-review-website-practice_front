@@ -24,14 +24,20 @@
           <q-option-group v-model="chosenGenres" :options="genres" type="checkbox" />
         </q-btn-dropdown>
       </q-btn-group>
-      <div class="row">
-        <div class="col-6 col-sm-6 col-md-4  col-lg-3 flex flex-center" v-for="(film) in films" :key="film.id"
-          style="align-content: flex-start;">
-          <FilmCard v-bind="film"></FilmCard>
+      <q-infinite-scroll @load="onLoad" :offset="250">
+        <div class="row">
+          <div class="col-6 col-sm-6 col-md-4  col-lg-3 flex flex-center" v-for="(film) in films" :key="film.id"
+            style="align-content: flex-start;">
+            <FilmCard v-bind="film"></FilmCard>
+          </div>
         </div>
-      </div>
+        <template v-slot:loading>
+          <div class="row justify-center q-my-md">
+            <q-spinner-dots color="primary" size="40px" />
+          </div>
+        </template>
+      </q-infinite-scroll>
     </div>
-    <!-- TODO:infinite scroll -->
   </div>
 </template>
 
@@ -47,11 +53,21 @@ const CurrentUser = useUserStore()
 const films = reactive([])
 const chosenGenres = ref([])
 const params = reactive({
+  page: 1,
   region: 'TW',
   year: 2023,
   rating: '',
   genres: ''
 })
+
+const onLoad = (index, done) => {
+  setTimeout(() => {
+    params.page++
+    getFilms()
+    done()
+    console.log(params.page)
+  }, 1000)
+}
 
 const getFilms = async () => {
   try {
@@ -60,9 +76,9 @@ const getFilms = async () => {
     const results = data.results.results
     if (CurrentUser.isLogin) {
       const withUserReview = await apiAuth.post('/reviews/user', [...results])
-      films.splice(0, (films.length - 1), ...withUserReview.data.films)
+      films.push(withUserReview.data.films)
     } else {
-      films.splice(0, (films.length - 1), ...results)
+      films.push(...results)
     }
   } catch (error) {
     console.log(error)
@@ -173,18 +189,25 @@ const genres = [
 ]
 
 const setYear = (year) => {
+  params.page = 1
   params.year = year
+  films.length = 0
+  getFilms()
 }
 
 const setRating = (i) => {
+  params.page = 1
   params.rating = i
+  films.length = 0
+  getFilms()
 }
 
 watch(chosenGenres, () => {
   params.genres = chosenGenres.value.join()
+  params.page = 1
+  films.length = 0
+  getFilms()
 })
-
-watch(params, getFilms)
 
 onMounted(async () => {
   await getFilms()
