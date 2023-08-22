@@ -4,7 +4,8 @@
       <div class="section" id="frontPage">
         <div class="w100 h100 relative">
           <!-- 右上眼球 -->
-          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142730115348959344/IMG_7940.png"
+          <img v-intersection="onIntersection"
+            src="https://cdn.discordapp.com/attachments/1109403221245571167/1142730115348959344/IMG_7940.png"
             style="position: absolute; top: 0; right: 0; width:calc(18vw + 184.3px) ;">
           <!-- 左下眼球 -->
           <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142730114640130119/IMG_7939.png"
@@ -54,10 +55,15 @@
       </div>
       <div class="section">
         <div class="column" style="height: 90vh;">
-          <div class="titles col-2">Popular Users</div>
-          <div class="row q-gutter-x-xl flex-center q-px-lg-xl col-10 w100">
+          <div class="titles col-auto">Popular Users</div>
+          <div class="row q-gutter-x-xl flex-center q-px-lg-xl col w100 gt-sm">
             <template v-for="(popUser, i) in popUsers" :key="i">
               <UserArch v-bind="popUser" class="col-3 "></UserArch>
+            </template>
+          </div>
+          <div class="column q-gutter-y-xl flex-center col w100 lt-md q-pb-md">
+            <template v-for="(popUser, i) in popUsers" :key="i">
+              <SideArch v-bind="popUser"></SideArch>
             </template>
           </div>
         </div>
@@ -87,6 +93,7 @@ import 'swiper/scss/grid'
 import { Autoplay, Navigation } from 'swiper'
 import ReviewCarousel from 'src/components/ReviewCarousel.vue'
 import UserArch from 'src/components/UserArch.vue'
+import SideArch from 'src/components/SideArch.vue'
 
 const reviewGroups = reactive([])
 const reviewGroups2 = reactive([])
@@ -149,9 +156,14 @@ const likecmt = async (id) => {
   await apiAuth.post('reviews/like', { cmtID: id })
   getPopReviews()
 }
-
+const onIntersection = (entry) => {
+  if (entry.isIntersecting) {
+    emit('fullpage-scroll', 0)
+  } else {
+    emit('fullpage-scroll', 1)
+  }
+}
 onMounted(
-  emit('fullpage-scroll', 0),
   getTrendingFilms(),
   getPopReviews(),
   getPopUsers()

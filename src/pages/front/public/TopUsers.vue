@@ -2,10 +2,13 @@
   <div class="row flex-center" style="overflow-x: clip;">
     <div class="col-12 col-md-8">
       <div class="titles">Top Users</div>
-      <div class="row q-gutter-lg">
+      <div class="row q-gutter-lg gt-sm">
         <template v-for="user in top3" :key="user.username">
           <UserArch v-bind="user" class="col"></UserArch>
         </template>
+      </div>
+      <div class="q-pt-md flex justify-center w100 q-gutter-y-lg lt-md">
+        <UserList :userList="top3" @follow="follow"></UserList>
       </div>
       <div class="q-pt-md flex justify-center w100 q-gutter-y-lg">
         <UserList :userList="top20" @follow="follow"></UserList>

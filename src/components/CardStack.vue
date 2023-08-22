@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, nextTick, watch } from 'vue'
+import { ref, reactive, computed, onMounted, nextTick, watch, onUnmounted } from 'vue'
 import { debounce } from 'src/utils/debounce'
 
 const props = defineProps({
@@ -128,6 +128,10 @@ onMounted(async () => {
   if (props.cards.length > 0) {
     handleResize()
   }
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
 })
 </script>
 
