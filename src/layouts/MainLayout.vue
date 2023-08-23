@@ -38,10 +38,11 @@
     </q-drawer>
 
     <q-page-container :style="pt">
-      <q-dialog maximized v-model="state.isLoading">
+      <Transition name="bounce">
         <div v-show="state.isLoading" class="w100 h100 bg-black text-white flex flex-center" id="loadingPage">loading
         </div>
-      </q-dialog>
+      </Transition>
+
       <router-view v-show="!state.isLoading" :key="$route.fullPath" @fullpage-scroll="onFullPageScroll" />
     </q-page-container>
     <LoginModal></LoginModal>
@@ -97,7 +98,33 @@ const onFullPageScroll = (destination) => {
 }
 </script>
 
-<!-- <style scoped>
+<style scoped>
 #loadingPage {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  z-index: 9999;
 }
-</style> -->
+
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+
+.bounce-leave-active {
+  animation: bounce-out 0.5s reverse;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+</style>
