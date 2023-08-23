@@ -56,7 +56,7 @@ import { useLogin } from 'src/utils/checkLogin.js'
 const { loginTryCatch } = useLogin()
 
 const currentUser = useUserStore()
-const emits = defineEmits(['like'])
+const emit = defineEmits(['like'])
 
 // Import Swiper styles
 import 'swiper/scss'
@@ -107,8 +107,9 @@ const props = defineProps({
     })
   }
 })
+
 const likeList = async (id) => {
   await apiAuth.post('/lists/like', { id })
-  emits('like')
+  emit('like')
 }
 </script>

@@ -4,17 +4,20 @@
       <div class="section" id="frontPage">
         <div class="w100 h100 relative">
           <!-- 右上眼球 -->
-          <img v-intersection="onIntersection"
+          <img v-intersection="onIntersection" id="topEye"
             src="https://cdn.discordapp.com/attachments/1109403221245571167/1142730115348959344/IMG_7940.png"
             style="position: absolute; top: 0; right: 0; width:calc(18vw + 184.3px) ;">
           <!-- 左下眼球 -->
           <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142730114640130119/IMG_7939.png"
-            style="position: absolute; bottom: 0; left: 0; width: calc(19vw + 184.3px);">
+            id="btmEye" style="position: absolute; bottom: 0; left: 0; width: calc(19vw + 184.3px);">
           <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142741333119873055/IMG_7943.png"
+            id="logo1" class="logo"
             style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: calc(32vw + 208.9px);">
           <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142741333480587387/IMG_7944.png"
+            id="logo2" class="logo"
             style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: calc(32vw + 208.9px);">
           <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142741333740630056/IMG_7945.png"
+            id="logo3" class="logo"
             style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: calc(32vw + 208.9px);">
         </div>
       </div>
@@ -75,17 +78,18 @@
 <script setup>
 const emit = defineEmits(['fullpage-scroll'])
 const options = {
-  licenseKey: 'gplv3-license',
-  onLeave: (origin, destination, direction, trigger) => {
-    emit('fullpage-scroll', destination.index)
-  }
+  licenseKey: 'gplv3-license'
+  // onLeave: (origin, destination, direction, trigger) => {
+  //   emit('fullpage-scroll', destination.index)
+  // }
   // sectionsColor: ['#41b883', '#ff5f45', '#0798ec']
 }
 
-import { onMounted, reactive, onUnmounted } from 'vue'
+import { ref, onMounted, reactive, onUnmounted } from 'vue'
 import { api, apiAuth } from 'src/boot/axios'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 
+import { gsap } from 'gsap'
 // Import Swiper styles
 import 'swiper/scss'
 import 'swiper/scss/navigation'
@@ -128,7 +132,7 @@ const swiperOptions = {
     }
   }
 }
-
+const fullpage = ref(null)
 const getTrendingFilms = async () => {
   const { data } = await api.get('/films/trending')
   films.push(...data.results.results)
@@ -158,16 +162,32 @@ const likecmt = async (id) => {
 }
 const onIntersection = (entry) => {
   if (entry.isIntersecting) {
+    console.log('hi')
     emit('fullpage-scroll', 0)
   } else {
+    console.log('bye')
     emit('fullpage-scroll', 1)
   }
 }
-onMounted(
-  getTrendingFilms(),
-  getPopReviews(),
+
+onMounted(() => {
+  getTrendingFilms()
+  getPopReviews()
   getPopUsers()
-)
+
+  const tl = gsap.timeline({
+    defaults: {
+      duration: 1
+    }
+  })
+
+  tl.from('#topEye', { x: document.querySelector('#topEye').width })
+    .from('#btmEye', { x: -(document.querySelector('#btmEye').width) })
+    .from('#logo1', { display: 'none', duration: 0.2 })
+    .from('#logo2', { display: 'none', duration: 0.2 })
+    .from('#logo3', { display: 'none', duration: 0.2 })
+    .then(setTimeout(() => { fullpage.value.api.moveTo(2) }, 3000))
+})
 
 onUnmounted(() => {
   emit('fullpage-scroll', 1)
@@ -192,6 +212,10 @@ onUnmounted(() => {
   padding-top: 10vh;
   overflow: hidden;
 }
+
+/* .logo {
+  display: none;
+} */
 
 .titles {
   padding-left: 60px;

@@ -6,7 +6,7 @@
         <q-tab-panels v-model="tab" animated swipeable vertical transition-prev="jump-up" transition-next="jump-up">
           <q-tab-panel name="watchlist">
             <div class="titles ">Watchlist</div>
-            <div class=" q-mb-md">Your films to be watched.</div>
+            <div class=" q-mb-md">Your films to be watched. </div>
             <div class="row q-col-gutter-md">
               <div class="col-6 col-md-4 col-lg-3 " v-for="(film, i) in CurrentUser.watchList" :key="i">
                 <RouterLink :to="'/films/' + film.id">
@@ -21,7 +21,10 @@
           <template v-for="(list, i) in CurrentUser.userLists" :key="i">
             <q-tab-panel :name="list.name">
               <div class="titles">{{ list.name }}</div>
-              <div class=" q-mb-md">{{ list.description || 'No description' }}</div>
+              <div class=" q-mb-md flex justify-between">
+                <span>{{ list.description || 'No description' }}</span>
+                <span> <q-icon name="favorite" /> {{ list.likes.length }}</span>
+              </div>
               <div class="row q-col-gutter-md">
                 <div class="col-6 col-md-4 col-lg-3" v-for="(film, i) in list.films" :key="i">
                   <RouterLink :to="'/films/' + film.id">

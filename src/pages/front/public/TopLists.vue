@@ -10,7 +10,7 @@
       <div class="section ">
         <div class="column">
           <div class="listTitles ">Newly Added</div>
-          <ListSwiper :list="newList" @like="loginTryCatch(() => { likeList($event) })" class="col"></ListSwiper>
+          <ListSwiper :list="newList" @like="likeList" class="col"></ListSwiper>
         </div>
       </div>
     </full-page>

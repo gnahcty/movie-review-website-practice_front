@@ -26,10 +26,11 @@ import FilmCard from 'components/FilmCard.vue'
 
 const route = useRoute()
 const films = ref([])
+const page = ref(1)
 
 const searchMovie = async () => {
   try {
-    const { data } = await api.get('/films/search/' + route.params.title)
+    const { data } = await api.post('/films/search/', { title: route.params.title, page: page.value })
     const results = data.results.results
     const withUserReview = await apiAuth.post('/reviews/user', [...results])
     films.value.push(...withUserReview.data.films)
@@ -39,10 +40,9 @@ const searchMovie = async () => {
 }
 const onLoad = (index, done) => {
   setTimeout(() => {
-    // params.page++
-    // getFilms()
-    // done()
-    console.log('55555')
+    page.value++
+    searchMovie()
+    done()
   }, 1000)
 }
 searchMovie()
