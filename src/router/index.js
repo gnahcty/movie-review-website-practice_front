@@ -2,6 +2,7 @@ import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory, START_LOCATION } from 'vue-router'
 import routes from './routes'
 import { useUserStore } from '../stores/user.js'
+import { useGeneralStore } from '../stores/general.js'
 
 /*
  * If not building with SSR mode, you can
@@ -33,6 +34,8 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach(async (to, from, next) => {
     const CurrentUser = useUserStore()
+    const state = useGeneralStore()
+    state.isLoading = true
     if (from === START_LOCATION) {
       await CurrentUser.getProfile()
     }

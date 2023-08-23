@@ -20,8 +20,10 @@
 
 <script setup>
 import { api, apiAuth } from 'boot/axios'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useGeneralStore } from 'stores/general.js'
+const state = useGeneralStore()
 import FilmCard from 'components/FilmCard.vue'
 
 const route = useRoute()
@@ -45,5 +47,8 @@ const onLoad = (index, done) => {
     done()
   }, 1000)
 }
-searchMovie()
+onMounted(async () => {
+  await searchMovie()
+  state.isLoading = false
+})
 </script>

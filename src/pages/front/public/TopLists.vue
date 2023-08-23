@@ -26,6 +26,8 @@ const options = {
 import { onMounted, reactive } from 'vue'
 import { api } from 'src/boot/axios'
 import ListSwiper from 'src/components/ListSwiper.vue'
+import { useGeneralStore } from 'stores/general.js'
+const state = useGeneralStore()
 
 const pop = reactive([])
 const newList = reactive([])
@@ -43,9 +45,10 @@ const likeList = () => {
   getPopLists()
   getNewLists()
 }
-onMounted(() => {
-  getPopLists()
-  getNewLists()
+onMounted(async () => {
+  await getPopLists()
+  await getNewLists()
+  state.isLoading = false
 }
 )
 </script>

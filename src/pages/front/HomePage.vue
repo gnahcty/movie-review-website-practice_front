@@ -86,6 +86,7 @@ const options = {
 }
 
 import { ref, onMounted, reactive, onUnmounted } from 'vue'
+import { useGeneralStore } from 'stores/general.js'
 import { api, apiAuth } from 'src/boot/axios'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 
@@ -99,6 +100,7 @@ import ReviewCarousel from 'src/components/ReviewCarousel.vue'
 import UserArch from 'src/components/UserArch.vue'
 import SideArch from 'src/components/SideArch.vue'
 
+const state = useGeneralStore()
 const reviewGroups = reactive([])
 const reviewGroups2 = reactive([])
 const popUsers = reactive([])
@@ -162,31 +164,32 @@ const likecmt = async (id) => {
 }
 const onIntersection = (entry) => {
   if (entry.isIntersecting) {
-    console.log('hi')
     emit('fullpage-scroll', 0)
   } else {
-    console.log('bye')
     emit('fullpage-scroll', 1)
   }
 }
 
-onMounted(() => {
-  getTrendingFilms()
-  getPopReviews()
-  getPopUsers()
+onMounted(async () => {
+  await getTrendingFilms()
+  await getPopReviews()
+  await getPopUsers()
+  state.isLoading = false
+  if (state.isFirstEntry === true) {
+    const tl = gsap.timeline({
+      defaults: {
+        duration: 1
+      }
+    })
 
-  const tl = gsap.timeline({
-    defaults: {
-      duration: 1
-    }
-  })
-
-  tl.from('#topEye', { x: document.querySelector('#topEye').width })
-    .from('#btmEye', { x: -(document.querySelector('#btmEye').width) })
-    .from('#logo1', { display: 'none', duration: 0.2 })
-    .from('#logo2', { display: 'none', duration: 0.2 })
-    .from('#logo3', { display: 'none', duration: 0.2 })
-    .then(setTimeout(() => { fullpage.value.api.moveTo(2) }, 3000))
+    tl.from('#topEye', { x: document.querySelector('#topEye').width })
+      .from('#btmEye', { x: -(document.querySelector('#btmEye').width) })
+      .from('#logo1', { display: 'none', duration: 0.2 })
+      .from('#logo2', { display: 'none', duration: 0.2 })
+      .from('#logo3', { display: 'none', duration: 0.2 })
+      .then(setTimeout(() => { fullpage.value.api.moveTo(2) }, 3000))
+      .then(state.isFirstEntry = false)
+  }
 })
 
 onUnmounted(() => {

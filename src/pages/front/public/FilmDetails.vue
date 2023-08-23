@@ -45,6 +45,8 @@ import { api, apiAuth } from 'src/boot/axios'
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from 'stores/user'
+import { useGeneralStore } from 'stores/general.js'
+const state = useGeneralStore()
 
 import FilmReview from 'components/FilmReview.vue'
 import RatingCard from 'src/components/RatingCard.vue'
@@ -130,10 +132,11 @@ const onCmtDeleted = () => {
 
 onMounted(async () => {
   await getDetails()
-  getReviews()
+  await getReviews()
   if (currentUser.isLogin) {
     getFriendsReviews()
   }
+  state.isLoading = false
 })
 
 </script>

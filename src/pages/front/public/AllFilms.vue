@@ -50,6 +50,8 @@ import { useQuasar } from 'quasar'
 
 const $q = useQuasar
 const CurrentUser = useUserStore()
+import { useGeneralStore } from 'stores/general.js'
+const state = useGeneralStore()
 const films = reactive([])
 const chosenGenres = ref([])
 const params = reactive({
@@ -211,7 +213,8 @@ watch(chosenGenres, () => {
 
 onMounted(async () => {
   await getFilms()
-  getUserLists()
+  await getUserLists()
+  state.isLoading = false
 })
 
 </script>

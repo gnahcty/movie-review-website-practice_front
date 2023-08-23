@@ -38,7 +38,11 @@
     </q-drawer>
 
     <q-page-container :style="pt">
-      <router-view :key="$route.fullPath" @fullpage-scroll="onFullPageScroll" />
+      <q-dialog maximized v-model="state.isLoading">
+        <div v-show="state.isLoading" class="w100 h100 bg-black text-white flex flex-center" id="loadingPage">loading
+        </div>
+      </q-dialog>
+      <router-view v-show="!state.isLoading" :key="$route.fullPath" @fullpage-scroll="onFullPageScroll" />
     </q-page-container>
     <LoginModal></LoginModal>
   </q-layout>
@@ -48,11 +52,13 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from 'stores/user.js'
+import { useGeneralStore } from 'stores/general.js'
 import LoginModal from 'src/components/LoginModal.vue'
 import SideBar from 'src/components/SideBar.vue'
 
 const leftDrawerOpen = ref(false)
 const search = ref('')
+const state = useGeneralStore()
 const CurrentUser = useUserStore()
 const route = useRoute()
 const router = useRouter()
@@ -90,3 +96,8 @@ const onFullPageScroll = (destination) => {
   headerColor.value = destination
 }
 </script>
+
+<!-- <style scoped>
+#loadingPage {
+}
+</style> -->

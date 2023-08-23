@@ -40,6 +40,8 @@ import { useRoute } from 'vue-router'
 import { api, apiAuth } from 'src/boot/axios'
 import { useLogin } from 'src/utils/checkLogin'
 import { useUserStore } from 'src/stores/user'
+import { useGeneralStore } from 'stores/general.js'
+const state = useGeneralStore()
 
 const currentUser = useUserStore()
 const { loginTryCatch } = useLogin()
@@ -53,7 +55,10 @@ const like = async (id) => {
   await apiAuth.post('lists/like', { id })
   getDetails()
 }
-onMounted(getDetails)
+onMounted(async () => {
+  await getDetails()
+  state.isLoading = false
+})
 </script>
 
 <style lang="scss" scoped></style>

@@ -22,7 +22,9 @@ import { reactive, onMounted } from 'vue'
 import { api, apiAuth } from 'src/boot/axios'
 import UserList from 'src/components/UserList.vue'
 import UserArch from 'src/components/UserArch.vue'
+import { useGeneralStore } from 'stores/general.js'
 
+const state = useGeneralStore()
 const top3 = reactive([])
 const top20 = reactive([])
 
@@ -36,8 +38,9 @@ const getPopUsers = async () => {
   top20.splice(0, top20.length, ...data.top20)
 }
 
-onMounted(() => {
-  getPopUsers()
+onMounted(async () => {
+  await getPopUsers()
+  state.isLoading = false
 })
 </script>
 
