@@ -109,11 +109,12 @@ const onFullPageScroll = (destination) => {
 }
 
 .round-enter-active {
-  animation-duration: 0.4s
+  animation-duration: 0.5s
 }
 
 .round-leave-active {
-  transition-duration: 0.4s;
+  transition-delay: 1.5s;
+  transition-duration: 1.5s;
   transition-timing-function: ease-in-out
 }
 
