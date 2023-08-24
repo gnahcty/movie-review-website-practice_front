@@ -10,7 +10,7 @@
         <div class="col-10">
           <swiper v-bind="swiperOptionsFilms">
             <swiperSlide v-for="(film) in likedFilms" :key="film._id">
-              <RouterLink :to="'/films/' + film._id">
+              <RouterLink :to="'/films/' + film.film">
                 <q-img :src="`https://image.tmdb.org/t/p/w300/${film.poster}`" style=" box-sizing: border-box;"
                   class="rounded15 border5 ratio w100">
                   <q-tooltip anchor="center middle" self="top middle">
