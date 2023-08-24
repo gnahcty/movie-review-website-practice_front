@@ -38,13 +38,13 @@
     </q-drawer>
 
     <q-page-container :style="pt">
-      <Transition name="round" enter-from-class="round-sm" enter-to-class="round-bg" leave-from-class="round-bg"
-        leave-to-class="round-sm">
-        <div v-show="state.isLoading" class="w100 h100 bg-black text-white flex flex-center" id="loadingPage">
+      <Transition name="round" enter-from-class="round-enter-from" enter-active-class="round-enter-active"
+        enter-to-class="round-enter-to" leave-from-class="round-leave-from" leave-active-class="round-leave-active"
+        leave-to-class="round-leave-to">
+        <div v-show="state.isLoading" class="w100 bg-black text-white flex flex-center" id="loadingPage" style="90vh">
           <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1143835902427287562/IMG_7974.gif">
         </div>
       </Transition>
-
       <router-view v-show="!state.isLoading" :key="$route.fullPath" @fullpage-scroll="onFullPageScroll" />
     </q-page-container>
     <LoginModal></LoginModal>
@@ -108,25 +108,42 @@ const onFullPageScroll = (destination) => {
   z-index: 9999;
 }
 
-.bounce-enter-active {
-  animation: bounce-in 0.5s;
+.round-enter-active {
+  animation-duration: 0.4s
 }
 
-.bounce-leave-active {
-  animation: bounce-in 0.5s reverse;
+.round-leave-active {
+  transition-duration: 0.4s;
+  transition-timing-function: ease-in-out
 }
 
-/* @keyframes bounce-in {
+.round-enter-from,
+.round-enter-to {
+  animation-name: round-in;
+  animation-fill-mode: forwards
+}
+
+@keyframes round-in {
   0% {
-    transform: scale(0);
+    clip-path: circle(3% at 46% -50%);
+    animation-timing-function: cubic-bezier(0.005, 0.920, 0.060, 0.99)
   }
 
-  50% {
-    transform: scale(1.25);
+  40% {
+    clip-path: circle(3% at 50% 50%);
+    animation-timing-function: cubic-bezier(0.630, -0.170, 0.140, 0.980)
   }
 
   100% {
-    transform: scale(1);
+    clip-path: circle(70.7% at 50% 50%)
   }
-} */
+}
+
+.round-leave-from {
+  clip-path: circle(70.7% at 50% 50%)
+}
+
+.round-leave-to {
+  clip-path: circle(40% at 140% 140%)
+}
 </style>

@@ -56,6 +56,8 @@
 import { ref, onMounted } from 'vue'
 import { apiAuth } from 'src/boot/axios'
 import { useUserStore } from 'stores/user.js'
+import { useGeneralStore } from 'stores/general.js'
+const state = useGeneralStore()
 const CurrentUser = useUserStore()
 const tab = ref('watchlist')
 const getUserLists = async () => {
@@ -68,5 +70,8 @@ const getUserLists = async () => {
     console.log(error)
   }
 }
-onMounted(getUserLists)
+onMounted(async () => {
+  await getUserLists()
+  state.isLoading = false
+})
 </script>
