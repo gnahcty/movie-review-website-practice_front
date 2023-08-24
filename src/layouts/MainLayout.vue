@@ -38,8 +38,10 @@
     </q-drawer>
 
     <q-page-container :style="pt">
-      <Transition name="bounce">
-        <div v-show="state.isLoading" class="w100 h100 bg-black text-white flex flex-center" id="loadingPage">loading
+      <Transition name="round" enter-from-class="round-sm" enter-to-class="round-bg" leave-from-class="round-bg"
+        leave-to-class="round-sm">
+        <div v-show="state.isLoading" class="w100 h100 bg-black text-white flex flex-center" id="loadingPage">
+          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1143835902427287562/IMG_7974.gif">
         </div>
       </Transition>
 
@@ -111,10 +113,10 @@ const onFullPageScroll = (destination) => {
 }
 
 .bounce-leave-active {
-  animation: bounce-out 0.5s reverse;
+  animation: bounce-in 0.5s reverse;
 }
 
-@keyframes bounce-in {
+/* @keyframes bounce-in {
   0% {
     transform: scale(0);
   }
@@ -126,5 +128,5 @@ const onFullPageScroll = (destination) => {
   100% {
     transform: scale(1);
   }
-}
+} */
 </style>
