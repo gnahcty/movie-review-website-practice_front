@@ -114,7 +114,7 @@ const onFullPageScroll = (destination) => {
 
 .round-leave-active {
   transition-delay: 1.5s;
-  transition-duration: 1.5s;
+  transition-duration: 0.5s;
   transition-timing-function: ease-in-out
 }
 
