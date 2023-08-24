@@ -182,12 +182,12 @@ onMounted(async () => {
       }
     })
 
-    tl.from('#topEye', { x: document.querySelector('#topEye').width })
+    tl.from('#topEye', { x: document.querySelector('#topEye').width }, '+=2')
       .from('#btmEye', { x: -(document.querySelector('#btmEye').width) })
       .from('#logo1', { display: 'none', duration: 0.2 })
       .from('#logo2', { display: 'none', duration: 0.2 })
       .from('#logo3', { display: 'none', duration: 0.2 })
-      .then(setTimeout(() => { fullpage.value.api.moveTo(2) }, 3000))
+      .then(setTimeout(() => { fullpage.value.api.moveTo(2) }, 5000))
       .then(state.isFirstEntry = false)
   }
 })
