@@ -3,7 +3,7 @@
     <div class="h100 row items-center">
       <div class="col-auto h100 ">
         <router-link :to="`/profile/${props.username}/recent`" class="h100 flex items-center">
-          <img :src="props.avatar" class="round" style="border: 3px solid #000;height: 85%;" />
+          <!-- <img :src="props.avatar" class="round" style="border: 3px solid #000;height: 85%;" /> -->
         </router-link>
       </div>
       <div class="col column q-pl-md">

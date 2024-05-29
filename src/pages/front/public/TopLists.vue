@@ -55,8 +55,9 @@ onMounted(async () => {
 
 <style scoped>
 .section {
+  height: 100vh;
   padding-top: 10vh;
-  overflow: hidden;
+  overflow: clip;
 }
 
 .listTitles {

@@ -82,6 +82,23 @@ color: #000;
   width: 20rem;
 }
 
+.no-scrollbar {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+.fp-overflow {
+  scrollbar-width: none !important; /* For Firefox */
+  -ms-overflow-style: none !important; /* For Internet Explorer and Edge */
+}
+
+.fp-overflow::-webkit-scrollbar {
+  display: none !important; /* For Chrome, Safari, and Opera */
+}
+
 .q-notifications__list--top {
   top: 7rem !important;
 }

@@ -48,9 +48,9 @@
     </q-drawer>
 
     <q-page-container :style="pt">
-      <Transition name="round" enter-from-class="round-enter-from" enter-active-class="round-enter-active"
-        enter-to-class="round-enter-to" leave-from-class="round-leave-from" leave-active-class="round-leave-active"
-        leave-to-class="round-leave-to">
+      <Transition v-if="!isLoginModal" name="round" enter-from-class="round-enter-from"
+        enter-active-class="round-enter-active" enter-to-class="round-enter-to" leave-from-class="round-leave-from"
+        leave-active-class="round-leave-active" leave-to-class="round-leave-to">
         <div v-show="state.isLoading" class="w100 bg-black text-white flex flex-center" id="loadingPage"
           style="height:100vh">
           <img src="https://github.com/gnahcty/pics/blob/main/filmory/1709543803577.gif?raw=true" style="height:80%">
@@ -84,8 +84,8 @@ const toggleLeftDrawer = () => {
 const menuList = [
   { to: '/films', label: 'Films', icon: 'fa-solid fa-film' },
   { to: '/watchlist', label: 'watchlist', icon: 'more_time' },
-  { to: `/profile/${CurrentUser.username}/likes`, label: 'Likes', icon: 'favorite' },
-  { to: '/settings', label: 'Settings', icon: 'settings' }
+  { to: `/profile/${CurrentUser.username}/likes`, label: 'Likes', icon: 'favorite' }
+  // { to: '/settings', label: 'Settings', icon: 'settings' }
 ]
 
 const SearchMovie = () => {
@@ -103,6 +103,10 @@ const pt = computed(() => {
   }
 }
 )
+const isLoginModal = computed(() => {
+  const queryTab = route.query.tab
+  return queryTab === 'register' || queryTab === 'login'
+})
 
 const colors = ['transparent', '#ffe500', '#ffe500', '#ffe500']
 const headerColor = ref(1)

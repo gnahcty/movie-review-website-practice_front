@@ -82,16 +82,6 @@ const routes = [
           admin: false,
           fullpage: false
         }
-      },
-      {
-        path: 'settings',
-        component: () => import('pages/front/user/UserSettings.vue'),
-        meta: {
-          title: 'moOo | Settings',
-          login: true,
-          admin: false,
-          fullpage: false
-        }
       }
     ]
   },

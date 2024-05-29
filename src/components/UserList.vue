@@ -5,7 +5,7 @@
       <q-item class="row">
         <q-item-section class="col-auto" avatar>
           <router-link :to="`/profile/${user.username}/recent`">
-            <img class="round q-pa-lg" style="width: 100%;" :src=user.avatar>
+            <img class="round q-pa-lg" style="width: 100%; max-height:25vh" :src=user.avatar>
           </router-link>
         </q-item-section>
         <q-item-section class="col-3">

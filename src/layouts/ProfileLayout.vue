@@ -32,13 +32,13 @@
           </div>
           <div class="col-12  col-sm-6 row q-xs-pb-lg ">
             <div class="col column text-center"> <span class="text-bold text-h6">{{ profile.watched
-            }}</span><span>films</span></div>
+                }}</span><span>films</span></div>
             <div class="col column text-center"> <span class="text-bold text-h6">{{ profile.reviewed
-            }}</span><span>reviews</span></div>
+                }}</span><span>reviews</span></div>
             <div class="col column text-center"> <span class="text-bold text-h6">{{ profile.followers?.length
-            }}</span><span>followers</span></div>
+                }}</span><span>followers</span></div>
             <div class="col column text-center"> <span class="text-bold text-h6">{{ profile.following?.length
-            }}</span><span>following</span></div>
+                }}</span><span>following</span></div>
           </div>
         </div>
       </div>
@@ -84,8 +84,8 @@ const menuList = [
   { to: '/users', label: 'Popular User', icon: 'fa-solid fa-ranking-star' },
   { to: '/films', label: 'Films', icon: 'fa-solid fa-film' },
   { to: '/watchlist', label: 'watchlist', icon: 'more_time' },
-  { to: `/profile/${CurrentUser.username}/likes`, label: 'Likes', icon: 'favorite' },
-  { to: '/settings', label: 'Settings', icon: 'settings' }
+  { to: `/profile/${CurrentUser.username}/likes`, label: 'Likes', icon: 'favorite' }
+  // { to: '/settings', label: 'Settings', icon: 'settings' }
 ]
 
 const followed = computed(() => {

@@ -1,8 +1,8 @@
 <template>
   <q-carousel v-model="slide1" transition-prev="slide-right" transition-next="slide-left" swipeable animated
-    control-color="black" padding arrows infinite style="width: 80vw; " class="self-center gt-sm h100">
+    control-color="black" padding arrows infinite style="width: 80vw; " class="no-scrollbar self-center gt-sm h100">
     <q-carousel-slide :name="index + 1" v-for="(reviewGroup, index) in props.reviewGroups" :key="index"
-      class="wrapper flex flex-center" style="padding-bottom: 0 !important;">
+      class="wrapper flex flex-center no-scrollbar" style="padding-bottom: 0 !important; overflow:clip">
       <template v-for="review in reviewGroup" :key="review._id">
         <q-card flat class="rounded15 border5 h100 bgea">
           <q-card-section horizontal class="fit row items-center">
@@ -56,11 +56,10 @@
       <div v-for="review in reviewGroup" :key="review._id" class="col w100">
         <q-card flat class="rounded15 border5 h100 bgea">
           <q-card-section horizontal class="h100 row flex-center q-gutter-sm">
-            <RouterLink :to="'/films/' + review.film" class="col flex items-center">
-              <q-card-section class="q-pa-xs fit" style="box-sizing: border-box;">
-                <q-img :src="'https://image.tmdb.org/t/p/w300/' + review.poster" class="rounded15 w100 ratio border5">
-                  <q-tooltip anchor="center middle" self="top middle">{{ review.title }} </q-tooltip>
-                </q-img>
+            <RouterLink :to="'/films/' + review.film" class="h100">
+              <q-card-section class="q-pa-xs h100 col flex items-center justify-center" style="box-sizing: border-box;">
+                <img :src="'https://image.tmdb.org/t/p/w300/' + review.poster" class="rounded15 ratio border5"
+                  style="width:60%" />
               </q-card-section>
             </RouterLink>
             <q-card-section class="col-9 full-height q-py-sm">

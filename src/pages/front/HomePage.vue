@@ -47,15 +47,15 @@
       <div class="section">
         <div class="column " style="height: 90vh;">
           <div class="titles col-auto" style="box-sizing: border-box;">Popular Comments</div>
-          <div class="col q-mb-md flex flex-center">
+          <div class="col flex flex-center">
             <ReviewCarousel :reviewGroups="reviewGroups" :reviewGroups2="reviewGroups2" @like="likecmt">
             </ReviewCarousel>
           </div>
         </div>
       </div>
       <div class="section">
-        <div class="column" style="height: 90vh;">
-          <div class="titles col-auto">Popular Users</div>
+        <div class="column">
+          <div class="titles">Popular Users</div>
           <div class="row q-gutter-x-xl flex-center q-px-lg-xl col w100 gt-sm">
             <template v-for="(popUser, i) in popUsers" :key="i">
               <UserArch v-bind="popUser" class="col-3 "></UserArch>
@@ -140,6 +140,7 @@ const getTrendingFilms = async () => {
 const getPopReviews = async () => {
   const { data } = await api.get('reviews/pop')
   const reviews = data.results
+  console.log(data)
   reviewGroups.length = 0
   reviewGroups2.length = 0
   for (let i = 0; i < reviews.length; i += 6) {
