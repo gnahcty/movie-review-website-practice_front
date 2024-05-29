@@ -3,12 +3,17 @@
 
     <q-header class="text-black" style="height: 10%;" :style="{ background: colors[headerColor] }">
       <q-toolbar class="h100 flex items-center">
+        <!-- menu btn -->
         <q-btn flat round icon="menu" @click="toggleLeftDrawer" />
+        <!-- menu btn -->
+        <!-- logo -->
         <router-link to="/">
-          <img style="height: 6vh;"
-            src="https://cdn.discordapp.com/attachments/1109403221245571167/1140443471002488943/5a3fc2d4e5a78829.png">
+          <img style="height: 6vh;" src="https://github.com/gnahcty/pics/blob/main/filmory/IMG_7952.PNG?raw=true">
         </router-link>
+        <!-- logo -->
+
         <q-space />
+        <!-- searchbar -->
         <form class="gt-sm">
           <q-input rounded standout="bg-black" bg-color="white" v-model="search" placeholder="search movie"
             style="width:30vw">
@@ -17,7 +22,10 @@
             </template>
           </q-input>
         </form>
+        <!-- searchbar -->
+
         <q-space />
+        <!-- links to other pages -->
         <q-btn flat round icon="format_list_bulleted" to="/lists" class="gt-xs">
           <q-tooltip>Lists</q-tooltip>
         </q-btn>
@@ -28,6 +36,8 @@
           :to="CurrentUser.isLogin ? `/profile/${CurrentUser.username}/recent` : '?tab=login'">
           <q-tooltip>Profile</q-tooltip>
         </q-btn>
+        <!-- links to other pages -->
+
       </q-toolbar>
     </q-header>
 

@@ -5,19 +5,16 @@
         <div class="w100 h100 relative">
           <!-- 右上眼球 -->
           <img v-intersection="onIntersection" id="topEye"
-            src="https://cdn.discordapp.com/attachments/1109403221245571167/1142730115348959344/IMG_7940.png"
+            src="https://github.com/gnahcty/pics/blob/main/filmory/IMG_7950.PNG?raw=true"
             style="position: absolute; top: 0; right: 0; width:calc(18vw + 184.3px) ;">
           <!-- 左下眼球 -->
-          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142730114640130119/IMG_7939.png"
-            id="btmEye" style="position: absolute; bottom: 0; left: 0; width: calc(19vw + 184.3px);">
-          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142741333119873055/IMG_7943.png"
-            id="logo1" class="logo"
+          <img src="https://github.com/gnahcty/pics/blob/main/filmory/IMG_7949.PNG?raw=true" id="btmEye"
+            style="position: absolute; bottom: 0; left: 0; width: calc(19vw + 184.3px);">
+          <img src="https://github.com/gnahcty/pics/blob/main/filmory/IMG_7943.PNG?raw=true" id="logo1" class="logo"
             style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: calc(32vw + 208.9px);">
-          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142741333480587387/IMG_7944.png"
-            id="logo2" class="logo"
+          <img src="https://github.com/gnahcty/pics/blob/main/filmory/IMG_7944.PNG?raw=true" id="logo2" class="logo"
             style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: calc(32vw + 208.9px);">
-          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1142741333740630056/IMG_7945.png"
-            id="logo3" class="logo"
+          <img src="https://github.com/gnahcty/pics/blob/main/filmory/IMG_7945.PNG?raw=true" id="logo3" class="logo"
             style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; width: calc(32vw + 208.9px);">
         </div>
       </div>
