@@ -51,8 +51,9 @@
       <Transition name="round" enter-from-class="round-enter-from" enter-active-class="round-enter-active"
         enter-to-class="round-enter-to" leave-from-class="round-leave-from" leave-active-class="round-leave-active"
         leave-to-class="round-leave-to">
-        <div v-show="state.isLoading" class="w100 bg-black text-white flex flex-center" id="loadingPage" style="90vh">
-          <img src="https://cdn.discordapp.com/attachments/1109403221245571167/1143835902427287562/IMG_7974.gif">
+        <div v-show="state.isLoading" class="w100 bg-black text-white flex flex-center" id="loadingPage"
+          style="height:100vh">
+          <img src="https://github.com/gnahcty/pics/blob/main/filmory/1709543803577.gif?raw=true" style="height:80%">
         </div>
       </Transition>
       <router-view v-show="!state.isLoading" :key="$route.fullPath" @fullpage-scroll="onFullPageScroll" />
